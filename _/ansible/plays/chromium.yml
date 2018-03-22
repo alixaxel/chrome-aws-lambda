@@ -171,7 +171,7 @@
 
     - name: Checking Out Chromium Commit
       shell: |
-        git checkout 7f3cdc3f76faecc6425814688e3b2b71bf1630a4
+        git checkout 2abb5574c7b89c95ce7d295edc467a9edcab7769
       args:
         chdir: /srv/source/chromium/src
 
