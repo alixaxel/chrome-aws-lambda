@@ -1,5 +1,7 @@
 # chrome-aws-lambda
 
+[![npm](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
+
 Chromium Binary for AWS Lambda
 
 ## Install
@@ -26,13 +28,16 @@ const chromium = require('chrome-aws-lambda');
 const puppeteer = require('puppeteer');
 
 exports.handler = async (event, context) => {
+  let browser = null;
+
   try {
-    const browser = await puppeteer.launch({
+    browser = await puppeteer.launch({
       args: chromium.defaultArgs(),
       executablePath: await chromium.executablePath(),
     });
 
-    const page = await browser.newPage();
+    let page = await browser.newPage();
+
     await page.goto(event.url || 'https://example.com');
 
     return context.succeed(await page.title());
@@ -88,7 +93,7 @@ For this reason, a stripped-down version of [`iltorb`](https://github.com/Mayhem
 
 ## Versioning
 
-This package is versioned based off the underlying Chromium version:
+This package is versioned based on the underlying Chromium version:
 
 | `puppeteer` Version | Chromium Revision                                    | `chrome-aws-lambda` Version         |
 | ------------------- | ---------------------------------------------------- | ----------------------------------- |

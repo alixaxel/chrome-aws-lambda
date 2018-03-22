@@ -32,8 +32,8 @@ class Chromium {
   }
 
   /**
-   * Inflates the current version of Chromium and returns the path to the executable.
-   * Returns `null` if not running on AWS Lambda.
+   * Inflates the current version of Chromium and returns the path to the binary.
+   * If not running on AWS Lambda, `null` is returned instead.
    *
    * @returns {?Promise<string>}
    */
