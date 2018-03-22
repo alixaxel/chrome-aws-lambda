@@ -1,0 +1,280 @@
+---
+- name: Bootstrap AWS
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Creating SSH Key
+      shell: |
+        ssh-keygen -b 2048 -t rsa -f ansible.pem -q -N '' && \
+        chmod 0600 ansible.pem.pub
+      args:
+        chdir: ../
+        creates: ansible.pem
+
+    - name: Creating EC2 Key Pair
+      ec2_key:
+        name: ansible
+        state: present
+        region: "{{ region }}"
+        key_material: "{{ item }}"
+      with_file: ../ansible.pem.pub
+
+    - name: Creating Security Group
+      ec2_group:
+        name: ansible
+        description: SSH Access
+        state: present
+        region: "{{ region }}"
+        rules:
+          - proto: tcp
+            to_port: 22
+            from_port: 22
+            cidr_ip: 0.0.0.0/0
+
+    - name: Launching EC2 Instance
+      ec2:
+        group: ansible
+        image: "{{ image }}"
+        instance_type: c5.9xlarge
+        key_name: ansible
+        wait: yes
+        spot_type: one-time
+        spot_price: 1.00
+        spot_wait_timeout: 300
+        spot_launch_group: chromium
+        region: "{{ region }}"
+        state: present
+        volumes:
+          - device_name: /dev/xvda
+            delete_on_termination: true
+            volume_size: 32
+            volume_type: gp2
+        instance_tags:
+          Name: Chromium
+      register: ec2
+
+    - name: Registering Host
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: aws
+      with_items: "{{ ec2.instances }}"
+
+    - name: Waiting for SSH
+      wait_for:
+        host: "{{ item.public_ip }}"
+        port: 22
+        timeout: 120
+        state: started
+      with_items: "{{ ec2.instances }}"
+
+- name: AWS
+  user: ec2-user
+  hosts: aws
+  become: true
+  become_user: root
+  gather_facts: true
+  environment:
+    LANG: en_US.UTF-8
+    LC_ALL: en_US.UTF-8
+    PATH: "{{ ansible_env.PATH }}:/srv/source/depot_tools"
+
+  tasks:
+    - name: Installing Packages
+      yum:
+        name: "{{ item }}"
+        state: latest
+        enablerepo: epel
+        update_cache: true
+      with_items:
+        - "@Development Tools"
+        - alsa-lib-devel
+        - binutils
+        - bison
+        - bzip2
+        - bzip2-devel
+        - cairo-devel
+        - cmake
+        - cups-devel
+        - dbus-devel
+        - dbus-glib-devel
+        - expat-devel
+        - fontconfig-devel
+        - freetype-devel
+        - gcc-c++
+        - git
+        - glib2-devel
+        - glibc.i686
+        - gperf
+        - htop
+        - httpd
+        - java-1.*.0-openjdk-devel
+        - libatomic
+        - libcap-devel
+        - libffi-devel
+        - libjpeg-devel
+        - libX11-devel
+        - libXtst-devel
+        - mercurial
+        - mod_ssl
+        - nspr-devel
+        - nss-devel
+        - pam-devel
+        - pango-devel
+        - pciutils-devel
+        - php
+        - php-cli
+        - pkgconfig
+        - python
+        - python-psutil
+        - redhat-lsb
+        - tar
+        - wdiff
+        - zlib-devel
+        - zlib.i686
+
+    - name: Creating Directory Structure
+      file:
+        path: /srv/{{ item }}/chromium
+        state: directory
+        recurse: true
+      with_items:
+        - build
+        - source
+
+    - name: Cloning Brotli
+      git:
+        repo: https://github.com/google/brotli.git
+        dest: /srv/source/brotli
+        force: yes
+
+    - name: Compiling Brotli
+      shell: |
+        ./configure-cmake && \
+        make && \
+        make install
+      args:
+        chdir: /srv/source/brotli
+        creates: /usr/local/bin/brotli
+
+    - name: Cloning Depot Tools
+      git:
+        repo: https://chromium.googlesource.com/chromium/tools/depot_tools.git
+        dest: /srv/source/depot_tools
+        force: yes
+
+    - name: Fetching Chromium
+      shell: |
+        fetch chromium
+      args:
+        chdir: /srv/source/chromium
+
+    - name: Checking Out Chromium Commit
+      shell: |
+        git checkout 7f3cdc3f76faecc6425814688e3b2b71bf1630a4
+      args:
+        chdir: /srv/source/chromium/src
+
+    - name: Synchronizing Chromium
+      shell: |
+        gclient sync --with_branch_heads
+      args:
+        chdir: /srv/source/chromium
+
+    - name: Patching Chromium
+      lineinfile:
+        line: "{{ item.line }}"
+        regexp: "{{ item.regexp }}"
+        path: "/srv/source/chromium/src/{{ item.path }}"
+        state: present
+        backrefs: yes
+      with_items:
+        - { path: 'content/browser/sandbox_ipc_linux.cc', regexp: '^(\s+)PLOG[(]WARNING[)] << "poll";$', line: '\1PLOG(WARNING) << "poll"; failed_polls = 0;' }
+
+    - name: Creating Build Configuration Directory
+      file:
+        mode: 0755
+        path: /srv/source/chromium/src/out/Headless
+        state: directory
+
+    - name: Creating Headless Chromium Configuration
+      copy:
+        content: |
+          import("//build/args/headless.gn")
+          enable_nacl = false
+          is_component_build = false
+          is_debug = false
+          remove_webcore_debug_symbols = true
+          symbol_level = 0
+        dest: /srv/source/chromium/src/out/Headless/args.gn
+
+    - name: Generating Headless Chromium Configuration
+      shell: |
+        gn gen out/Headless
+      args:
+        chdir: /srv/source/chromium/src
+
+    - name: Compiling Headless Chromium
+      shell: |
+        ninja -C out/Headless headless_shell
+      args:
+        chdir: /srv/source/chromium/src
+
+    - name: Getting Chromium Version
+      shell: |
+        sed --regexp-extended 's~[^0-9]+~~g' chrome/VERSION | tr '\n' '.' | sed 's~[.]$~~'
+      args:
+        chdir: /srv/source/chromium/src
+        warn: false
+      register: version
+
+    - name: Striping Symbols from Chromium Binary
+      shell: |
+        strip -o /srv/build/chromium/chromium-{{ version.stdout | quote }} out/Headless/headless_shell
+      args:
+        chdir: /srv/source/chromium/src
+
+    - name: Compressing Chromium Binary
+      shell: |
+        /usr/local/bin/brotli --best --force chromium-*
+      args:
+        chdir: /srv/build/chromium
+
+    - name: Downloading Chromium Package
+      fetch:
+        src: "/srv/build/chromium/chromium-{{ version.stdout }}.br"
+        dest: ../../../bin/
+        flat: yes
+        fail_on_missing: true
+
+- name: Teardown AWS
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Terminating EC2 Instance
+      ec2:
+        wait: yes
+        state: absent
+        instance_ids: '{{ ec2.instance_ids }}'
+        region: "{{ region }}"
+
+    - name: Deleting Security Group
+      ec2_group:
+        name: ansible
+        state: absent
+        region: "{{ region }}"
+
+    - name: Deleting EC2 Key Pair
+      ec2_key:
+        name: ansible
+        state: absent
+        region: "{{ region }}"
+
+    - name: Deleting SSH Key
+      file:
+        path: "../{{ item }}"
+        state: absent
+      with_items:
+        - ansible.pem
+        - ansible.pem.pub

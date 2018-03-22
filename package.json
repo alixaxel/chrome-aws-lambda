@@ -1,0 +1,35 @@
+{
+  "name": "chrome-aws-lambda",
+  "private": false,
+  "version": "64.0.3264",
+  "description": "Chromium Binary for AWS Lambda",
+  "main": "source/index.js",
+  "engines": {
+    "node": ">=6.10"
+  },
+  "scripts": {
+    "version": "git add -A .",
+    "postversion": "git push && git push --tags"
+  },
+  "author": "Alix Axel",
+  "license": "MIT",
+  "dependencies": {
+    "debug": "^3.1.0"
+  },
+  "homepage": "https://github.com/alixaxel/chrome-aws-lambda",
+  "bugs": {
+    "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"
+  },
+  "repository": {
+    "url": "git://github.com/alixaxel/chrome-aws-lambda.git",
+    "type": "git"
+  },
+  "keywords": [
+    "aws",
+    "chrome",
+    "chromium",
+    "lambda",
+    "puppeteer",
+    "serverless"
+  ]
+}
