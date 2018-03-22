@@ -4,11 +4,13 @@ This Ansible playbook will launch an EC2 `c5.9xlarge` Spot Instance and compile 
 
 Once the compilation finishes, the binary will be compressed with Brotli and downloaded.
 
+The whole process usually takes slightly less than 1 hour to complete.
+
 ## Chromium Revision to Git Commit
 
 - crrev.com/{REVISION}
 
-Make sure to update the `chromium_commit` variable accordingly.
+Make sure to update the `Checking Out Chromium Commit` task accordingly.
 
 ## Usage
 
