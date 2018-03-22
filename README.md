@@ -29,6 +29,7 @@ const chromium = require('chrome-aws-lambda');
 const puppeteer = require('puppeteer');
 
 exports.handler = async (event, context) => {
+  let result = null;
   let browser = null;
 
   try {
@@ -41,12 +42,16 @@ exports.handler = async (event, context) => {
 
     await page.goto(event.url || 'https://example.com');
 
-    return context.succeed(await page.title());
+    result = await page.title();
   } catch (error) {
     return context.fail(error);
   } finally {
-    await browser.close();
+    if (browser !== null) {
+      await browser.close();
+    }
   }
+
+  return context.succeed(result);
 };
 ```
 
