@@ -9,7 +9,7 @@
   },
   "scripts": {
     "version": "git add -A .",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags && npm publish"
   },
   "author": "Alix Axel",
   "license": "MIT",
