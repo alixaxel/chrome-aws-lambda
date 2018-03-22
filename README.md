@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
 [![puppeteer](https://img.shields.io/badge/puppeteer-v1.3.0-blue.svg?style=for-the-badge)](https://github.com/GoogleChrome/puppeteer)
-[![Chromium](https://img.shields.io/badge/chromium-31_MB-green.svg?style=for-the-badge)](bin/chromium.br)
+[![Chromium](https://img.shields.io/badge/chromium-31_MB-brightgreen.svg?style=for-the-badge)](bin/chromium.br)
 
 Chromium Binary for AWS Lambda
 
