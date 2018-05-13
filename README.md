@@ -1,7 +1,6 @@
 # chrome-aws-lambda
 
 [![chrome-aws-lambda](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
-[![puppeteer](https://img.shields.io/npm/v/puppeteer.svg?style=for-the-badge)](https://www.npmjs.com/package/puppeteer)
 [![Chromium](https://img.shields.io/badge/chromium-31_MB-brightgreen.svg?style=for-the-badge)](bin/)
 
 Chromium Binary for AWS Lambda
