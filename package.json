@@ -1,7 +1,7 @@
 {
   "name": "chrome-aws-lambda",
   "private": false,
-  "version": "67.0.3372",
+  "version": "0.13.0",
   "description": "Chromium Binary for AWS Lambda",
   "main": "source/index.js",
   "engines": {
