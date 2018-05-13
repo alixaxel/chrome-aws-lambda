@@ -5,7 +5,7 @@
   "description": "Chromium Binary for AWS Lambda",
   "main": "source/index.js",
   "engines": {
-    "node": ">=6.10"
+    "node": ">=8.10"
   },
   "scripts": {
     "version": "git add -A .",
@@ -13,8 +13,10 @@
   },
   "author": "Alix Axel",
   "license": "MIT",
-  "dependencies": {
-    "debug": "^3.1.0"
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {
+    "iltorb": "^2.2.0"
   },
   "homepage": "https://github.com/alixaxel/chrome-aws-lambda",
   "bugs": {

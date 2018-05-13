@@ -1,7 +1,8 @@
 # chrome-aws-lambda
 
-[![npm](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
+[![npm](https://img.shields.io/badge/chrome-aws-lambda-v0.13.0-blue.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
 [![puppeteer](https://img.shields.io/badge/puppeteer-v1.3.0-blue.svg?style=for-the-badge)](https://github.com/GoogleChrome/puppeteer)
+[![Chromium](https://img.shields.io/badge/chromium-v64.0.3264.0-blue.svg?style=for-the-badge)](bin/chromium.br)
 [![Chromium](https://img.shields.io/badge/chromium-31_MB-brightgreen.svg?style=for-the-badge)](bin/chromium.br)
 
 Chromium Binary for AWS Lambda
@@ -12,16 +13,17 @@ Chromium Binary for AWS Lambda
 $ npm i chrome-aws-lambda
 ```
 
-This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a day).
+This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a day or two).
 
 If you wish to install an older version of Chromium, take a look at [Versioning](https://github.com/alixaxel/chrome-aws-lambda#versioning).
 
 ## API
 
-| Method             | Returns              | Description                                               |
-| ------------------ | -------------------- | --------------------------------------------------------- |
-| `defaultArgs()`    | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
-| `executablePath()` | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
+| Method           | Returns              | Description                                               |
+| ---------------- | -------------------- | --------------------------------------------------------- |
+| `args`           | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
+| `executablePath` | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
+| `headless`       | `{!boolean}`         | Returns `true` if we are running on AWS Lambda.           |
 
 ## Usage
 
@@ -35,8 +37,9 @@ exports.handler = async (event, context) => {
 
   try {
     browser = await puppeteer.launch({
-      args: chromium.defaultArgs(),
-      executablePath: await chromium.executablePath(),
+      args: chromium.args,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
     });
 
     let page = await browser.newPage();
@@ -56,9 +59,19 @@ exports.handler = async (event, context) => {
 };
 ```
 
+The `nodejs8.10` AWS Lambda runtime is required for this package to work properly.
+
+## Versioning
+
+This package is versioned based on the underlying `puppeteer` version:
+
+| `puppeteer` Version | Chromium Revision                                    | `chrome-aws-lambda` Version      |
+| ------------------- | ---------------------------------------------------- | -------------------------------- |
+| `0.13.0`            | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) | `npm i chrome-aws-lambda@0.13.0` |
+
 ## Compiling
 
-To compile your own version of Chromium take a look at the instructions in the [Ansible playbook](_/ansible).
+To compile your own version of Chromium check the [Ansible playbook instructions](_/ansible).
 
 ## Compression
 
@@ -97,17 +110,6 @@ This allows us to get the best compression ratio and faster decompression times.
 | chromium.br | Brotli    | 11    | 34820408  | **33.21** | **74.58%** | 0.712s     |
 
 For this reason, a stripped-down version of [`iltorb`](https://github.com/MayhemYDG/iltorb) is bundled as a dependency.
-
-## Versioning
-
-This package is versioned based on the underlying Chromium version:
-
-| `puppeteer` Version | Chromium Revision                                    | `chrome-aws-lambda` Version         |
-| ------------------- | ---------------------------------------------------- | ----------------------------------- |
-| `1.2.0`             | [`543305`](https://crrev.com/543305) (`67.0.3372.0`) | `npm i chrome-aws-lambda@67.0.3372` |
-| `1.1.0`             | [`536395`](https://crrev.com/536395) (`66.0.3347.0`) | `npm i chrome-aws-lambda@66.0.3347` |
-| `1.0.0`             | [`526987`](https://crrev.com/526987) (`65.0.3312.0`) | `npm i chrome-aws-lambda@65.0.3312` |
-| `0.13.0`            | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) | `npm i chrome-aws-lambda@64.0.3264` |
 
 ## License
 

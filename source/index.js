@@ -1,9 +1,4 @@
-'use strict';
-
-const debug = require('debug')('chrome-aws-lambda');
-
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 
 class Chromium {
@@ -12,13 +7,16 @@ class Chromium {
    *
    * @returns {!Array<string>}
    */
-  static defaultArgs() {
-    return [
+  static get args() {
+    let result = [
       '--disable-dev-shm-usage',
       '--disable-notifications',
       '--disable-offer-store-unmasked-wallet-cards',
       '--disable-offer-upload-credit-cards',
       '--disable-setuid-sandbox',
+      '--enable-async-dns',
+      '--enable-simple-cache-backend',
+      '--enable-tcp-fast-open',
       '--media-cache-size=33554432',
       '--no-default-browser-check',
       '--no-first-run',
@@ -26,9 +24,15 @@ class Chromium {
       '--no-sandbox',
       '--no-zygote',
       '--prerender-from-omnibox=disabled',
-      '--single-process',
-      '--start-maximized',
     ];
+
+    if (this.headless === true) {
+      result.push('--single-process');
+    } else {
+      result.push('--start-maximized');
+    }
+
+    return result;
   }
 
   /**
@@ -37,22 +41,30 @@ class Chromium {
    *
    * @returns {?Promise<string>}
    */
-  static executablePath() {
-    if (process.env['AWS_LAMBDA_FUNCTION_NAME'] === undefined) {
+  static get executablePath() {
+    if (this.headless !== true) {
       return null;
-    }
-
-    const input = path.join(__dirname, '../bin/chromium.br');
-    const output = path.join(os.tmpdir(), 'chromium');
-
-    if (fs.existsSync(output) === true) {
-      return output;
     }
 
     return new Promise(
       (resolve, reject) => {
-        if (process.env.DEBUG !== undefined) {
-          debug(`Inflating '${path.basename(input)}'.`);
+        let input = path.join(__dirname, '..', 'bin');
+        let output = '/tmp/chromium';
+
+        if (fs.existsSync(output) === true) {
+          for (let file of fs.readdirSync(`/tmp`)) {
+            if (file.startsWith('core.chromium') === true) {
+              fs.unlinkSync(`/tmp/${file}`);
+            }
+          }
+
+          return resolve(output);
+        }
+
+        for (let file of fs.readdirSync(input)) {
+          if (file.endsWith('.br') === true) {
+            input = path.join(input, file);
+          }
         }
 
         const source = fs.createReadStream(input);
@@ -72,23 +84,30 @@ class Chromium {
 
         target.on('close',
           () => {
-            try {
-              fs.chmod(output, '0755', () => {
-                if (process.env.DEBUG !== undefined) {
-                  debug(`Finished inflating '${path.basename(input)}' into '${output}'.`);
+            fs.chmod(output, '0755',
+              (error) => {
+                if (error) {
+                  return reject(error);
                 }
 
                 return resolve(output);
-              });
-            } catch (error) {
-              return reject(error);
-            }
+              }
+            );
           }
         );
 
         source.pipe(require(`${__dirname}/iltorb`).decompressStream()).pipe(target);
       }
     );
+  }
+
+  /**
+   * Returns a boolean indicating if we are running on AWS Lambda.
+   *
+   * @returns {!boolean}
+   */
+  static get headless() {
+    return (process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined);
   }
 }
 
