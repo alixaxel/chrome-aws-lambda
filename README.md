@@ -1,9 +1,8 @@
 # chrome-aws-lambda
 
-[![npm](https://img.shields.io/badge/chrome-aws-lambda-v0.13.0-blue.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
-[![puppeteer](https://img.shields.io/badge/puppeteer-v1.3.0-blue.svg?style=for-the-badge)](https://github.com/GoogleChrome/puppeteer)
-[![Chromium](https://img.shields.io/badge/chromium-v64.0.3264.0-blue.svg?style=for-the-badge)](bin/chromium.br)
-[![Chromium](https://img.shields.io/badge/chromium-31_MB-brightgreen.svg?style=for-the-badge)](bin/chromium.br)
+[![chrome-aws-lambda](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
+[![puppeteer](https://img.shields.io/npm/v/puppeteer.svg?style=for-the-badge)](https://www.npmjs.com/package/puppeteer)
+[![Chromium](https://img.shields.io/badge/chromium-31_MB-brightgreen.svg?style=for-the-badge)](bin/)
 
 Chromium Binary for AWS Lambda
 
