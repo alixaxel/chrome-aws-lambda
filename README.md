@@ -17,7 +17,7 @@ If you wish to install an older version of Chromium, take a look at [Versioning]
 
 ## API
 
-| Method           | Returns              | Description                                               |
+| Property         | Returns              | Description                                               |
 | ---------------- | -------------------- | --------------------------------------------------------- |
 | `args`           | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
 | `executablePath` | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
@@ -65,6 +65,7 @@ This package is versioned based on the underlying `puppeteer` version:
 
 | `puppeteer` Version | Chromium Revision                                    | `chrome-aws-lambda` Version      |
 | ------------------- | ---------------------------------------------------- | -------------------------------- |
+| `1.5.0`             | [`564778`](https://crrev.com/564778) (`69.0.3452.0`) | `npm i chrome-aws-lambda@1.5.0`  |
 | `1.4.0`             | [`555668`](https://crrev.com/555668) (`68.0.3419.0`) | `npm i chrome-aws-lambda@1.4.0`  |
 | `1.3.0`             | [`549031`](https://crrev.com/549031) (`67.0.3391.0`) | `npm i chrome-aws-lambda@1.3.0`  |
 | `1.2.0`             | [`543305`](https://crrev.com/543305) (`67.0.3372.0`) | `npm i chrome-aws-lambda@1.2.0`  |
