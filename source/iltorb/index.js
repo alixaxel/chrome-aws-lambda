@@ -11,7 +11,7 @@ const { StreamEncode, StreamDecode } = require('./build/bindings/iltorb.node');
 const { Transform } = require('stream');
 
 class TransformStreamEncode extends Transform {
-  constructor(params={}, async=true) {
+  constructor(params = {}, async = true) {
     super();
     this.encoding = false;
     this.corked = false;
@@ -81,7 +81,7 @@ class TransformStreamEncode extends Transform {
 }
 
 class TransformStreamDecode extends Transform {
-  constructor(async=true) {
+  constructor(async = true) {
     super();
     this.decoder = new StreamDecode(async);
   }
@@ -131,7 +131,7 @@ function compress(input, params, cb) {
     return Promise.reject(err);
   }
 
-  params = Object.assign({}, params, {size_hint: input.length});
+  params = Object.assign({}, params, { size_hint: input.length });
 
   if (gotCallback) {
     return compressBuffer(input, params, cb);
@@ -211,7 +211,7 @@ function compressSync(input, params) {
   if (typeof params !== 'object') {
     params = {};
   }
-  params = Object.assign({}, params, {size_hint: input.length});
+  params = Object.assign({}, params, { size_hint: input.length });
   const stream = new TransformStreamEncode(params, false);
   const chunks = [];
   let length = 0;

@@ -20,8 +20,7 @@
     "postversion": "git push && git push --tags && npm publish"
   },
   "dependencies": {},
-  "devDependencies": {},
-  "optionalDependencies": {
+  "devDependencies": {
     "iltorb": "2.4.0"
   },
   "homepage": "https://github.com/alixaxel/chrome-aws-lambda",

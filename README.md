@@ -30,7 +30,7 @@ The `nodejs8.10` AWS Lambda runtime is required for this package to work properl
 
 ```javascript
 const chromium = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 
 exports.handler = async (event, context) => {
   let result = null;
@@ -60,20 +60,23 @@ exports.handler = async (event, context) => {
 };
 ```
 
+You should allocate at least 512 MB of RAM to your Lambda, 1536 MB is recommended.
+
 ## Versioning
 
 This package is versioned based on the underlying `puppeteer` version:
 
-| `puppeteer` Version | Chromium Revision                                    | `chrome-aws-lambda` Version                   |
-| ------------------- | ---------------------------------------------------- | --------------------------------------------- |
-| `1.6.2`             | [`575458`](https://crrev.com/575458) (`69.0.3494.0`) | `npm i chrome-aws-lambda@1.6.2 --save-exact`  |
-| `1.5.0`             | [`564778`](https://crrev.com/564778) (`69.0.3452.0`) | `npm i chrome-aws-lambda@1.5.0 --save-exact`  |
-| `1.4.0`             | [`555668`](https://crrev.com/555668) (`68.0.3419.0`) | `npm i chrome-aws-lambda@1.4.0 --save-exact`  |
-| `1.3.0`             | [`549031`](https://crrev.com/549031) (`67.0.3391.0`) | `npm i chrome-aws-lambda@1.3.0 --save-exact`  |
-| `1.2.0`             | [`543305`](https://crrev.com/543305) (`67.0.3372.0`) | `npm i chrome-aws-lambda@1.2.0 --save-exact`  |
-| `1.1.0`             | [`536395`](https://crrev.com/536395) (`66.0.3347.0`) | `npm i chrome-aws-lambda@1.1.0 --save-exact`  |
-| `1.0.0`             | [`526987`](https://crrev.com/526987) (`65.0.3312.0`) | `npm i chrome-aws-lambda@1.0.0 --save-exact`  |
-| `0.13.0`            | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) | `npm i chrome-aws-lambda@0.13.0 --save-exact` |
+| `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                    |
+| ------------------- | --------------------------------------------- | ---------------------------------------------------- |
+| `1.7.0`             | `npm i chrome-aws-lambda@1.7.0 --save-exact`  | [`579032`](https://crrev.com/579032) (`70.0.3508.0`) |
+| `1.6.2`             | `npm i chrome-aws-lambda@1.6.2 --save-exact`  | [`575458`](https://crrev.com/575458) (`69.0.3494.0`) |
+| `1.5.0`             | `npm i chrome-aws-lambda@1.5.0 --save-exact`  | [`564778`](https://crrev.com/564778) (`69.0.3452.0`) |
+| `1.4.0`             | `npm i chrome-aws-lambda@1.4.0 --save-exact`  | [`555668`](https://crrev.com/555668) (`68.0.3419.0`) |
+| `1.3.0`             | `npm i chrome-aws-lambda@1.3.0 --save-exact`  | [`549031`](https://crrev.com/549031) (`67.0.3391.0`) |
+| `1.2.0`             | `npm i chrome-aws-lambda@1.2.0 --save-exact`  | [`543305`](https://crrev.com/543305) (`67.0.3372.0`) |
+| `1.1.0`             | `npm i chrome-aws-lambda@1.1.0 --save-exact`  | [`536395`](https://crrev.com/536395) (`66.0.3347.0`) |
+| `1.0.0`             | `npm i chrome-aws-lambda@1.0.0 --save-exact`  | [`526987`](https://crrev.com/526987) (`65.0.3312.0`) |
+| `0.13.0`            | `npm i chrome-aws-lambda@0.13.0 --save-exact` | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) |
 
 ## Compiling
 
