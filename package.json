@@ -2,8 +2,16 @@
   "name": "chrome-aws-lambda",
   "private": false,
   "version": "1.5.0",
+  "author": {
+    "name": "Alix Axel"
+  },
+  "license": "MIT",
   "description": "Chromium Binary for AWS Lambda",
   "main": "source/index.js",
+  "files": [
+    "bin",
+    "source"
+  ],
   "engines": {
     "node": ">=8.10"
   },
@@ -11,10 +19,6 @@
     "version": "git add -A .",
     "postversion": "git push && git push --tags && npm publish"
   },
-  "author": {
-    "name": "Alix Axel"
-  },
-  "license": "MIT",
   "dependencies": {},
   "devDependencies": {},
   "optionalDependencies": {
@@ -36,10 +40,6 @@
     "lambda",
     "puppeteer",
     "serverless"
-  ],
-  "files": [
-    "bin",
-    "source"
   ],
   "prettier": {
     "arrowParens": "always",
