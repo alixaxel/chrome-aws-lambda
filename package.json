@@ -21,8 +21,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "iltorb": "2.4.0",
-    "puppeteer-core": "1.9.0"
+    "iltorb": "^2.4.0",
+    "puppeteer-core": "~1.9.0"
   },
   "homepage": "https://github.com/alixaxel/chrome-aws-lambda",
   "bugs": {
