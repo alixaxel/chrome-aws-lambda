@@ -139,9 +139,9 @@ class Chromium {
     }
 
     try {
-      return require('puppeteer-core');
-    } catch (error) {
       return require('puppeteer');
+    } catch (error) {
+      return require('puppeteer-core');
     }
   }
 }

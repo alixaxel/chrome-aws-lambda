@@ -1,9 +1,9 @@
 let Super = null;
 
 try {
-  Super = require('puppeteer-core/lib/Page').Page;
-} catch (error) {
   Super = require('puppeteer/lib/Page').Page;
+} catch (error) {
+  Super = require('puppeteer-core/lib/Page').Page;
 }
 
 Super.prototype.clickAndWaitForNavigation = function (selector, options = null) {

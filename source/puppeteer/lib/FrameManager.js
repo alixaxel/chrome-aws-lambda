@@ -1,9 +1,9 @@
 let Super = null;
 
 try {
-  Super = require('puppeteer-core/lib/FrameManager').Frame;
-} catch (error) {
   Super = require('puppeteer/lib/FrameManager').Frame;
+} catch (error) {
+  Super = require('puppeteer-core/lib/FrameManager').Frame;
 }
 
 Super.prototype.count = function (selector) {
