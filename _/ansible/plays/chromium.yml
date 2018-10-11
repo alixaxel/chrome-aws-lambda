@@ -39,11 +39,11 @@
       ec2:
         group: ansible
         image: "{{ image }}"
-        instance_type: c5.4xlarge
+        instance_type: c5.9xlarge
         key_name: ansible
         wait: yes
         spot_type: one-time
-        spot_price: 0.50
+        spot_price: 0.75
         spot_wait_timeout: 300
         spot_launch_group: chromium
         region: "{{ region }}"
@@ -51,7 +51,7 @@
         volumes:
           - device_name: /dev/xvda
             delete_on_termination: true
-            volume_size: 32
+            volume_size: 64
             volume_type: gp2
         instance_tags:
           Name: Chromium
@@ -166,11 +166,17 @@
         dest: /srv/source/depot_tools
         force: yes
 
+    - name: Resolving Chromium Revision from Puppeteer Version
+      uri:
+        url: "https://raw.githubusercontent.com/GoogleChrome/puppeteer/{{ puppeteer_version | default('master') }}/package.json"
+        return_content: yes
+      register: puppeteer
+
     - name: Resolving Git Commit from Chromium Revision
       uri:
-        url: "https://cr-rev.appspot.com/_ah/api/crrev/v1/redirect/{{ chromium_revision }}"
+        url: "https://cr-rev.appspot.com/_ah/api/crrev/v1/redirect/{{ puppeteer.json.puppeteer.chromium_revision }}"
         return_content: yes
-      register: crrev
+      register: revision
 
     - name: Fetching Chromium
       shell: |
@@ -180,7 +186,7 @@
 
     - name: Checking Out Chromium Commit
       shell: |
-        git checkout {{ crrev.json.git_sha }}
+        git checkout {{ revision.json.git_sha }}
       args:
         chdir: /srv/source/chromium/src
 
@@ -206,6 +212,14 @@
         path: /srv/source/chromium/src/out/Headless
         state: directory
 
+    - name: Mounting Build Directory in Memory
+      mount:
+        fstype: tmpfs
+        opts: size=32G,nr_inodes=64k,mode=1777
+        path: /srv/source/chromium/src/out/Headless
+        src: tmpfs
+        state: mounted
+
     - name: Creating Headless Chromium Configuration
       copy:
         content: |
@@ -225,7 +239,7 @@
 
     - name: Compiling Headless Chromium
       shell: |
-        ninja -C out/Headless headless_shell
+        autoninja -C out/Headless headless_shell
       args:
         chdir: /srv/source/chromium/src
 

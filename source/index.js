@@ -9,6 +9,7 @@ class Chromium {
    */
   static get args() {
     let result = [
+      '--disable-accelerated-2d-canvas',
       '--disable-dev-shm-usage',
       '--disable-notifications',
       '--disable-offer-store-unmasked-wallet-cards',
@@ -54,7 +55,7 @@ class Chromium {
         if (fs.existsSync(output) === true) {
           for (let file of fs.readdirSync(`/tmp`)) {
             if (file.startsWith('core.chromium') === true) {
-              fs.unlinkSync(`/tmp/${file}`);
+              fs.unlinkSync(`/tmp/${file}`); break;
             }
           }
 
