@@ -18,11 +18,13 @@ If you wish to install an older version of Chromium, take a look at [Versioning]
 
 ## API
 
-| Property         | Returns              | Description                                               |
-| ---------------- | -------------------- | --------------------------------------------------------- |
-| `args`           | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
-| `executablePath` | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
-| `headless`       | `{!boolean}`         | Returns `true` if we are running on AWS Lambda.           |
+| Property          | Returns              | Description                                               |
+| ----------------- | -------------------- | --------------------------------------------------------- |
+| `args`            | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
+| `defaultViewport` | `{!Object}`          | Returns more sensible default viewport settings.          |
+| `executablePath`  | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
+| `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda.           |
+| `puppeteer`       | `{!Object}`          | Overloads puppeteer  and returns the resolved package.    |
 
 ## Usage
 
@@ -61,6 +63,42 @@ exports.handler = async (event, context) => {
 ```
 
 You should allocate at least 512 MB of RAM to your Lambda, 1536 MB is recommended.
+
+## Overloading
+
+Since version `1.7.0`, it's also possible to overload `puppeteer` / `puppeteer-core` API with useful methods:
+
+- `Frame`
+  - `count(selector)`
+  - `exists(selector)`
+  - `fill(form, data, heuristic = 'name')`
+  - `number(selector, decimal = null, index = null, property = 'textContent')`
+  - `selectByLabel(selector, ...values)`
+  - `string(selector, property = 'textContent')`
+  - `waitUntilVisible(selector, timeout = null)`
+  - `waitWhileVisible(selector, timeout = null)`
+- `Page`
+  - `clickAndWaitForNavigation(selector, options = null)`
+  - `count(selector)`
+  - `exists(selector)`
+  - `fill(form, data, heuristic = 'name')`
+  - `go(url, options = null)`
+  - `number(selector, decimal = null, index = null, property = 'textContent')`
+  - `selectByLabel(selector, ...values)`
+  - `string(selector, property = 'textContent')`
+  - `waitUntilVisible(selector, timeout = null)`
+  - `waitWhileVisible(selector, timeout = null)`
+
+Besides the public API, the following browser-context methods will also become available:
+
+ - `σ.$(selector, context = document)`
+ - `σ.$$(selector, index = null, context = document)`
+ - `σ.$x(expression, index = null, context = document)`
+ - `σ.$number(data, decimal = null, index = null, property = 'textContent')`
+ - `σ.$string(data, property = 'textContent')`
+ - `σ.$regexp(data, pattern, index = null, property = 'textContent')`
+
+To enable overloading, simply call the `puppeteer` property exposed by this package.
 
 ## Versioning
 

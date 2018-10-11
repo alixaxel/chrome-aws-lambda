@@ -37,6 +37,22 @@ class Chromium {
   }
 
   /**
+   * Returns more sensible default viewport settings.
+   *
+   * @returns {!Object}
+   */
+  static get defaultViewport() {
+    return {
+      width: (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) ? 0 : 1920,
+      height: (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) ? 0 : 1080,
+      deviceScaleFactor: 1,
+      isMobile: false,
+      hasTouch: false,
+      isLandscape: true,
+    };
+  }
+
+  /**
    * Inflates the current version of Chromium and returns the path to the binary.
    * If not running on AWS Lambda, `null` is returned instead.
    *
@@ -109,6 +125,24 @@ class Chromium {
    */
   static get headless() {
     return (process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined);
+  }
+
+  /**
+   * Overloads puppeteer with useful methods and returns the resolved package.
+   *
+   * @throws {Error}
+   * @returns {!Object}
+   */
+  static get puppeteer() {
+    for (let overload of ['FrameManager', 'Page']) {
+      require(`${__dirname}/puppeteer/lib/${overload}`);
+    }
+
+    try {
+      return require('puppeteer-core');
+    } catch (error) {
+      return require('puppeteer');
+    }
   }
 }
 
