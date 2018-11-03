@@ -85,56 +85,55 @@
   tasks:
     - name: Installing Packages
       yum:
-        name: "{{ item }}"
+        name:
+          - "@Development Tools"
+          - alsa-lib-devel
+          - binutils
+          - bison
+          - bzip2
+          - bzip2-devel
+          - cairo-devel
+          - cmake
+          - cups-devel
+          - dbus-devel
+          - dbus-glib-devel
+          - expat-devel
+          - fontconfig-devel
+          - freetype-devel
+          - gcc-c++
+          - git
+          - glib2-devel
+          - glibc.i686
+          - gperf
+          - htop
+          - httpd
+          - java-1.*.0-openjdk-devel
+          - libatomic
+          - libcap-devel
+          - libffi-devel
+          - libjpeg-devel
+          - libX11-devel
+          - libXtst-devel
+          - mercurial
+          - mod_ssl
+          - nspr-devel
+          - nss-devel
+          - pam-devel
+          - pango-devel
+          - pciutils-devel
+          - php
+          - php-cli
+          - pkgconfig
+          - python
+          - python-psutil
+          - redhat-lsb
+          - tar
+          - wdiff
+          - zlib-devel
+          - zlib.i686
         state: latest
         enablerepo: epel
         update_cache: true
-      with_items:
-        - "@Development Tools"
-        - alsa-lib-devel
-        - binutils
-        - bison
-        - bzip2
-        - bzip2-devel
-        - cairo-devel
-        - cmake
-        - cups-devel
-        - dbus-devel
-        - dbus-glib-devel
-        - expat-devel
-        - fontconfig-devel
-        - freetype-devel
-        - gcc-c++
-        - git
-        - glib2-devel
-        - glibc.i686
-        - gperf
-        - htop
-        - httpd
-        - java-1.*.0-openjdk-devel
-        - libatomic
-        - libcap-devel
-        - libffi-devel
-        - libjpeg-devel
-        - libX11-devel
-        - libXtst-devel
-        - mercurial
-        - mod_ssl
-        - nspr-devel
-        - nss-devel
-        - pam-devel
-        - pango-devel
-        - pciutils-devel
-        - php
-        - php-cli
-        - pkgconfig
-        - python
-        - python-psutil
-        - redhat-lsb
-        - tar
-        - wdiff
-        - zlib-devel
-        - zlib.i686
 
     - name: Creating Directory Structure
       file:
