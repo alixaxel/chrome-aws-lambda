@@ -10,22 +10,52 @@ class Chromium {
   static get args() {
     let result = [
       '--disable-accelerated-2d-canvas',
+      '--disable-background-networking',
+      '--disable-background-timer-throttling',
+      '--disable-breakpad',
+      '--disable-client-side-phishing-detection',
+      '--disable-cloud-import',
+      '--disable-default-apps',
       '--disable-dev-shm-usage',
+      '--disable-extensions',
+      '--disable-gesture-typing',
+      '--disable-gpu',
+      '--disable-hang-monitor',
+      '--disable-infobars',
       '--disable-notifications',
       '--disable-offer-store-unmasked-wallet-cards',
       '--disable-offer-upload-credit-cards',
+      '--disable-popup-blocking',
+      '--disable-print-preview',
+      '--disable-prompt-on-repost',
       '--disable-setuid-sandbox',
+      '--disable-software-rasterizer',
+      '--disable-speech-api',
+      '--disable-sync',
+      '--disable-tab-for-desktop-share',
+      '--disable-translate',
+      '--disable-voice-input',
+      '--disable-wake-on-wifi',
       '--enable-async-dns',
       '--enable-simple-cache-backend',
       '--enable-tcp-fast-open',
+      '--hide-scrollbars',
       '--media-cache-size=33554432',
+      '--metrics-recording-only',
+      '--mute-audio',
       '--no-default-browser-check',
       '--no-first-run',
       '--no-pings',
       '--no-sandbox',
       '--no-zygote',
+      '--password-store=basic',
       '--prerender-from-omnibox=disabled',
+      '--use-mock-keychain',
     ];
+
+    if (parseInt(process.env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || '512', 10) >= 1024) {
+      result.push('--memory-pressure-off');
+    }
 
     if (this.headless === true) {
       result.push('--single-process');

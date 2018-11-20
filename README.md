@@ -62,7 +62,7 @@ exports.handler = async (event, context) => {
 };
 ```
 
-You should allocate at least 512 MB of RAM to your Lambda, 1536 MB is recommended.
+You should allocate at least 512 MB of RAM to your Lambda, 1600 MB is recommended.
 
 ## Overloading
 
@@ -102,11 +102,11 @@ To enable overloading, simply call the `puppeteer` property exposed by this pack
 
 ## Versioning
 
-This package is versioned based on the underlying `puppeteer` version:
+This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                    |
 | ------------------- | --------------------------------------------- | ---------------------------------------------------- |
-| `1.10.0`            | `npm i chrome-aws-lambda@1.10.0 --save-exact` | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
+| `1.10.0`            | `npm i chrome-aws-lambda@1.10.1 --save-exact` | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
 | `1.9.0`             | `npm i chrome-aws-lambda@1.9.1 --save-exact`  | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |
 | `1.8.0`             | `npm i chrome-aws-lambda@1.8.0 --save-exact`  | [`588429`](https://crrev.com/588429) (`71.0.3542.0`) |
 | `1.7.0`             | `npm i chrome-aws-lambda@1.7.0 --save-exact`  | [`579032`](https://crrev.com/579032) (`70.0.3508.0`) |
