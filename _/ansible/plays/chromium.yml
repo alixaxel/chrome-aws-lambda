@@ -88,8 +88,11 @@
         name:
           - "@Development Tools"
           - alsa-lib-devel
+          - atk-devel
           - binutils
           - bison
+          - bluez-libs-devel
+          - brlapi-devel
           - bzip2
           - bzip2-devel
           - cairo-devel
@@ -105,17 +108,24 @@
           - glib2-devel
           - glibc.i686
           - gperf
+          - gtk3-devel
           - htop
           - httpd
           - java-1.*.0-openjdk-devel
           - libatomic
           - libcap-devel
           - libffi-devel
+          - libgcc.i686
+          - libgnome-keyring-devel
           - libjpeg-devel
+          - libstdc++.i686
           - libX11-devel
+          - libxkbcommon-x11-devel
+          - libXScrnSaver-devel
           - libXtst-devel
           - mercurial
           - mod_ssl
+          - ncurses-compat-libs
           - nspr-devel
           - nss-devel
           - pam-devel
@@ -124,15 +134,12 @@
           - php
           - php-cli
           - pkgconfig
+          - pulseaudio-libs-devel
           - python
-          - python-psutil
-          - redhat-lsb
           - tar
-          - wdiff
           - zlib-devel
           - zlib.i686
         state: latest
-        enablerepo: epel
         update_cache: true
 
     - name: Creating Directory Structure
@@ -143,21 +150,6 @@
       with_items:
         - build
         - source
-
-    - name: Cloning Brotli
-      git:
-        repo: https://github.com/google/brotli.git
-        dest: /srv/source/brotli
-        force: yes
-
-    - name: Compiling Brotli
-      shell: |
-        ./configure-cmake && \
-        make && \
-        make install
-      args:
-        chdir: /srv/source/brotli
-        creates: /usr/local/bin/brotli
 
     - name: Cloning Depot Tools
       git:
@@ -255,6 +247,21 @@
         strip -o /srv/build/chromium/chromium-{{ version.stdout | quote }} out/Headless/headless_shell
       args:
         chdir: /srv/source/chromium/src
+
+    - name: Cloning Brotli
+      git:
+        repo: https://github.com/google/brotli.git
+        dest: /srv/source/brotli
+        force: yes
+
+    - name: Compiling Brotli
+      shell: |
+        ./configure-cmake && \
+        make && \
+        make install
+      args:
+        chdir: /srv/source/brotli
+        creates: /usr/local/bin/brotli
 
     - name: Compressing Chromium Binary
       shell: |

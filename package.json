@@ -13,7 +13,7 @@
     "source"
   ],
   "engines": {
-    "node": ">=8.10"
+    "node": ">= 8.10"
   },
   "scripts": {
     "version": "git add -A .",
@@ -21,8 +21,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "iltorb": "^2.4.0",
-    "puppeteer-core": "~1.10.0"
+    "iltorb": "^2.4.1",
+    "puppeteer-core": "~1.11.0"
   },
   "homepage": "https://github.com/alixaxel/chrome-aws-lambda",
   "bugs": {
