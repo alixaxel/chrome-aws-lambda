@@ -1,7 +1,10 @@
-.PHONY: ansible iltorb chromium
+.PHONY: ansible chromium iltorb
 
 ansible:
 	sudo pip install boto boto3
+
+chromium:
+	ansible-playbook plays/chromium.yml -i inventory.ini
 
 iltorb:
 	rm --force --recursive "$$PWD/../../node_modules/iltorb/"
@@ -17,6 +20,3 @@ iltorb:
 		"$$PWD/../../node_modules/iltorb/build/" \
 		"$$PWD/../../node_modules/iltorb/index.js" \
 		"$$PWD/../../node_modules/iltorb/LICENSE"
-
-chromium:
-	ansible-playbook plays/chromium.yml -i inventory.ini

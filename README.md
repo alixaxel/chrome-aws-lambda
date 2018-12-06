@@ -16,6 +16,22 @@ This will ship with appropriate binary for the latest stable release of [`puppet
 
 If you wish to install an older version of Chromium, take a look at [Versioning](https://github.com/alixaxel/chrome-aws-lambda#versioning).
 
+## AWS Lambda Layers
+
+[Lambda Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) is a new convenient way to manage common dependencies between different Lambda Functions.
+
+The following set of commands will create a well-structured layer of this package:
+
+```shell
+npm pack && \
+mkdir --parents nodejs/node_modules/chrome-aws-lambda/ && \
+tar --directory nodejs/node_modules/chrome-aws-lambda/ --extract --file chrome-aws-lambda-*.tgz --strip-components=1 && \
+rm chrome-aws-lambda-*.tgz && \
+zip -9 --filesync --move --recurse-paths _/chrome-aws-lambda.layer.zip nodejs/
+```
+
+The above will create a `_/chrome-aws-lambda.layer.zip` file, which can be uploaded to your Layers console.
+
 ## API
 
 | Property          | Returns              | Description                                               |
