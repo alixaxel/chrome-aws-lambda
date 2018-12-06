@@ -10,7 +10,6 @@ class Chromium {
   static get args() {
     let result = [
       '--disable-accelerated-2d-canvas',
-      '--disable-background-networking',
       '--disable-background-timer-throttling',
       '--disable-breakpad',
       '--disable-client-side-phishing-detection',
