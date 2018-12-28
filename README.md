@@ -124,11 +124,11 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 To compile your own version of Chromium check the [Ansible playbook instructions](_/ansible).
 
-## AWS Lambda Layers
+## AWS Lambda Layer
 
 [Lambda Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) is a new convenient way to manage common dependencies between different Lambda Functions.
 
-The following set of commands will create a well-structured layer of this package:
+The following set of (Linux) commands will create a well-structured layer of this package:
 
 ```shell
 git clone https://github.com/alixaxel/chrome-aws-lambda.git && \
