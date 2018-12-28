@@ -1,7 +1,7 @@
 # chrome-aws-lambda
 
 [![chrome-aws-lambda](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
-[![Chromium](https://img.shields.io/badge/chromium-33_MB-brightgreen.svg?style=for-the-badge)](bin/)
+[![Chromium](https://img.shields.io/badge/chromium-34_MB-brightgreen.svg?style=for-the-badge)](bin/)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg?style=for-the-badge)](https://paypal.me/alixaxel)
 
 Chromium Binary for AWS Lambda
@@ -15,22 +15,6 @@ $ npm i chrome-aws-lambda
 This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a day or two).
 
 If you wish to install an older version of Chromium, take a look at [Versioning](https://github.com/alixaxel/chrome-aws-lambda#versioning).
-
-## AWS Lambda Layers
-
-[Lambda Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) is a new convenient way to manage common dependencies between different Lambda Functions.
-
-The following set of commands will create a well-structured layer of this package:
-
-```shell
-npm pack && \
-mkdir --parents nodejs/node_modules/chrome-aws-lambda/ && \
-tar --directory nodejs/node_modules/chrome-aws-lambda/ --extract --file chrome-aws-lambda-*.tgz --strip-components=1 && \
-rm chrome-aws-lambda-*.tgz && \
-zip -9 --filesync --move --recurse-paths _/chrome-aws-lambda.layer.zip nodejs/
-```
-
-The above will create a `_/chrome-aws-lambda.layer.zip` file, which can be uploaded to your Layers console.
 
 ## API
 
@@ -139,6 +123,24 @@ This package is versioned based on the underlying `puppeteer` minor version:
 ## Compiling
 
 To compile your own version of Chromium check the [Ansible playbook instructions](_/ansible).
+
+## AWS Lambda Layers
+
+[Lambda Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) is a new convenient way to manage common dependencies between different Lambda Functions.
+
+The following set of commands will create a well-structured layer of this package:
+
+```shell
+git clone https://github.com/alixaxel/chrome-aws-lambda.git && \
+cd chrome-aws-lambda && \
+npm pack && \
+mkdir --parents nodejs/node_modules/chrome-aws-lambda/ && \
+tar --directory nodejs/node_modules/chrome-aws-lambda/ --extract --file chrome-aws-lambda-*.tgz --strip-components=1 && \
+rm chrome-aws-lambda-*.tgz && \
+zip -9 --filesync --move --recurse-paths _/chrome-aws-lambda.zip nodejs/
+```
+
+The above will create a `_/chrome-aws-lambda.zip` file, which can be uploaded to your Layers console.
 
 ## Compression
 
