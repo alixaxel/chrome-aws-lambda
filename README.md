@@ -16,16 +16,6 @@ This will ship with appropriate binary for the latest stable release of [`puppet
 
 If you wish to install an older version of Chromium, take a look at [Versioning](https://github.com/alixaxel/chrome-aws-lambda#versioning).
 
-## API
-
-| Property          | Returns              | Description                                               |
-| ----------------- | -------------------- | --------------------------------------------------------- |
-| `args`            | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
-| `defaultViewport` | `{!Object}`          | Returns more sensible default viewport settings.          |
-| `executablePath`  | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
-| `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda.           |
-| `puppeteer`       | `{!Object}`          | Overloads puppeteer  and returns the resolved package.    |
-
 ## Usage
 
 The `nodejs8.10` AWS Lambda runtime is required for this package to work properly.
@@ -63,6 +53,16 @@ exports.handler = async (event, context) => {
 ```
 
 You should allocate at least 512 MB of RAM to your Lambda, 1600 MB is recommended.
+
+## API
+
+| Property          | Returns              | Description                                               |
+| ----------------- | -------------------- | --------------------------------------------------------- |
+| `args`            | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
+| `defaultViewport` | `{!Object}`          | Returns more sensible default viewport settings.          |
+| `executablePath`  | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
+| `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda.           |
+| `puppeteer`       | `{!Object}`          | Overloads puppeteer  and returns the resolved package.    |
 
 ## Overloading
 
