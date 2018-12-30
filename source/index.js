@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 
 class Chromium {
   /**
@@ -52,7 +51,7 @@ class Chromium {
       '--use-mock-keychain',
     ];
 
-    if (parseInt(process.env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || '512', 10) >= 1024) {
+    if (parseInt(process.env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || process.env.FUNCTION_MEMORY_MB || '512', 10) >= 1024) {
       result.push('--memory-pressure-off');
     }
 
@@ -72,8 +71,8 @@ class Chromium {
    */
   static get defaultViewport() {
     return {
-      width: (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) ? 0 : 1920,
-      height: (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) ? 0 : 1080,
+      width: Chromium.headless === true ? 1920 : 0,
+      height: Chromium.headless === true ? 1080 : 0,
       deviceScaleFactor: 1,
       isMobile: false,
       hasTouch: false,
@@ -83,7 +82,7 @@ class Chromium {
 
   /**
    * Inflates the current version of Chromium and returns the path to the binary.
-   * If not running on AWS Lambda, `null` is returned instead.
+   * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
    *
    * @returns {?Promise<string>}
    */
@@ -92,68 +91,62 @@ class Chromium {
       return null;
     }
 
-    return new Promise(
-      (resolve, reject) => {
-        let input = path.join(__dirname, '..', 'bin');
-        let output = '/tmp/chromium';
+    return new Promise((resolve, reject) => {
+      let input = `${__dirname}/../bin`;
+      let output = '/tmp/chromium';
 
-        if (fs.existsSync(output) === true) {
-          for (let file of fs.readdirSync(`/tmp`)) {
-            if (file.startsWith('core.chromium') === true) {
-              fs.unlinkSync(`/tmp/${file}`); break;
-            }
+      if (fs.existsSync(output) === true) {
+        for (let file of fs.readdirSync(`/tmp`)) {
+          if (file.startsWith('core.chromium') === true) {
+            fs.unlinkSync(`/tmp/${file}`);
+          }
+        }
+
+        return resolve(output);
+      }
+
+      for (let file of fs.readdirSync(input)) {
+        if (file.endsWith('.br') === true) {
+          input = `${input}/${file}`;
+        }
+      }
+
+      const source = fs.createReadStream(input);
+      const target = fs.createWriteStream(output);
+
+      source.on('error', (error) => {
+        return reject(error);
+      });
+
+      target.on('error', (error) => {
+        return reject(error);
+      });
+
+      target.on('close', () => {
+        fs.chmod(output, '0755', (error) => {
+          if (error) {
+            return reject(error);
           }
 
           return resolve(output);
-        }
+        });
+      });
 
-        for (let file of fs.readdirSync(input)) {
-          if (file.endsWith('.br') === true) {
-            input = path.join(input, file);
-          }
-        }
-
-        const source = fs.createReadStream(input);
-        const target = fs.createWriteStream(output);
-
-        source.on('error',
-          (error) => {
-            return reject(error);
-          }
-        );
-
-        target.on('error',
-          (error) => {
-            return reject(error);
-          }
-        );
-
-        target.on('close',
-          () => {
-            fs.chmod(output, '0755',
-              (error) => {
-                if (error) {
-                  return reject(error);
-                }
-
-                return resolve(output);
-              }
-            );
-          }
-        );
-
+      if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs8.10') {
         source.pipe(require(`${__dirname}/iltorb`).decompressStream()).pipe(target);
+      } else {
+        source.pipe(require('iltorb').decompressStream()).pipe(target);
       }
-    );
+    });
   }
 
   /**
-   * Returns a boolean indicating if we are running on AWS Lambda.
+   * Returns a boolean indicating if we are running on AWS Lambda or Google Cloud Functions.
    *
    * @returns {!boolean}
    */
   static get headless() {
-    return (process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined);
+    return process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined || process.env.FUNCTION_NAME !== undefined;
   }
 
   /**

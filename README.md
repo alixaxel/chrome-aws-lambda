@@ -4,7 +4,7 @@
 [![Chromium](https://img.shields.io/badge/chromium-34_MB-brightgreen.svg?style=for-the-badge)](bin/)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg?style=for-the-badge)](https://paypal.me/alixaxel)
 
-Chromium Binary for AWS Lambda
+Chromium Binary for AWS Lambda and Google Cloud Functions
 
 ## Install
 
@@ -31,6 +31,7 @@ exports.handler = async (event, context) => {
   try {
     browser = await puppeteer.launch({
       args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath,
       headless: chromium.headless,
     });
@@ -61,7 +62,7 @@ You should allocate at least 512 MB of RAM to your Lambda, 1600 MB is recommende
 | `args`            | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
 | `defaultViewport` | `{!Object}`          | Returns more sensible default viewport settings.          |
 | `executablePath`  | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
-| `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda.           |
+| `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda or GCF.    |
 | `puppeteer`       | `{!Object}`          | Overloads puppeteer  and returns the resolved package.    |
 
 ## Overloading
@@ -106,7 +107,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                    |
 | ------------------- | --------------------------------------------- | ---------------------------------------------------- |
-| `1.11.0`            | `npm i chrome-aws-lambda@1.11.1 --save-exact` | [`609904`](https://crrev.com/609904) (`72.0.3618.0`) |
+| `1.11.0`            | `npm i chrome-aws-lambda@1.11.2 --save-exact` | [`609904`](https://crrev.com/609904) (`72.0.3618.0`) |
 | `1.10.0`            | `npm i chrome-aws-lambda@1.10.1 --save-exact` | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
 | `1.9.0`             | `npm i chrome-aws-lambda@1.9.1 --save-exact`  | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |
 | `1.8.0`             | `npm i chrome-aws-lambda@1.8.0 --save-exact`  | [`588429`](https://crrev.com/588429) (`71.0.3542.0`) |
@@ -141,6 +142,18 @@ zip -9 --filesync --move --recurse-paths _/chrome-aws-lambda.zip nodejs/
 ```
 
 The above will create a `_/chrome-aws-lambda.zip` file, which can be uploaded to your Layers console.
+
+## Google Cloud Functions
+
+Since version `1.11.2`, it's also possible to use this package on Google/Firebase Cloud Functions.
+
+The only additional requirement is that `iltorb` must also be added as a dependency:
+
+```shell
+$ npm i iltorb
+```
+
+According to our benchmarks, it's 40% to 50% faster than using the off-the-shelf `puppeteer` bundle.
 
 ## Compression
 
