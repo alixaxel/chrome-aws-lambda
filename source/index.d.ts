@@ -1,16 +1,20 @@
-declare module 'chrome-aws-lambda' {
-  export default class Chromium {
-    static args: string[];
-    static defaultViewport: {
-      width: number;
-      height: number;
-      deviceScaleFactor: number;
-      isMobile: boolean;
-      hasTouch: boolean;
-      isLandscape: boolean;
-    };
-    static executablePath: Promise<string>;
-    static headless: boolean;
-    static puppeteer: Object;
-  }
-}
+import { Browser, ChromeArgOptions, ConnectOptions, LaunchOptions } from '@types/puppeteer';
+
+export const args: string[];
+export const defaultViewport: {
+  deviceScaleFactor: number;
+  hasTouch: boolean;
+  height: number;
+  isLandscape: boolean;
+  isMobile: boolean;
+  width: number;
+};
+
+export const executablePath: Promise<string>;
+export const headless: boolean;
+export const puppeteer: {
+  connect(options?: ConnectOptions): Promise<Browser>;
+  defaultArgs(options?: ChromeArgOptions): string[];
+  executablePath(): string;
+  launch(options?: LaunchOptions): Promise<Browser>;
+};
