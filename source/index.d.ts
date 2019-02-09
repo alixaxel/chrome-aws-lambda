@@ -1,4 +1,4 @@
-import { Browser, ChromeArgOptions, ConnectOptions, LaunchOptions } from '@types/puppeteer';
+import { Browser, ChromeArgOptions, ConnectOptions, LaunchOptions } from 'puppeteer';
 
 export const args: string[];
 export const defaultViewport: {
