@@ -1,10 +1,8 @@
-const fs = require('fs');
+const { chmod, createReadStream, createWriteStream, existsSync, readdirSync, unlinkSync } = require('fs');
 
 class Chromium {
   /**
    * Returns a list of recommended additional Chromium flags.
-   *
-   * @returns {!Array<string>}
    */
   static get args() {
     let result = [
@@ -66,25 +64,21 @@ class Chromium {
 
   /**
    * Returns more sensible default viewport settings.
-   *
-   * @returns {!Object}
    */
   static get defaultViewport() {
     return {
-      width: Chromium.headless === true ? 1920 : 0,
-      height: Chromium.headless === true ? 1080 : 0,
       deviceScaleFactor: 1,
-      isMobile: false,
       hasTouch: false,
+      height: Chromium.headless === true ? 1080 : 0,
       isLandscape: true,
+      isMobile: false,
+      width: Chromium.headless === true ? 1920 : 0,
     };
   }
 
   /**
    * Inflates the current version of Chromium and returns the path to the binary.
    * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
-   *
-   * @returns {?Promise<string>}
    */
   static get executablePath() {
     if (this.headless !== true) {
@@ -95,24 +89,24 @@ class Chromium {
       let input = `${__dirname}/../bin`;
       let output = '/tmp/chromium';
 
-      if (fs.existsSync(output) === true) {
-        for (let file of fs.readdirSync(`/tmp`)) {
+      if (existsSync(output) === true) {
+        for (let file of readdirSync(`/tmp`)) {
           if (file.startsWith('core.chromium') === true) {
-            fs.unlinkSync(`/tmp/${file}`);
+            unlinkSync(`/tmp/${file}`);
           }
         }
 
         return resolve(output);
       }
 
-      for (let file of fs.readdirSync(input)) {
+      for (let file of readdirSync(input)) {
         if (file.endsWith('.br') === true) {
           input = `${input}/${file}`;
         }
       }
 
-      const source = fs.createReadStream(input);
-      const target = fs.createWriteStream(output);
+      const source = createReadStream(input);
+      const target = createWriteStream(output);
 
       source.on('error', (error) => {
         return reject(error);
@@ -123,7 +117,7 @@ class Chromium {
       });
 
       target.on('close', () => {
-        fs.chmod(output, '0755', (error) => {
+        chmod(output, '0755', (error) => {
           if (error) {
             return reject(error);
           }
@@ -142,8 +136,6 @@ class Chromium {
 
   /**
    * Returns a boolean indicating if we are running on AWS Lambda or Google Cloud Functions.
-   *
-   * @returns {!boolean}
    */
   static get headless() {
     return process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined || process.env.FUNCTION_NAME !== undefined;
@@ -151,9 +143,6 @@ class Chromium {
 
   /**
    * Overloads puppeteer with useful methods and returns the resolved package.
-   *
-   * @throws {Error}
-   * @returns {!Object}
    */
   static get puppeteer() {
     for (let overload of ['FrameManager', 'Page']) {

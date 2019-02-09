@@ -63,7 +63,7 @@ You should allocate at least 512 MB of RAM to your Lambda, 1600 MB is recommende
 | `defaultViewport` | `{!Object}`          | Returns more sensible default viewport settings.          |
 | `executablePath`  | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
 | `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda or GCF.    |
-| `puppeteer`       | `{!Object}`          | Overloads puppeteer  and returns the resolved package.    |
+| `puppeteer`       | `{!Object}`          | Overloads puppeteer and returns the resolved package.     |
 
 ## Overloading
 
@@ -90,7 +90,7 @@ Since version `1.7.0`, it's also possible to overload `puppeteer` / `puppeteer-c
   - `waitUntilVisible(selector, timeout = null)`
   - `waitWhileVisible(selector, timeout = null)`
 
-Besides the public API, the following browser-context methods will also become available:
+Besides the public API, the following browser-context methods will also be available if `Page.go()` is used:
 
  - `σ.$(selector, context = document)`
  - `σ.$$(selector, index = null, context = document)`
@@ -107,19 +107,20 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                    |
 | ------------------- | --------------------------------------------- | ---------------------------------------------------- |
-| `1.11.0`            | `npm i chrome-aws-lambda@1.11.2 --save-exact` | [`609904`](https://crrev.com/609904) (`72.0.3618.0`) |
-| `1.10.0`            | `npm i chrome-aws-lambda@1.10.1 --save-exact` | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
-| `1.9.0`             | `npm i chrome-aws-lambda@1.9.1 --save-exact`  | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |
-| `1.8.0`             | `npm i chrome-aws-lambda@1.8.0 --save-exact`  | [`588429`](https://crrev.com/588429) (`71.0.3542.0`) |
-| `1.7.0`             | `npm i chrome-aws-lambda@1.7.0 --save-exact`  | [`579032`](https://crrev.com/579032) (`70.0.3508.0`) |
-| `1.6.2`             | `npm i chrome-aws-lambda@1.6.2 --save-exact`  | [`575458`](https://crrev.com/575458) (`69.0.3494.0`) |
-| `1.5.0`             | `npm i chrome-aws-lambda@1.5.0 --save-exact`  | [`564778`](https://crrev.com/564778) (`69.0.3452.0`) |
-| `1.4.0`             | `npm i chrome-aws-lambda@1.4.0 --save-exact`  | [`555668`](https://crrev.com/555668) (`68.0.3419.0`) |
-| `1.3.0`             | `npm i chrome-aws-lambda@1.3.0 --save-exact`  | [`549031`](https://crrev.com/549031) (`67.0.3391.0`) |
-| `1.2.0`             | `npm i chrome-aws-lambda@1.2.0 --save-exact`  | [`543305`](https://crrev.com/543305) (`67.0.3372.0`) |
-| `1.1.0`             | `npm i chrome-aws-lambda@1.1.0 --save-exact`  | [`536395`](https://crrev.com/536395) (`66.0.3347.0`) |
-| `1.0.0`             | `npm i chrome-aws-lambda@1.0.0 --save-exact`  | [`526987`](https://crrev.com/526987) (`65.0.3312.0`) |
-| `0.13.0`            | `npm i chrome-aws-lambda@0.13.0 --save-exact` | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) |
+| `1.12.*`            | `npm i chrome-aws-lambda@1.12.0 --save-exact` | [`624492`](https://crrev.com/624492) (`73.0.3679.0`) |
+| `1.11.*`            | `npm i chrome-aws-lambda@1.11.2 --save-exact` | [`609904`](https://crrev.com/609904) (`72.0.3618.0`) |
+| `1.10.*`            | `npm i chrome-aws-lambda@1.10.1 --save-exact` | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
+| `1.9.*`             | `npm i chrome-aws-lambda@1.9.1 --save-exact`  | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |
+| `1.8.*`             | `npm i chrome-aws-lambda@1.8.0 --save-exact`  | [`588429`](https://crrev.com/588429) (`71.0.3542.0`) |
+| `1.7.*`             | `npm i chrome-aws-lambda@1.7.0 --save-exact`  | [`579032`](https://crrev.com/579032) (`70.0.3508.0`) |
+| `1.6.*`             | `npm i chrome-aws-lambda@1.6.2 --save-exact`  | [`575458`](https://crrev.com/575458) (`69.0.3494.0`) |
+| `1.5.*`             | `npm i chrome-aws-lambda@1.5.0 --save-exact`  | [`564778`](https://crrev.com/564778) (`69.0.3452.0`) |
+| `1.4.*`             | `npm i chrome-aws-lambda@1.4.0 --save-exact`  | [`555668`](https://crrev.com/555668) (`68.0.3419.0`) |
+| `1.3.*`             | `npm i chrome-aws-lambda@1.3.0 --save-exact`  | [`549031`](https://crrev.com/549031) (`67.0.3391.0`) |
+| `1.2.*`             | `npm i chrome-aws-lambda@1.2.0 --save-exact`  | [`543305`](https://crrev.com/543305) (`67.0.3372.0`) |
+| `1.1.*`             | `npm i chrome-aws-lambda@1.1.0 --save-exact`  | [`536395`](https://crrev.com/536395) (`66.0.3347.0`) |
+| `1.0.*`             | `npm i chrome-aws-lambda@1.0.0 --save-exact`  | [`526987`](https://crrev.com/526987) (`65.0.3312.0`) |
+| `0.13.*`            | `npm i chrome-aws-lambda@0.13.0 --save-exact` | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) |
 
 ## Compiling
 
@@ -135,7 +136,7 @@ The following set of (Linux) commands will create a well-structured layer of thi
 git clone https://github.com/alixaxel/chrome-aws-lambda.git && \
 cd chrome-aws-lambda && \
 npm pack && \
-mkdir --parents nodejs/node_modules/chrome-aws-lambda/ && \
+mkdir -p nodejs/node_modules/chrome-aws-lambda/ && \
 tar --directory nodejs/node_modules/chrome-aws-lambda/ --extract --file chrome-aws-lambda-*.tgz --strip-components=1 && \
 rm chrome-aws-lambda-*.tgz && \
 zip -9 --filesync --move --recurse-paths _/chrome-aws-lambda.zip nodejs/

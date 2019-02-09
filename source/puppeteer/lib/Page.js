@@ -38,16 +38,8 @@ Super.prototype.fill = function (form, data, heuristic = 'name') {
 };
 
 Super.prototype.go = async function (url, options = null) {
-  await this.emulate({
-    viewport: {
-      width: (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) ? 0 : 1920,
-      height: (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) ? 0 : 1080,
-      deviceScaleFactor: 1,
-      isMobile: false,
-      hasTouch: false,
-      isLandscape: true,
-    },
-    userAgent: 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0',
+  await this.browser().userAgent().then((agent) => {
+    return this.setUserAgent(agent.replace('Headless', ''));
   });
 
   await this.evaluateOnNewDocument(
