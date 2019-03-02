@@ -107,7 +107,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                    |
 | ------------------- | --------------------------------------------- | ---------------------------------------------------- |
-| `1.12.*`            | `npm i chrome-aws-lambda@1.12.0 --save-exact` | [`624492`](https://crrev.com/624492) (`73.0.3679.0`) |
+| `1.12.*`            | `npm i chrome-aws-lambda@1.12.1 --save-exact` | [`624492`](https://crrev.com/624492) (`73.0.3679.0`) |
 | `1.11.*`            | `npm i chrome-aws-lambda@1.11.2 --save-exact` | [`609904`](https://crrev.com/609904) (`72.0.3618.0`) |
 | `1.10.*`            | `npm i chrome-aws-lambda@1.10.1 --save-exact` | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
 | `1.9.*`             | `npm i chrome-aws-lambda@1.9.1 --save-exact`  | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |
