@@ -78,7 +78,7 @@ await chromium.font('https://raw.githack.com/googlei18n/noto-emoji/master/fonts/
 
 Fonts with the same basename will only be downloaded if they are not already cached.
 
-> On non-headless environments, the font method is a no-op to avoid polluting the user space.
+> On non-serverless environments, the `font()` method is a no-op to avoid polluting the user space.
 
 It's recommended that you use a CDN, like [raw.githack.com](https://raw.githack.com/) or [gitcdn.xyz](https://gitcdn.xyz/).
 
