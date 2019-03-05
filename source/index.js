@@ -1,6 +1,57 @@
-const { chmod, createReadStream, createWriteStream, existsSync, readdirSync, unlinkSync } = require('fs');
+const { chmod, createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
+const { get } = require('https');
+const { URL } = require('url');
 
 class Chromium {
+  /**
+   * Downloads a custom font and returns its basename, patching the environment so that Chromium can find it.
+   * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
+   */
+  static async font(input) {
+    if (this.headless !== true) {
+      return null;
+    }
+
+    if (process.env.HOME === undefined) {
+      process.env.HOME = '/tmp';
+    }
+
+    if (existsSync(`${process.env.HOME}/.fonts`) !== true) {
+      mkdirSync(`${process.env.HOME}/.fonts`);
+    }
+
+    return new Promise((resolve, reject) => {
+      let url = new URL(input);
+      let output = `${process.env.HOME}/.fonts/${url.pathname.split('/').pop()}`;
+
+      if (existsSync(output) === true) {
+        return resolve(output);
+      }
+
+      get(input, (response) => {
+        if (response.statusCode !== 200) {
+          return reject(`Unexpected status code: ${response.statusCode}.`);
+        }
+
+        const stream = createWriteStream(output);
+
+        response.on('data', (chunk) => {
+          stream.write(chunk);
+        });
+
+        response.on('end', () => {
+          stream.end(() => {
+            return resolve(url.pathname.split('/').pop());
+          });
+        });
+
+        stream.on('error', (error) => {
+          return reject(error);
+        });
+      });
+    });
+  }
+
   /**
    * Returns a list of recommended additional Chromium flags.
    */

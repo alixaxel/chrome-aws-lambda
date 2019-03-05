@@ -2,7 +2,7 @@
 
 [![chrome-aws-lambda](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
 [![Chromium](https://img.shields.io/badge/chromium-34_MB-brightgreen.svg?style=for-the-badge)](bin/)
-[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg?style=for-the-badge)](https://paypal.me/alixaxel)
+[![Donate](https://img.shields.io/badge/donate-paypal-orange.svg?style=for-the-badge)](https://paypal.me/alixaxel)
 
 Chromium Binary for AWS Lambda and Google Cloud Functions
 
@@ -59,11 +59,28 @@ You should allocate at least 512 MB of RAM to your Lambda, 1600 MB is recommende
 
 | Property          | Returns              | Description                                               |
 | ----------------- | -------------------- | --------------------------------------------------------- |
+| `font(url)`       | `{?Promise<string>}` | Downloads a custom font and returns its basename.         |
 | `args`            | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
 | `defaultViewport` | `{!Object}`          | Returns more sensible default viewport settings.          |
 | `executablePath`  | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
 | `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda or GCF.    |
 | `puppeteer`       | `{!Object}`          | Overloads puppeteer and returns the resolved package.     |
+
+## Fonts
+
+Since version `1.12.2`, the `font()` method will download additional fonts and make them discoverable.
+
+To use it, simply pass a **HTTPS** URL to a custom font face _before_ launching Chromium, e.g.:
+
+```javascript
+await chromium.font('https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf');
+```
+
+Fonts with the same basename will only be downloaded if they are not already cached.
+
+> On non-headless environments, the font method is a no-op to avoid polluting the user space.
+
+It's recommended that you use a CDN, like [raw.githack.com](https://raw.githack.com/) or [gitcdn.xyz](https://gitcdn.xyz/).
 
 ## Overloading
 
@@ -107,7 +124,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                    |
 | ------------------- | --------------------------------------------- | ---------------------------------------------------- |
-| `1.12.*`            | `npm i chrome-aws-lambda@1.12.1 --save-exact` | [`624492`](https://crrev.com/624492) (`73.0.3679.0`) |
+| `1.12.*`            | `npm i chrome-aws-lambda@1.12.2 --save-exact` | [`624492`](https://crrev.com/624492) (`73.0.3679.0`) |
 | `1.11.*`            | `npm i chrome-aws-lambda@1.11.2 --save-exact` | [`609904`](https://crrev.com/609904) (`72.0.3618.0`) |
 | `1.10.*`            | `npm i chrome-aws-lambda@1.10.1 --save-exact` | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
 | `1.9.*`             | `npm i chrome-aws-lambda@1.9.1 --save-exact`  | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |

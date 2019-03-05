@@ -1,5 +1,7 @@
 import { Browser, ChromeArgOptions, ConnectOptions, LaunchOptions } from 'puppeteer';
 
+export const font: (input: string) => Promise<string>;
+
 export const args: string[];
 export const defaultViewport: {
   deviceScaleFactor: number;
