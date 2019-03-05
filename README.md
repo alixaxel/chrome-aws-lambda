@@ -57,7 +57,7 @@ You should allocate at least 512 MB of RAM to your Lambda, 1600 MB is recommende
 
 ## API
 
-| Property          | Returns              | Description                                               |
+| Method / Property | Returns              | Description                                               |
 | ----------------- | -------------------- | --------------------------------------------------------- |
 | `font(url)`       | `{?Promise<string>}` | Downloads a custom font and returns its basename.         |
 | `args`            | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
