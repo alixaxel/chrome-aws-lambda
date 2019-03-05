@@ -152,6 +152,7 @@ The following set of (Linux) commands will create a well-structured layer of thi
 ```shell
 git clone https://github.com/alixaxel/chrome-aws-lambda.git && \
 cd chrome-aws-lambda && \
+brotli --decompress --rm bin/chromium-*.br && \
 npm pack && \
 mkdir -p nodejs/node_modules/chrome-aws-lambda/ && \
 tar --directory nodejs/node_modules/chrome-aws-lambda/ --extract --file chrome-aws-lambda-*.tgz --strip-components=1 && \

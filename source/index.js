@@ -151,7 +151,7 @@ class Chromium {
       }
 
       for (let file of readdirSync(input)) {
-        if (file.endsWith('.br') === true) {
+        if (file.startsWith('chromium-') === true) {
           input = `${input}/${file}`;
         }
       }
@@ -177,10 +177,18 @@ class Chromium {
         });
       });
 
-      if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs8.10') {
-        source.pipe(require(`${__dirname}/iltorb`).decompressStream()).pipe(target);
+      if (input.endsWith('.br') === true) {
+        let iltorb = null;
+
+        if (process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10') {
+          iltorb = require('iltorb');
+        } else {
+          iltorb = require(`${__dirname}/iltorb`);
+        }
+
+        source.pipe(iltorb.decompressStream()).pipe(target);
       } else {
-        source.pipe(require('iltorb').decompressStream()).pipe(target);
+        source.pipe(target);
       }
     });
   }
