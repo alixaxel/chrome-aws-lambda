@@ -148,16 +148,17 @@ To compile your own version of Chromium check the [Ansible playbook instructions
 
 [Lambda Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) is a new convenient way to manage common dependencies between different Lambda Functions.
 
-The following set of (Linux) commands will create a well-structured layer of this package:
+The following set of (Linux) commands will create a well-structured layer of this package alongside `puppeteer-core`:
 
 ```shell
-git clone https://github.com/alixaxel/chrome-aws-lambda.git && \
+git clone --depth=1 https://github.com/alixaxel/chrome-aws-lambda.git && \
 cd chrome-aws-lambda && \
 brotli --decompress --rm bin/chromium-*.br && \
 npm pack && \
 mkdir -p nodejs/node_modules/chrome-aws-lambda/ && \
 tar --directory nodejs/node_modules/chrome-aws-lambda/ --extract --file chrome-aws-lambda-*.tgz --strip-components=1 && \
 rm chrome-aws-lambda-*.tgz && \
+npm install puppeteer-core --no-bin-links --no-optional --no-package-lock --no-save --no-shrinkwrap --prefix nodejs/ && \
 zip -9 --filesync --move --recurse-paths _/chrome-aws-lambda.zip nodejs/
 ```
 
