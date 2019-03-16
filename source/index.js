@@ -153,6 +153,7 @@ class Chromium {
       for (let file of readdirSync(input)) {
         if (file.startsWith('chromium-') === true) {
           input = `${input}/${file}`;
+          break;
         }
       }
 
