@@ -150,13 +150,8 @@ class Chromium {
         return resolve(output);
       }
 
-      for (let file of readdirSync(input)) {
-        if (file.startsWith('chromium-') === true) {
-          input = `${input}/${file}`;
-        }
-      }
-
-      const source = createReadStream(input);
+      const binary = readdirSync(input).find((file) => file.startsWith('chromium-'));
+      const source = createReadStream(`${input}/${binary}`);
       const target = createWriteStream(output);
 
       source.on('error', (error) => {
@@ -177,7 +172,7 @@ class Chromium {
         });
       });
 
-      if (input.endsWith('.br') === true) {
+      if (binary.endsWith('.br') === true) {
         let iltorb = null;
 
         if (process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10') {
@@ -211,6 +206,10 @@ class Chromium {
     try {
       return require('puppeteer');
     } catch (error) {
+      if (error.code !== 'MODULE_NOT_FOUND') {
+        throw error;
+      }
+
       return require('puppeteer-core');
     }
   }
