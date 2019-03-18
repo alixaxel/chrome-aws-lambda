@@ -9,7 +9,7 @@ Chromium Binary for AWS Lambda and Google Cloud Functions
 ## Install
 
 ```shell
-$ npm i chrome-aws-lambda
+npm i chrome-aws-lambda
 ```
 
 This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a day or two).
@@ -171,7 +171,7 @@ Since version `1.11.2`, it's also possible to use this package on Google/Firebas
 The only additional requirement is that `iltorb` must also be added as a dependency:
 
 ```shell
-$ npm i iltorb
+npm i iltorb
 ```
 
 According to our benchmarks, it's 40% to 50% faster than using the off-the-shelf `puppeteer` bundle.
