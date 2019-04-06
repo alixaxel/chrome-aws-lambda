@@ -1,4 +1,4 @@
-const { chmod, createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
+const { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
 const { get } = require('https');
 const { URL } = require('url');
 
@@ -151,8 +151,8 @@ class Chromium {
       }
 
       const binary = readdirSync(input).find((file) => file.startsWith('chromium-'));
-      const source = createReadStream(`${input}/${binary}`);
-      const target = createWriteStream(output);
+      const source = createReadStream(`${input}/${binary}`, { highWaterMark: 8 * 1024 * 1024 });
+      const target = createWriteStream(output, { mode: 0o755 });
 
       source.on('error', (error) => {
         return reject(error);
@@ -163,13 +163,7 @@ class Chromium {
       });
 
       target.on('close', () => {
-        chmod(output, '0755', (error) => {
-          if (error) {
-            return reject(error);
-          }
-
-          return resolve(output);
-        });
+        return resolve(output);
       });
 
       if (binary.endsWith('.br') === true) {
