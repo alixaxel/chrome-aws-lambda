@@ -23,8 +23,8 @@
   "dependencies": {},
   "devDependencies": {
     "@types/puppeteer": "~1.12.3",
-    "iltorb": "^2.4.2",
-    "puppeteer-core": "~1.14.0"
+    "iltorb": "^2.4.3",
+    "puppeteer-core": "~1.15.0"
   },
   "bugs": {
     "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"
@@ -47,7 +47,7 @@
     "arrowParens": "always",
     "bracketSpacing": true,
     "jsxBracketSameLine": false,
-    "printWidth": 120,
+    "printWidth": 140,
     "semi": true,
     "singleQuote": true,
     "tabWidth": 2,

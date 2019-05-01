@@ -1,7 +1,8 @@
-_/*.zip
 .idea/
 *.log
 *.pem
 *.pem.pub
+*.zip
 node_modules/
+nodejs/
 package-lock.json

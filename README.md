@@ -124,6 +124,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                    |
 | ------------------- | --------------------------------------------- | ---------------------------------------------------- |
+| `1.15.*`            | `npm i chrome-aws-lambda@1.15.0 --save-exact` | [`650583`](https://crrev.com/650583) (`75.0.3765.0`) |
 | `1.14.*`            | `npm i chrome-aws-lambda@1.14.0 --save-exact` | [`641577`](https://crrev.com/641577) (`75.0.3738.0`) |
 | `1.13.*`            | `npm i chrome-aws-lambda@1.13.0 --save-exact` | [`637110`](https://crrev.com/637110) (`74.0.3723.0`) |
 | `1.12.*`            | `npm i chrome-aws-lambda@1.12.2 --save-exact` | [`624492`](https://crrev.com/624492) (`73.0.3679.0`) |
@@ -154,16 +155,16 @@ The following set of (Linux) commands will create a well-structured layer of thi
 ```shell
 git clone --depth=1 https://github.com/alixaxel/chrome-aws-lambda.git && \
 cd chrome-aws-lambda && \
-brotli --decompress --rm bin/chromium-*.br && \
-npm pack && \
-mkdir -p nodejs/node_modules/chrome-aws-lambda/ && \
-tar --directory nodejs/node_modules/chrome-aws-lambda/ --extract --file chrome-aws-lambda-*.tgz --strip-components=1 && \
-rm chrome-aws-lambda-*.tgz && \
-npm install puppeteer-core --no-bin-links --no-optional --no-package-lock --no-save --no-shrinkwrap --prefix nodejs/ && \
-zip -9 --filesync --move --recurse-paths _/chrome-aws-lambda.zip nodejs/
+make chrome_aws_lambda.zip
 ```
 
-The above will create a `_/chrome-aws-lambda.zip` file, which can be uploaded to your Layers console.
+The above will create a `chrome-aws-lambda.zip` file, which can be uploaded to your Layers console.
+
+Alternatively, if have `brotli` installed and wish to create a layer with the Chromium binary already decompressed:
+
+```shell
+make inflated chrome_aws_lambda.zip
+```
 
 ## Google Cloud Functions
 
