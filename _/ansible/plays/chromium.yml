@@ -215,10 +215,10 @@
       copy:
         content: |
           import("//build/args/headless.gn")
+          blink_symbol_level = 0
           enable_nacl = false
           is_component_build = false
           is_debug = false
-          remove_webcore_debug_symbols = true
           symbol_level = 0
         dest: /srv/source/chromium/src/out/Headless/args.gn
 
@@ -269,12 +269,28 @@
       args:
         chdir: /srv/build/chromium
 
-    - name: Downloading Chromium Package
+    - name: Compressing SwiftShader Shared Objects
+      shell: |
+        /usr/local/bin/brotli --best --force *.so
+      args:
+        chdir: /srv/source/chromium/src/out/Headless/swiftshader
+
+    - name: Downloading Chromium
       fetch:
         src: "/srv/build/chromium/chromium-{{ version.stdout }}.br"
         dest: ../../../bin/
         flat: yes
         fail_on_missing: true
+
+    - name: Downloading SwiftShader
+      fetch:
+        src: "/srv/source/chromium/src/out/Headless/swiftshader/{{ item }}"
+        dest: ../../../bin/swiftshader/
+        flat: yes
+        fail_on_missing: true
+      with_items:
+        - libEGL.so.br
+        - libGLESv2.so.br
 
 - name: Teardown AWS
   hosts: localhost

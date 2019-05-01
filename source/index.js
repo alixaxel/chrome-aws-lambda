@@ -1,4 +1,5 @@
 const { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
+const { decompressStream } = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10' ? 'iltorb' : `${__dirname}/iltorb`);
 const { get } = require('https');
 const { URL } = require('url');
 
@@ -57,7 +58,6 @@ class Chromium {
    */
   static get args() {
     let result = [
-      '--disable-accelerated-2d-canvas',
       '--disable-background-timer-throttling',
       '--disable-breakpad',
       '--disable-client-side-phishing-detection',
@@ -66,7 +66,6 @@ class Chromium {
       '--disable-dev-shm-usage',
       '--disable-extensions',
       '--disable-gesture-typing',
-      '--disable-gpu',
       '--disable-hang-monitor',
       '--disable-infobars',
       '--disable-notifications',
@@ -76,7 +75,6 @@ class Chromium {
       '--disable-print-preview',
       '--disable-prompt-on-repost',
       '--disable-setuid-sandbox',
-      '--disable-software-rasterizer',
       '--disable-speech-api',
       '--disable-sync',
       '--disable-tab-for-desktop-share',
@@ -86,7 +84,9 @@ class Chromium {
       '--enable-async-dns',
       '--enable-simple-cache-backend',
       '--enable-tcp-fast-open',
+      '--enable-webgl',
       '--hide-scrollbars',
+      '--ignore-gpu-blacklist',
       '--media-cache-size=33554432',
       '--metrics-recording-only',
       '--mute-audio',
@@ -97,6 +97,7 @@ class Chromium {
       '--no-zygote',
       '--password-store=basic',
       '--prerender-from-omnibox=disabled',
+      '--use-gl=swiftshader',
       '--use-mock-keychain',
     ];
 
@@ -136,49 +137,33 @@ class Chromium {
       return null;
     }
 
-    return new Promise((resolve, reject) => {
-      let input = `${__dirname}/../bin`;
-      let output = '/tmp/chromium';
-
-      if (existsSync(output) === true) {
-        for (let file of readdirSync(`/tmp`)) {
-          if (file.startsWith('core.chromium') === true) {
-            unlinkSync(`/tmp/${file}`);
-          }
+    if (existsSync('/tmp/chromium') === true) {
+      for (let file of readdirSync('/tmp')) {
+        if (file.startsWith('core.chromium') === true) {
+          unlinkSync(`/tmp/${file}`);
         }
-
-        return resolve(output);
       }
 
-      const binary = readdirSync(input).find((file) => file.startsWith('chromium-'));
-      const source = createReadStream(`${input}/${binary}`, { highWaterMark: 8 * 1024 * 1024 });
-      const target = createWriteStream(output, { mode: 0o755 });
+      return '/tmp/chromium';
+    }
 
-      source.on('error', (error) => {
-        return reject(error);
-      });
+    if (existsSync('/tmp/swiftshader') !== true) {
+      mkdirSync('/tmp/swiftshader');
+    }
 
-      target.on('error', (error) => {
-        return reject(error);
-      });
+    const input = `${__dirname}/../bin`;
+    const binary = readdirSync(input).find((file) => {
+      return file.startsWith('chromium-');
+    });
 
-      target.on('close', () => {
-        return resolve(output);
-      });
+    const promises = [
+      inflate(`${input}/${binary}`, '/tmp/chromium'),
+      inflate(`${input}/swiftshader/libEGL.so.br`, '/tmp/swiftshader/libEGL.so'),
+      inflate(`${input}/swiftshader/libGLESv2.so.br`, '/tmp/swiftshader/libGLESv2.so'),
+    ];
 
-      if (binary.endsWith('.br') === true) {
-        let iltorb = null;
-
-        if (process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10') {
-          iltorb = require('iltorb');
-        } else {
-          iltorb = require(`${__dirname}/iltorb`);
-        }
-
-        source.pipe(iltorb.decompressStream()).pipe(target);
-      } else {
-        source.pipe(target);
-      }
+    return Promise.all(promises).then((result) => {
+      return result.shift();
     });
   }
 
@@ -207,6 +192,31 @@ class Chromium {
       return require('puppeteer-core');
     }
   }
+}
+
+function inflate(input, output, mode = 0o755) {
+  return new Promise((resolve, reject) => {
+    const source = createReadStream(input, { highWaterMark: 8 * 1024 * 1024 });
+    const target = createWriteStream(output, { mode: mode });
+
+    source.on('error', (error) => {
+      return reject(error);
+    });
+
+    target.on('error', (error) => {
+      return reject(error);
+    });
+
+    target.on('close', () => {
+      return resolve(output);
+    });
+
+    if (input.endsWith('.br') === true) {
+      source.pipe(decompressStream()).pipe(target);
+    } else {
+      source.pipe(target);
+    }
+  });
 }
 
 module.exports = Chromium;
