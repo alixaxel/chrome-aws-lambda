@@ -122,25 +122,25 @@ To enable overloading, simply call the `puppeteer` property exposed by this pack
 
 This package is versioned based on the underlying `puppeteer` minor version:
 
-| `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                    |
-| ------------------- | --------------------------------------------- | ---------------------------------------------------- |
-| `1.15.*`            | `npm i chrome-aws-lambda@1.15.1 --save-exact` | [`650583`](https://crrev.com/650583) (`75.0.3765.0`) |
-| `1.14.*`            | `npm i chrome-aws-lambda@1.14.0 --save-exact` | [`641577`](https://crrev.com/641577) (`75.0.3738.0`) |
-| `1.13.*`            | `npm i chrome-aws-lambda@1.13.0 --save-exact` | [`637110`](https://crrev.com/637110) (`74.0.3723.0`) |
-| `1.12.*`            | `npm i chrome-aws-lambda@1.12.2 --save-exact` | [`624492`](https://crrev.com/624492) (`73.0.3679.0`) |
-| `1.11.*`            | `npm i chrome-aws-lambda@1.11.2 --save-exact` | [`609904`](https://crrev.com/609904) (`72.0.3618.0`) |
-| `1.10.*`            | `npm i chrome-aws-lambda@1.10.1 --save-exact` | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
-| `1.9.*`             | `npm i chrome-aws-lambda@1.9.1 --save-exact`  | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |
-| `1.8.*`             | `npm i chrome-aws-lambda@1.8.0 --save-exact`  | [`588429`](https://crrev.com/588429) (`71.0.3542.0`) |
-| `1.7.*`             | `npm i chrome-aws-lambda@1.7.0 --save-exact`  | [`579032`](https://crrev.com/579032) (`70.0.3508.0`) |
-| `1.6.*`             | `npm i chrome-aws-lambda@1.6.2 --save-exact`  | [`575458`](https://crrev.com/575458) (`69.0.3494.0`) |
-| `1.5.*`             | `npm i chrome-aws-lambda@1.5.0 --save-exact`  | [`564778`](https://crrev.com/564778) (`69.0.3452.0`) |
-| `1.4.*`             | `npm i chrome-aws-lambda@1.4.0 --save-exact`  | [`555668`](https://crrev.com/555668) (`68.0.3419.0`) |
-| `1.3.*`             | `npm i chrome-aws-lambda@1.3.0 --save-exact`  | [`549031`](https://crrev.com/549031) (`67.0.3391.0`) |
-| `1.2.*`             | `npm i chrome-aws-lambda@1.2.0 --save-exact`  | [`543305`](https://crrev.com/543305) (`67.0.3372.0`) |
-| `1.1.*`             | `npm i chrome-aws-lambda@1.1.0 --save-exact`  | [`536395`](https://crrev.com/536395) (`66.0.3347.0`) |
-| `1.0.*`             | `npm i chrome-aws-lambda@1.0.0 --save-exact`  | [`526987`](https://crrev.com/526987) (`65.0.3312.0`) |
-| `0.13.*`            | `npm i chrome-aws-lambda@0.13.0 --save-exact` | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) |
+| `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
+| ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `1.15.*`            | `npm i chrome-aws-lambda@~1.15.1` | [`650583`](https://crrev.com/650583) (`75.0.3765.0`) |
+| `1.14.*`            | `npm i chrome-aws-lambda@~1.14.0` | [`641577`](https://crrev.com/641577) (`75.0.3738.0`) |
+| `1.13.*`            | `npm i chrome-aws-lambda@~1.13.0` | [`637110`](https://crrev.com/637110) (`74.0.3723.0`) |
+| `1.12.*`            | `npm i chrome-aws-lambda@~1.12.2` | [`624492`](https://crrev.com/624492) (`73.0.3679.0`) |
+| `1.11.*`            | `npm i chrome-aws-lambda@~1.11.2` | [`609904`](https://crrev.com/609904) (`72.0.3618.0`) |
+| `1.10.*`            | `npm i chrome-aws-lambda@~1.10.1` | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
+| `1.9.*`             | `npm i chrome-aws-lambda@~1.9.1`  | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |
+| `1.8.*`             | `npm i chrome-aws-lambda@~1.8.0`  | [`588429`](https://crrev.com/588429) (`71.0.3542.0`) |
+| `1.7.*`             | `npm i chrome-aws-lambda@~1.7.0`  | [`579032`](https://crrev.com/579032) (`70.0.3508.0`) |
+| `1.6.*`             | `npm i chrome-aws-lambda@~1.6.2`  | [`575458`](https://crrev.com/575458) (`69.0.3494.0`) |
+| `1.5.*`             | `npm i chrome-aws-lambda@~1.5.0`  | [`564778`](https://crrev.com/564778) (`69.0.3452.0`) |
+| `1.4.*`             | `npm i chrome-aws-lambda@~1.4.0`  | [`555668`](https://crrev.com/555668) (`68.0.3419.0`) |
+| `1.3.*`             | `npm i chrome-aws-lambda@~1.3.0`  | [`549031`](https://crrev.com/549031) (`67.0.3391.0`) |
+| `1.2.*`             | `npm i chrome-aws-lambda@~1.2.0`  | [`543305`](https://crrev.com/543305) (`67.0.3372.0`) |
+| `1.1.*`             | `npm i chrome-aws-lambda@~1.1.0`  | [`536395`](https://crrev.com/536395) (`66.0.3347.0`) |
+| `1.0.*`             | `npm i chrome-aws-lambda@~1.0.0`  | [`526987`](https://crrev.com/526987) (`65.0.3312.0`) |
+| `0.13.*`            | `npm i chrome-aws-lambda@~0.13.0` | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) |
 
 ## Compiling
 
