@@ -1,5 +1,4 @@
 const { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
-const { decompressStream } = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10' ? 'iltorb' : `${__dirname}/iltorb`);
 const { get } = require('https');
 const { URL } = require('url');
 
@@ -194,7 +193,13 @@ class Chromium {
   }
 }
 
+let iltorb = null;
+
 function inflate(input, output, mode = 0o755) {
+  if (iltorb == null) {
+    iltorb = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10' ? 'iltorb' : `${__dirname}/iltorb`)
+  }
+
   return new Promise((resolve, reject) => {
     const source = createReadStream(input, { highWaterMark: 8 * 1024 * 1024 });
     const target = createWriteStream(output, { mode: mode });
@@ -212,7 +217,7 @@ function inflate(input, output, mode = 0o755) {
     });
 
     if (input.endsWith('.br') === true) {
-      source.pipe(decompressStream()).pipe(target);
+      source.pipe(iltorb.decompressStream()).pipe(target);
     } else {
       source.pipe(target);
     }
