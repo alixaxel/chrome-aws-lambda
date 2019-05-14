@@ -100,7 +100,7 @@ class Chromium {
       '--use-mock-keychain',
     ];
 
-    if (parseInt(process.env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || process.env.FUNCTION_MEMORY_MB || '512', 10) >= 1024) {
+    if (parseInt(process.env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || process.env.FUNCTION_MEMORY_MB || '1024', 10) >= 1024) {
       result.push('--memory-pressure-off');
     }
 
@@ -197,7 +197,7 @@ let iltorb = null;
 
 function inflate(input, output, mode = 0o755) {
   if (iltorb == null) {
-    iltorb = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10' ? 'iltorb' : `${__dirname}/iltorb`)
+    iltorb = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs10.x' ? 'iltorb' : `${__dirname}/iltorb`)
   }
 
   return new Promise((resolve, reject) => {

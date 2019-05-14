@@ -1,7 +1,7 @@
 # chrome-aws-lambda
 
 [![chrome-aws-lambda](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
-[![Chromium](https://img.shields.io/badge/chromium-35_MB-brightgreen.svg?style=for-the-badge)](bin/)
+[![Chromium](https://img.shields.io/badge/chromium-36_MB-brightgreen.svg?style=for-the-badge)](bin/)
 [![Donate](https://img.shields.io/badge/donate-paypal-orange.svg?style=for-the-badge)](https://paypal.me/alixaxel)
 
 Chromium Binary for AWS Lambda and Google Cloud Functions
@@ -18,7 +18,7 @@ If you wish to install an older version of Chromium, take a look at [Versioning]
 
 ## Usage
 
-The `nodejs8.10` AWS Lambda runtime is required for this package to work properly.
+The `nodejs10.x` AWS Lambda runtime is required for this package to work properly.
 
 ```javascript
 const chromium = require('chrome-aws-lambda');
