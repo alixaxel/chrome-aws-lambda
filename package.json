@@ -14,7 +14,7 @@
     "source"
   ],
   "engines": {
-    "node": ">= 10.15"
+    "node": ">= 8.10"
   },
   "scripts": {
     "version": "git add -A .",

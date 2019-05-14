@@ -13,7 +13,7 @@ iltorb:
 		--rm \
 		--user $$(id -u "$$USER"):$$(id -g "$$USER") \
 		--volume "$$PWD/../../":/srv/chrome-aws-lambda \
-		--workdir /srv/chrome-aws-lambda node:10.15 \
+		--workdir /srv/chrome-aws-lambda node:8.10 \
 	npm install --no-shrinkwrap --silent
 	mkdir --parents "$$PWD/../../source/iltorb/build/"
 	mv --target-directory="$$PWD/../../source/iltorb/" \

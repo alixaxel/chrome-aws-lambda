@@ -197,7 +197,7 @@ let iltorb = null;
 
 function inflate(input, output, mode = 0o755) {
   if (iltorb == null) {
-    iltorb = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs10.x' ? 'iltorb' : `${__dirname}/iltorb`)
+    iltorb = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10' ? 'iltorb' : `${__dirname}/iltorb`)
   }
 
   return new Promise((resolve, reject) => {
