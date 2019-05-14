@@ -22,7 +22,7 @@
 
     - name: Creating Security Group
       ec2_group:
-        name: ansible
+        name: Chromium
         description: SSH Access
         state: present
         region: "{{ region }}"
@@ -37,9 +37,9 @@
 
     - name: Launching EC2 Instance
       ec2:
-        group: ansible
+        group: Chromium
         image: "{{ image }}"
-        instance_type: c5.9xlarge
+        instance_type: c5d.9xlarge
         key_name: ansible
         wait: yes
         spot_type: one-time
@@ -51,7 +51,7 @@
         volumes:
           - device_name: /dev/xvda
             delete_on_termination: true
-            volume_size: 64
+            volume_size: 32
             volume_type: gp2
         instance_tags:
           Name: Chromium
@@ -142,6 +142,17 @@
         state: latest
         update_cache: true
 
+    - name: Creating NVMe SSD Filesystem
+      filesystem:
+        dev: /dev/nvme1n1
+        fstype: xfs
+
+    - name: Mounting NVMe SSD Filesystem
+      shell: |
+        mount /dev/nvme1n1 /srv
+      args:
+        warn: false
+
     - name: Creating Directory Structure
       file:
         path: /srv/{{ item }}/chromium
@@ -204,12 +215,10 @@
         state: directory
 
     - name: Mounting Build Directory in Memory
-      mount:
-        fstype: tmpfs
-        opts: size=32G,nr_inodes=64k,mode=1777
-        path: /srv/source/chromium/src/out/Headless
-        src: tmpfs
-        state: mounted
+      shell: |
+        mount --types tmpfs --options size=32G,nr_inodes=64k,mode=1777 tmpfs /srv/source/chromium/src/out/Headless
+      args:
+        warn: false
 
     - name: Creating Headless Chromium Configuration
       copy:
@@ -217,8 +226,10 @@
           import("//build/args/headless.gn")
           blink_symbol_level = 0
           enable_nacl = false
+          ffmpeg_branding = "Chrome"
           is_component_build = false
           is_debug = false
+          proprietary_codecs = true
           symbol_level = 0
         dest: /srv/source/chromium/src/out/Headless/args.gn
 
@@ -306,7 +317,7 @@
 
     - name: Deleting Security Group
       ec2_group:
-        name: ansible
+        name: Chromium
         state: absent
         region: "{{ region }}"
 
