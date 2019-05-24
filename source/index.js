@@ -170,7 +170,7 @@ class Chromium {
    * Returns a boolean indicating if we are running on AWS Lambda or Google Cloud Functions.
    */
   static get headless() {
-    return process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined || process.env.FUNCTION_NAME !== undefined;
+    return ['AWS_LAMBDA_FUNCTION_NAME', 'FUNCTION_NAME', 'FUNCTION_TARGET'].some((key) => process.env[key] !== undefined);
   }
 
   /**
@@ -197,7 +197,7 @@ let iltorb = null;
 
 function inflate(input, output, mode = 0o755) {
   if (iltorb == null) {
-    iltorb = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10' ? 'iltorb' : `${__dirname}/iltorb`)
+    iltorb = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10' ? 'iltorb' : `${__dirname}/iltorb`);
   }
 
   return new Promise((resolve, reject) => {
