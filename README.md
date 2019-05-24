@@ -20,16 +20,17 @@ If you wish to install an older version of Chromium, take a look at [Versioning]
 
 The `nodejs8.10` AWS Lambda runtime is required for this package to work properly.
 
+Due to unmet dependencies, the `nodejs10.x` AWS Lambda runtime is currently *not* supported.
+
 ```javascript
 const chromium = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer-core');
 
 exports.handler = async (event, context) => {
   let result = null;
   let browser = null;
 
   try {
-    browser = await puppeteer.launch({
+    browser = await chromium.puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath,
@@ -124,6 +125,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `1.17.*`            | `npm i chrome-aws-lambda@~1.17.0` | [`662092`](https://crrev.com/662092) (`76.0.3803.0`) |
 | `1.16.*`            | `npm i chrome-aws-lambda@~1.16.1` | [`656675`](https://crrev.com/656675) (`76.0.3786.0`) |
 | `1.15.*`            | `npm i chrome-aws-lambda@~1.15.1` | [`650583`](https://crrev.com/650583) (`75.0.3765.0`) |
 | `1.14.*`            | `npm i chrome-aws-lambda@~1.14.0` | [`641577`](https://crrev.com/641577) (`75.0.3738.0`) |

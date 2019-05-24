@@ -6,7 +6,7 @@
     "name": "Alix Axel"
   },
   "license": "MIT",
-  "description": "Chromium Binary for AWS Lambda",
+  "description": "Chromium Binary for AWS Lambda and Google Cloud Functions",
   "main": "source/index.js",
   "types": "source/index.d.ts",
   "files": [
@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/puppeteer": "~1.12.4",
     "iltorb": "^2.4.3",
-    "puppeteer-core": "~1.16.0"
+    "puppeteer-core": "^1.17.0"
   },
   "bugs": {
     "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"
