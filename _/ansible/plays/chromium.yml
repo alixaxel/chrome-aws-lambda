@@ -40,10 +40,11 @@
         group: Chromium
         image: "{{ image }}"
         instance_type: c5d.9xlarge
+        instance_initiated_shutdown_behavior: terminate
         key_name: ansible
         wait: yes
         spot_type: one-time
-        spot_price: 0.75
+        spot_price: "0.75"
         spot_wait_timeout: 300
         spot_launch_group: chromium
         region: "{{ region }}"
@@ -106,7 +107,7 @@
           - gcc-c++
           - git
           - glib2-devel
-          - glibc.i686
+          - glibc
           - gperf
           - gtk3-devel
           - htop
@@ -115,10 +116,11 @@
           - libatomic
           - libcap-devel
           - libffi-devel
-          - libgcc.i686
+          - libgcc
           - libgnome-keyring-devel
           - libjpeg-devel
-          - libstdc++.i686
+          - libstdc++
+          - libuuid-devel
           - libX11-devel
           - libxkbcommon-x11-devel
           - libXScrnSaver-devel
@@ -137,8 +139,8 @@
           - pulseaudio-libs-devel
           - python
           - tar
+          - zlib
           - zlib-devel
-          - zlib.i686
         state: latest
         update_cache: true
 
@@ -225,12 +227,32 @@
         content: |
           import("//build/args/headless.gn")
           blink_symbol_level = 0
+          disable_ftp_support = true
+          disable_histogram_support = false
+          disable_libfuzzer = true
+          enable_basic_print_dialog = false
+          enable_basic_printing = false
+          enable_desktop_in_product_help = false
+          enable_keystone_registration_framework = false
+          enable_linux_installer = false
+          enable_media_remoting = false
+          enable_media_remoting_rpc = false
           enable_nacl = false
+          enable_one_click_signin = false
           ffmpeg_branding = "Chrome"
+          headless_use_embedded_resources = true
+          icu_use_data_file = false
           is_component_build = false
           is_debug = false
           proprietary_codecs = true
           symbol_level = 0
+          target_cpu = "x64"
+          target_os = "linux"
+          use_bundled_fontconfig = true
+          use_cups = false
+          use_pulseaudio = false
+          use_sysroot = true
+          v8_target_cpu = "x64"
         dest: /srv/source/chromium/src/out/Headless/args.gn
 
     - name: Generating Headless Chromium Configuration
@@ -274,24 +296,31 @@
         chdir: /srv/source/brotli
         creates: /usr/local/bin/brotli
 
-    - name: Compressing Chromium Binary
+    - name: Compressing Chromium
       shell: |
-        /usr/local/bin/brotli --best --force chromium-*
+        /usr/local/bin/brotli --best --force {{ item }}
       args:
         chdir: /srv/build/chromium
+      with_items:
+        - "chromium-{{ version.stdout }}"
 
-    - name: Compressing SwiftShader Shared Objects
+    - name: Compressing SwiftShader
       shell: |
-        /usr/local/bin/brotli --best --force *.so
+        /usr/local/bin/brotli --best --force {{ item }}
       args:
         chdir: /srv/source/chromium/src/out/Headless/swiftshader
+      with_items:
+        - libEGL.so
+        - libGLESv2.so
 
     - name: Downloading Chromium
       fetch:
-        src: "/srv/build/chromium/chromium-{{ version.stdout }}.br"
+        src: "/srv/build/chromium/{{ item }}"
         dest: ../../../bin/
         flat: yes
         fail_on_missing: true
+      with_items:
+        - "chromium-{{ version.stdout }}.br"
 
     - name: Downloading SwiftShader
       fetch:

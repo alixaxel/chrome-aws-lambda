@@ -242,12 +242,6 @@ build_libsrtp_tests
     Tests may not be appropriate for some build environments, e.g. Windows.
     Rather than enumerate valid options, we just let clients ask for them.
 
-build_sfntly_samples
-    Current value (from the default) = false
-      From //third_party/sfntly/BUILD.gn:9
-
-    Flip to true to build sfntly sample programs.
-
 build_with_mozilla
     Current value (from the default) = false
       From //third_party/webrtc/webrtc.gni:121
@@ -520,17 +514,23 @@ disable_file_support
     Disables support for file URLs.  File URL support requires use of icu.
 
 disable_ftp_support
-    Current value (from the default) = false
+    Current value = true
+      From //out/Headless/args.gn:3
+    Overridden from the default = false
       From //net/features.gni:17
 
 disable_histogram_support
-    Current value (from the default) = false
+    Current value = false
+      From //out/Headless/args.gn:4
+    Overridden from the default = false
       From //components/cronet/BUILD.gn:16
 
     If set to true, this will remove histogram manager to reduce binary size.
 
 disable_libfuzzer
-    Current value (from the default) = false
+    Current value = true
+      From //out/Headless/args.gn:5
+    Overridden from the default = false
       From //build/config/sanitizers/sanitizers.gni:93
 
     Helper variable for testing builds with disabled libfuzzer.
@@ -576,14 +576,18 @@ enable_background_mode
       From //chrome/common/features.gni:27
 
 enable_basic_print_dialog
-    Current value (from the default) = true
+    Current value = false
+      From //out/Headless/args.gn:6
+    Overridden from the default = false
       From //chrome/common/features.gni:31
 
     Enable the printing system dialog for platforms that support printing
     and have a system dialog.
 
 enable_basic_printing
-    Current value (from the default) = true
+    Current value = false
+      From //out/Headless/args.gn:7
+    Overridden from the default = true
       From //printing/buildflags/buildflags.gni:11
 
     Enable basic printing support and UI.
@@ -652,18 +656,13 @@ enable_debugallocation
     but people sometimes need to do that).
 
 enable_desktop_in_product_help
-    Current value (from the default) = true
+    Current value = false
+      From //out/Headless/args.gn:8
+    Overridden from the default = true
       From //components/feature_engagement/features.gni:8
 
     In-Product Help is only available in Windows and Linux OS for
     desktop.
-
-enable_distro_version_check
-    Current value (from the default) = true
-      From //chrome/installer/linux/BUILD.gn:24
-
-    Enables checks that ensure the packages are installable on all supported
-    distributions.
 
 enable_dolby_vision_demuxing
     Current value (from the default) = false
@@ -790,7 +789,9 @@ enable_iterator_debugging
     defaults to off.
 
 enable_keystone_registration_framework
-    Current value (from the default) = true
+    Current value = false
+      From //out/Headless/args.gn:9
+    Overridden from the default = true
       From //chrome/BUILD.gn:51
 
     Indicates whether keystone registration framework should be enabled (see
@@ -811,7 +812,9 @@ enable_libaom_decoder
     Enable decoding AV1 video files.
 
 enable_linux_installer
-    Current value (from the default) = true
+    Current value = false
+      From //out/Headless/args.gn:10
+    Overridden from the default = true
       From //chrome/installer/BUILD.gn:11
 
 enable_location_source
@@ -837,7 +840,9 @@ enable_mdns
     Multicast DNS.
 
 enable_media_remoting
-    Current value (from the default) = true
+    Current value = false
+      From //out/Headless/args.gn:11
+    Overridden from the default = true
       From //media/media_options.gni:258
 
     This switch defines whether the Media Remoting implementation will be built.
@@ -845,7 +850,9 @@ enable_media_remoting
     devices when the tab is being casted and other conditions are met.
 
 enable_media_remoting_rpc
-    Current value (from the default) = true
+    Current value = false
+      From //out/Headless/args.gn:12
+    Overridden from the default = false
       From //media/media_options.gni:264
 
     Media Remoting RPC is disabled on Android since it's unused but increases
@@ -926,7 +933,7 @@ enable_mutex_priority_inheritance
 
 enable_nacl
     Current value = false
-      From //out/Headless/args.gn:3
+      From //out/Headless/args.gn:13
     Overridden from the default = true
       From //components/nacl/features.gni:13
 
@@ -976,7 +983,9 @@ enable_offline_pages_harness
     evaluations. Requires setting this variable manually at local environment.
 
 enable_one_click_signin
-    Current value (from the default) = true
+    Current value = false
+      From //out/Headless/args.gn:14
+    Overridden from the default = true
       From //chrome/common/features.gni:44
 
 enable_openvr
@@ -998,12 +1007,6 @@ enable_precompiled_headers
     Precompiled header file support is by default available,
     but for distributed build system uses (like goma) or when
     doing official builds.
-
-enable_print_media_l10n
-    Current value (from the default) = false
-      From //components/printing/browser/BUILD.gn:9
-
-    For now, we only enable print media localization on Chrome OS.
 
 enable_print_preview
     Current value = false
@@ -1171,7 +1174,7 @@ fatal_linker_warnings
 
 ffmpeg_branding
     Current value = "Chrome"
-      From //out/Headless/args.gn:4
+      From //out/Headless/args.gn:15
     Overridden from the default = "Chromium"
       From //third_party/ffmpeg/ffmpeg_options.gni:34
 
@@ -1316,7 +1319,7 @@ headless_fontconfig_utils
 
 headless_use_embedded_resources
     Current value = true
-      From //build/args/headless.gn:16
+      From //out/Headless/args.gn:16
     Overridden from the default = false
       From //headless/headless.gni:7
 
@@ -1349,7 +1352,7 @@ host_toolchain
 
 icu_use_data_file
     Current value = false
-      From //build/args/headless.gn:26
+      From //out/Headless/args.gn:17
     Overridden from the default = true
       From //third_party/icu/config.gni:15
 
@@ -1465,7 +1468,7 @@ is_clang
 
 is_component_build
     Current value = false
-      From //out/Headless/args.gn:5
+      From //out/Headless/args.gn:18
     Overridden from the default = false
       From //build/config/BUILDCONFIG.gn:165
 
@@ -1495,7 +1498,7 @@ is_ct_supported
 
 is_debug
     Current value = false
-      From //out/Headless/args.gn:6
+      From //out/Headless/args.gn:19
     Overridden from the default = true
       From //build/config/BUILDCONFIG.gn:155
 
@@ -2056,7 +2059,7 @@ print_unsymbolized_stack_traces
 
 proprietary_codecs
     Current value = true
-      From //out/Headless/args.gn:7
+      From //out/Headless/args.gn:20
     Overridden from the default = false
       From //build/config/features.gni:29
 
@@ -2444,7 +2447,7 @@ support_webgl2_compute_context
 
 symbol_level
     Current value = 0
-      From //out/Headless/args.gn:8
+      From //out/Headless/args.gn:21
     Overridden from the default = -1
       From //build/config/compiler/compiler.gni:35
 
@@ -2478,11 +2481,15 @@ system_libdir
     args.gn file to 'lib' or 'lib64' as appropriate for the target architecture.
 
 target_cpu
-    Current value (from the default) = ""
+    Current value = "x64"
+      From //out/Headless/args.gn:22
+    Overridden from the default = ""
       (Internally set; try `gn help target_cpu`.)
 
 target_os
-    Current value (from the default) = ""
+    Current value = "linux"
+      From //out/Headless/args.gn:23
+    Overridden from the default = ""
       (Internally set; try `gn help target_os`.)
 
 target_sysroot
@@ -2563,7 +2570,7 @@ use_base_test_suite
 
 use_bundled_fontconfig
     Current value = true
-      From //build/args/headless.gn:22
+      From //out/Headless/args.gn:24
     Overridden from the default = true
       From //third_party/fontconfig/fontconfig.gni:10
 
@@ -2616,7 +2623,7 @@ use_crash_key_stubs
 
 use_cups
     Current value = false
-      From //build/args/headless.gn:36
+      From //out/Headless/args.gn:25
     Overridden from the default = true
       From //printing/buildflags/buildflags.gni:23
 
@@ -2902,7 +2909,7 @@ use_prebuilt_instrumented_libraries
 
 use_pulseaudio
     Current value = false
-      From //build/args/headless.gn:41
+      From //out/Headless/args.gn:26
     Overridden from the default = true
       From //media/media_options.gni:122
 
@@ -2938,7 +2945,9 @@ use_swiftshader_with_subzero
       From //third_party/swiftshader/src/Reactor/BUILD.gn:20
 
 use_sysroot
-    Current value (from the default) = true
+    Current value = true
+      From //out/Headless/args.gn:27
+    Overridden from the default = true
       From //build/config/sysroot.gni:18
 
 use_system_freetype
@@ -3130,13 +3139,13 @@ v8_android_log_stdout
 
 v8_can_use_fpu_instructions
     Current value (from the default) = true
-      From //v8/BUILD.gn:150
+      From //v8/BUILD.gn:153
 
     Similar to vfp but on MIPS.
 
 v8_check_header_includes
     Current value (from the default) = false
-      From //v8/BUILD.gn:186
+      From //v8/BUILD.gn:189
 
     Check that each header can be included in isolation (requires also
     setting the "check_v8_header_includes" gclient variable to run a
@@ -3146,7 +3155,7 @@ v8_check_microtasks_scopes_consistency
     Current value = false
       From //.gn:52
     Overridden from the default = ""
-      From //v8/BUILD.gn:170
+      From //v8/BUILD.gn:173
 
     Temporary flag to allow embedders to update their microtasks scopes
     while rolling in a new version of V8.
@@ -3197,7 +3206,7 @@ v8_embedder_string
 
 v8_enable_31bit_smis_on_64bit_arch
     Current value (from the default) = false
-      From //v8/BUILD.gn:108
+      From //v8/BUILD.gn:111
 
 v8_enable_backtrace
     Current value (from the default) = ""
@@ -3207,7 +3216,7 @@ v8_enable_backtrace
 
 v8_enable_concurrent_marking
     Current value (from the default) = true
-      From //v8/BUILD.gn:126
+      From //v8/BUILD.gn:129
 
     Sets -dV8_CONCURRENT_MARKING
 
@@ -3226,7 +3235,7 @@ v8_enable_disassembler
 
 v8_enable_embedded_builtins
     Current value (from the default) = true
-      From //v8/BUILD.gn:89
+      From //v8/BUILD.gn:92
 
     Enable embedded builtins.
 
@@ -3235,6 +3244,12 @@ v8_enable_fast_mksnapshot
       From //v8/BUILD.gn:86
 
     Enable fast mksnapshot runs.
+
+v8_enable_fast_torque
+    Current value (from the default) = ""
+      From //v8/BUILD.gn:89
+
+    Optimize code for Torque executable, even during a debug build.
 
 v8_enable_future
     Current value (from the default) = false
@@ -3246,7 +3261,7 @@ v8_enable_gdbjit
     Current value = false
       From //.gn:47
     Overridden from the default = true
-      From //v8/BUILD.gn:165
+      From //v8/BUILD.gn:168
 
 v8_enable_handle_zapping
     Current value (from the default) = true
@@ -3271,19 +3286,19 @@ v8_enable_lite_mode
 
 v8_enable_minor_mc
     Current value (from the default) = true
-      From //v8/BUILD.gn:181
+      From //v8/BUILD.gn:184
 
     Enable minor mark compact.
 
 v8_enable_object_print
     Current value (from the default) = ""
-      From //v8/BUILD.gn:111
+      From //v8/BUILD.gn:114
 
     Sets -dOBJECT_PRINT.
 
 v8_enable_pointer_compression
-    Current value (from the default) = false
-      From //v8/BUILD.gn:107
+    Current value (from the default) = ""
+      From //v8/BUILD.gn:110
 
     Enable pointer compression (sets -dV8_COMPRESS_POINTERS).
 
@@ -3295,10 +3310,11 @@ v8_enable_raw_heap_snapshots
     on platform and embedder level.
 
 v8_enable_shared_ro_heap
-    Current value (from the default) = false
-      From //v8/BUILD.gn:189
+    Current value (from the default) = ""
+      From //v8/BUILD.gn:193
 
     Enable sharing read-only space across isolates.
+    Sets -DV8_SHARED_RO_HEAP.
 
 v8_enable_slow_dchecks
     Current value (from the default) = false
@@ -3308,13 +3324,13 @@ v8_enable_slow_dchecks
 
 v8_enable_snapshot_code_comments
     Current value (from the default) = false
-      From //v8/BUILD.gn:95
+      From //v8/BUILD.gn:98
 
     Enable code comments for builtins in the snapshot (impacts performance).
 
 v8_enable_snapshot_native_code_counters
     Current value (from the default) = ""
-      From //v8/BUILD.gn:101
+      From //v8/BUILD.gn:104
 
     Enable native counters from the snapshot (impacts performance, sets
     -dV8_SNAPSHOT_NATIVE_CODE_COUNTERS).
@@ -3323,37 +3339,37 @@ v8_enable_snapshot_native_code_counters
 
 v8_enable_test_features
     Current value (from the default) = ""
-      From //v8/BUILD.gn:129
+      From //v8/BUILD.gn:132
 
     Enables various testing features.
 
 v8_enable_trace_feedback_updates
     Current value (from the default) = false
-      From //v8/BUILD.gn:123
+      From //v8/BUILD.gn:126
 
     Sets -dV8_TRACE_FEEDBACK_UPDATES.
 
 v8_enable_trace_ignition
     Current value (from the default) = false
-      From //v8/BUILD.gn:120
+      From //v8/BUILD.gn:123
 
     Sets -dV8_TRACE_IGNITION.
 
 v8_enable_trace_maps
     Current value (from the default) = ""
-      From //v8/BUILD.gn:114
+      From //v8/BUILD.gn:117
 
     Sets -dV8_TRACE_MAPS.
 
 v8_enable_v8_checks
     Current value (from the default) = ""
-      From //v8/BUILD.gn:117
+      From //v8/BUILD.gn:120
 
     Sets -dV8_ENABLE_CHECKS.
 
 v8_enable_verify_csa
     Current value (from the default) = false
-      From //v8/BUILD.gn:104
+      From //v8/BUILD.gn:107
 
     Enable code-generation-time checking of types in the CodeStubAssembler.
 
@@ -3385,7 +3401,7 @@ v8_extra_library_files
     Current value = ["//third_party/blink/renderer/core/streams/CommonOperations.js", "//third_party/blink/renderer/core/streams/CommonStrings.js", "//third_party/blink/renderer/core/streams/SimpleQueue.js", "//third_party/blink/renderer/core/streams/ByteLengthQueuingStrategy.js", "//third_party/blink/renderer/core/streams/CountQueuingStrategy.js", "//third_party/blink/renderer/core/streams/ReadableStream.js", "//third_party/blink/renderer/core/streams/WritableStream.js", "//third_party/blink/renderer/core/streams/TransformStream.js"]
       From //.gn:32
     Overridden from the default = ["//test/cctest/test-extra.js"]
-      From //v8/BUILD.gn:162
+      From //v8/BUILD.gn:165
 
     List of extra files to snapshot. They will be snapshotted in order so
     if files export symbols used by later files, they should go first.
@@ -3427,7 +3443,7 @@ v8_multi_arch_build
 
 v8_no_inline
     Current value (from the default) = false
-      From //v8/BUILD.gn:144
+      From //v8/BUILD.gn:147
 
     Switches off inlining in V8.
 
@@ -3439,13 +3455,13 @@ v8_optimized_debug
 
 v8_os_page_size
     Current value (from the default) = "0"
-      From //v8/BUILD.gn:147
+      From //v8/BUILD.gn:150
 
     Override OS page size when generating snapshot
 
 v8_postmortem_support
     Current value (from the default) = false
-      From //v8/BUILD.gn:134
+      From //v8/BUILD.gn:137
 
     With post mortem support enabled, metadata is embedded into libv8 that
     describes various parameters of the VM for use by debuggers. See
@@ -3459,7 +3475,7 @@ v8_promise_internal_field_count
 
 v8_snapshot_toolchain
     Current value (from the default) = ""
-      From //v8/snapshot_toolchain.gni:34
+      From //v8/gni/snapshot_toolchain.gni:34
 
     The v8 snapshot needs to be built by code that is compiled with a
     toolchain that matches the bit-width of the target CPU, but runs on
@@ -3472,7 +3488,9 @@ v8_static_library
     Use static libraries instead of source_sets.
 
 v8_target_cpu
-    Current value (from the default) = ""
+    Current value = "x64"
+      From //out/Headless/args.gn:28
+    Overridden from the default = ""
       From //build/config/v8_target_cpu.gni:33
 
     This arg is used when we want to tell the JIT-generating v8 code
@@ -3503,13 +3521,13 @@ v8_target_cpu
 
 v8_typed_array_max_size_in_heap
     Current value (from the default) = 64
-      From //v8/BUILD.gn:156
+      From //v8/BUILD.gn:159
 
     Controls the threshold for on-heap/off-heap Typed Arrays.
 
 v8_untrusted_code_mitigations
     Current value (from the default) = false
-      From //v8/BUILD.gn:178
+      From //v8/BUILD.gn:181
 
 v8_use_external_startup_data
     Current value = false
@@ -3522,7 +3540,7 @@ v8_use_external_startup_data
 
 v8_use_mips_abi_hardfloat
     Current value (from the default) = true
-      From //v8/BUILD.gn:153
+      From //v8/BUILD.gn:156
 
     Similar to the ARM hard float ABI but on MIPS.
 
@@ -3534,14 +3552,14 @@ v8_use_multi_snapshots
 
 v8_use_perfetto
     Current value (from the default) = false
-      From //v8/BUILD.gn:141
+      From //v8/BUILD.gn:144
 
     Use Perfetto (https://perfetto.dev) as the default TracingController. Not
     currently implemented.
 
 v8_use_siphash
     Current value (from the default) = false
-      From //v8/BUILD.gn:137
+      From //v8/BUILD.gn:140
 
     Use Siphash as added protection against hash flooding attacks.
 
@@ -3558,7 +3576,7 @@ v8_use_snapshot
 
 v8_win64_unwinding_info
     Current value (from the default) = true
-      From //v8/BUILD.gn:92
+      From //v8/BUILD.gn:95
 
     Enable the registration of unwinding info for Windows/x64.
 
