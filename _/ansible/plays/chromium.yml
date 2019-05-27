@@ -231,7 +231,7 @@
           disable_histogram_support = false
           disable_libfuzzer = true
           enable_basic_print_dialog = false
-          enable_basic_printing = false
+          enable_basic_printing = true
           enable_desktop_in_product_help = false
           enable_keystone_registration_framework = false
           enable_linux_installer = false

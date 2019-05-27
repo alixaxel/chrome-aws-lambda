@@ -585,7 +585,7 @@ enable_basic_print_dialog
     and have a system dialog.
 
 enable_basic_printing
-    Current value = false
+    Current value = true
       From //out/Headless/args.gn:7
     Overridden from the default = true
       From //printing/buildflags/buildflags.gni:11
