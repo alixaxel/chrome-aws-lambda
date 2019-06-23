@@ -17,7 +17,6 @@
     "node": ">= 8.10"
   },
   "scripts": {
-    "version": "git add -A .",
     "postversion": "git push && git push --tags && npm publish"
   },
   "dependencies": {},

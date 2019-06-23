@@ -9,7 +9,7 @@ Chromium Binary for AWS Lambda and Google Cloud Functions
 ## Install
 
 ```shell
-npm i chrome-aws-lambda
+npm install chrome-aws-lambda --save-prod
 ```
 
 This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a day or two).
@@ -17,7 +17,7 @@ This will ship with appropriate binary for the latest stable release of [`puppet
 You will also need to install the corresponding version of `puppeteer` (or `puppeteer-core`):
 
 ```shell
-npm i puppeteer-core
+npm install puppeteer-core --save-prod
 ```
 
 If you wish to install an older version of Chromium, take a look at [Versioning](https://github.com/alixaxel/chrome-aws-lambda#versioning).
@@ -61,6 +61,10 @@ exports.handler = async (event, context) => {
 ```
 
 You should allocate at least 512 MB of RAM to your Lambda, 1600 MB is recommended.
+
+### Running Locally
+
+Please refer to the [Local Development Wiki page](https://github.com/alixaxel/chrome-aws-lambda/wiki/HOWTO:-Local-Development) for instructions and troubleshooting.
 
 ## API
 
@@ -131,6 +135,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `1.18.*`            | `npm i chrome-aws-lambda@~1.18.0` | [`669486`](https://crrev.com/669486) (`77.0.3827.0`) |
 | `1.17.*`            | `npm i chrome-aws-lambda@~1.17.1` | [`662092`](https://crrev.com/662092) (`76.0.3803.0`) |
 | `1.16.*`            | `npm i chrome-aws-lambda@~1.16.1` | [`656675`](https://crrev.com/656675) (`76.0.3786.0`) |
 | `1.15.*`            | `npm i chrome-aws-lambda@~1.15.1` | [`650583`](https://crrev.com/650583) (`75.0.3765.0`) |
@@ -182,7 +187,7 @@ Since version `1.11.2`, it's also possible to use this package on Google/Firebas
 The only additional requirement is that `iltorb` must also be added as a dependency:
 
 ```shell
-npm i iltorb
+npm install iltorb --save-prod
 ```
 
 According to our benchmarks, it's 40% to 50% faster than using the off-the-shelf `puppeteer` bundle.
