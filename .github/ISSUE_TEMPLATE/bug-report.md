@@ -7,6 +7,8 @@ assignees: alixaxel
 
 ---
 
+<!--- For Puppeteer-specific bugs, please use https://github.com/GoogleChrome/puppeteer/issues -->
+
 ## Environment
 * `chrome-aws-lambda` Version: 
 * Node.js Version: 
@@ -24,4 +26,4 @@ assignees: alixaxel
 <!--- Not obligatory, but suggest a fix/reason for the bug. -->
 
 ## Steps to Reproduce
-<!--- Include code to reproduce, if relevant. -->
+<!--- Include code to reproduce this issue, if relevant. -->
