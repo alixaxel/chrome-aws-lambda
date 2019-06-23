@@ -4,7 +4,6 @@ about: Standard Bug Report
 title: "[BUG]"
 labels: bug
 assignees: alixaxel
-
 ---
 
 <!---
@@ -13,10 +12,11 @@ https://github.com/GoogleChrome/puppeteer/issues
 -->
 
 ## Environment
-* `chrome-aws-lambda` Version: 
-* Node.js Version: 
-* Puppeteer Version: 
-* Lambda / GCF Runtime: 
+* `chrome-aws-lambda` Version:
+* `puppeteer` / `puppeteer-core` Version:
+* OS:
+* Node.js Version:
+* Lambda / GCF Runtime:
 
 ## Expected Behavior
 <!--- What should have happened. -->
@@ -25,7 +25,7 @@ https://github.com/GoogleChrome/puppeteer/issues
 <!--- What happened instead. -->
 
 ## Possible Solution
-<!--- Not obligatory, but suggest a fix/reason for the bug. -->
+<!--- Not obligatory, but you can suggest a fix or reason for the bug. -->
 
 ## Steps to Reproduce
-<!--- Include code or URLs to reproduce this issue, if relevant. -->
+<!--- Include code and/or URLs to reproduce this issue, if relevant. -->
