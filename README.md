@@ -14,6 +14,12 @@ npm i chrome-aws-lambda
 
 This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a day or two).
 
+You will also need to install the corresponding version of `puppeteer` (or `puppeteer-core`):
+
+```shell
+npm i puppeteer-core
+```
+
 If you wish to install an older version of Chromium, take a look at [Versioning](https://github.com/alixaxel/chrome-aws-lambda#versioning).
 
 ## Usage
