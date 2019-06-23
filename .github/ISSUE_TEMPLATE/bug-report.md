@@ -7,7 +7,10 @@ assignees: alixaxel
 
 ---
 
-<!--- For Puppeteer-specific bugs, please use https://github.com/GoogleChrome/puppeteer/issues -->
+<!---
+For Puppeteer-specific bugs, please refer to:
+https://github.com/GoogleChrome/puppeteer/issues
+-->
 
 ## Environment
 * `chrome-aws-lambda` Version: 
