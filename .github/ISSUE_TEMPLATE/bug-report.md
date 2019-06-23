@@ -16,7 +16,6 @@ https://github.com/GoogleChrome/puppeteer/issues
 * `chrome-aws-lambda` Version: 
 * Node.js Version: 
 * Puppeteer Version: 
-* Platform / OS Version: 
 * Lambda / GCF Runtime: 
 
 ## Expected Behavior
@@ -29,4 +28,4 @@ https://github.com/GoogleChrome/puppeteer/issues
 <!--- Not obligatory, but suggest a fix/reason for the bug. -->
 
 ## Steps to Reproduce
-<!--- Include code to reproduce this issue, if relevant. -->
+<!--- Include code or URLs to reproduce this issue, if relevant. -->
