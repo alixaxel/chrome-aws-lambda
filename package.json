@@ -19,11 +19,11 @@
   "scripts": {
     "postversion": "git push && git push --tags && npm publish"
   },
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "@types/puppeteer": "~1.12.4",
     "iltorb": "^2.4.3"
   },
+  "devDependencies": {},
   "peerDependencies": {
     "puppeteer-core": "1.18.x"
   },
