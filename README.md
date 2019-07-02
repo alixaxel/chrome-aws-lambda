@@ -135,6 +135,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `1.18.*`            | `npm i chrome-aws-lambda@~1.18.1` | [`672088`](https://crrev.com/672088) (`77.0.3835.0`) |
 | `1.18.*`            | `npm i chrome-aws-lambda@~1.18.0` | [`669486`](https://crrev.com/669486) (`77.0.3827.0`) |
 | `1.17.*`            | `npm i chrome-aws-lambda@~1.17.1` | [`662092`](https://crrev.com/662092) (`76.0.3803.0`) |
 | `1.16.*`            | `npm i chrome-aws-lambda@~1.16.1` | [`656675`](https://crrev.com/656675) (`76.0.3786.0`) |
@@ -147,7 +148,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 | `1.9.*`             | `npm i chrome-aws-lambda@~1.9.1`  | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |
 | `1.8.*`             | `npm i chrome-aws-lambda@~1.8.0`  | [`588429`](https://crrev.com/588429) (`71.0.3542.0`) |
 | `1.7.*`             | `npm i chrome-aws-lambda@~1.7.0`  | [`579032`](https://crrev.com/579032) (`70.0.3508.0`) |
-| `1.6.*`             | `npm i chrome-aws-lambda@~1.6.2`  | [`575458`](https://crrev.com/575458) (`69.0.3494.0`) |
+| `1.6.*`             | `npm i chrome-aws-lambda@~1.6.3`  | [`575458`](https://crrev.com/575458) (`69.0.3494.0`) |
 | `1.5.*`             | `npm i chrome-aws-lambda@~1.5.0`  | [`564778`](https://crrev.com/564778) (`69.0.3452.0`) |
 | `1.4.*`             | `npm i chrome-aws-lambda@~1.4.0`  | [`555668`](https://crrev.com/555668) (`68.0.3419.0`) |
 | `1.3.*`             | `npm i chrome-aws-lambda@~1.3.0`  | [`549031`](https://crrev.com/549031) (`67.0.3391.0`) |
