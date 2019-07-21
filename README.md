@@ -93,6 +93,14 @@ Fonts with the same basename will only be downloaded if they are not already cac
 
 It's recommended that you use a CDN, like [raw.githack.com](https://raw.githack.com/) or [gitcdn.xyz](https://gitcdn.xyz/).
 
+### Recommended Fonts
+
+- [Noto Emoji fonts by Google](https://github.com/googlefonts/noto-emoji) – Provide some missing fonts, like standard emoji.
+
+### Testing Font Faces
+
+- [Color Unicode Emoji](https://eosrei.github.io/emojione-color-font/full-demo.html) –  Visualize all standard emoji at glance to ensure they are rendered properly.
+
 ## Overloading
 
 Since version `1.7.0`, it's also possible to overload `puppeteer` / `puppeteer-core` API with useful methods:
