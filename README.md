@@ -182,6 +182,8 @@ Alternatively, if have `brotli` installed and wish to create a layer with the Ch
 make inflated chrome_aws_lambda.zip
 ```
 
+Check out [shelfio/chrome-aws-lambda-layer](https://github.com/shelfio/chrome-aws-lambda-layer) repo if you wish to use already published layer.
+
 ## Google Cloud Functions
 
 Since version `1.11.2`, it's also possible to use this package on Google/Firebase Cloud Functions.
