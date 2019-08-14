@@ -99,7 +99,8 @@ It's recommended that you use a CDN, like [raw.githack.com](https://raw.githack.
 
 ### Testing Font Faces
 
-- [Color Unicode Emoji](https://eosrei.github.io/emojione-color-font/full-demo.html) –  Visualize all standard emoji at glance to ensure they are rendered properly.
+- [Color Unicode Emoji](https://eosrei.github.io/emojione-color-font/full-demo.html) – Visualize all standard emoji at glance to ensure they are rendered properly.
+- [Get Emoji](https://getemoji.com) – Common emoji to check they work properly.
 
 ## Overloading
 
