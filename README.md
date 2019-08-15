@@ -101,6 +101,7 @@ It's recommended that you use a CDN, like [raw.githack.com](https://raw.githack.
 
 - [Color Unicode Emoji](https://eosrei.github.io/emojione-color-font/full-demo.html) – Visualize all standard emoji at glance to ensure they are rendered properly.
 - [Get Emoji](https://getemoji.com) – Common emoji to check they work properly.
+- [Safe web fonts](https://web.mit.edu/jmorzins/www/fonts.html) – A directory of common and popular web font faces.
 
 ## Overloading
 
