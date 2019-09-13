@@ -21,11 +21,11 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/puppeteer": "~1.12.4",
+    "@types/puppeteer": "~1.19.1",
     "iltorb": "^2.4.3"
   },
   "peerDependencies": {
-    "puppeteer-core": "1.19.x"
+    "puppeteer-core": "1.20.x"
   },
   "bugs": {
     "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"

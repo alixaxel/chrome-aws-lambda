@@ -1,6 +1,7 @@
-const { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
-const { get } = require('https');
-const { URL } = require('url');
+let { createBrotliDecompress } = require('zlib');
+let { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
+let { get } = require('https');
+let { URL } = require('url');
 
 class Chromium {
   /**
@@ -35,18 +36,18 @@ class Chromium {
 
         const stream = createWriteStream(output);
 
+        stream.once('error', (error) => {
+          return reject(error);
+        });
+
         response.on('data', (chunk) => {
           stream.write(chunk);
         });
 
-        response.on('end', () => {
+        response.once('end', () => {
           stream.end(() => {
             return resolve(url.pathname.split('/').pop());
           });
-        });
-
-        stream.on('error', (error) => {
-          return reject(error);
         });
       });
     });
@@ -193,31 +194,35 @@ class Chromium {
   }
 }
 
-let iltorb = null;
+function inflate(input, output, mode = 0o700) {
+  if (createBrotliDecompress === undefined) {
+    let iltorb = 'iltorb';
 
-function inflate(input, output, mode = 0o755) {
-  if (iltorb == null) {
-    iltorb = require(process.env.AWS_EXECUTION_ENV !== 'AWS_Lambda_nodejs8.10' ? 'iltorb' : `${__dirname}/iltorb`);
+    if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs8.10') {
+      iltorb = `${__dirname}/iltorb`;
+    }
+
+    createBrotliDecompress = require(iltorb).decompressStream;
   }
 
   return new Promise((resolve, reject) => {
     const source = createReadStream(input, { highWaterMark: 8 * 1024 * 1024 });
     const target = createWriteStream(output, { mode: mode });
 
-    source.on('error', (error) => {
+    source.once('error', (error) => {
       return reject(error);
     });
 
-    target.on('error', (error) => {
+    target.once('error', (error) => {
       return reject(error);
     });
 
-    target.on('close', () => {
+    target.once('close', () => {
       return resolve(output);
     });
 
     if (input.endsWith('.br') === true) {
-      source.pipe(iltorb.decompressStream()).pipe(target);
+      source.pipe(createBrotliDecompress({ chunkSize: 2 * 1024 * 1024 })).pipe(target);
     } else {
       source.pipe(target);
     }
