@@ -8,7 +8,7 @@
   "license": "MIT",
   "description": "Chromium Binary for AWS Lambda and Google Cloud Functions",
   "main": "source/index.js",
-  "types": "source/index.d.ts",
+  "typings": "source/index.d.ts",
   "files": [
     "bin",
     "source"
