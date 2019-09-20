@@ -237,10 +237,12 @@
           enable_media_remoting_rpc = false
           enable_nacl = false
           enable_one_click_signin = false
+          ffmpeg_branding = "Chrome"
           headless_use_embedded_resources = true
           icu_use_data_file = false
           is_component_build = false
           is_debug = false
+          proprietary_codecs = true
           symbol_level = 0
           target_cpu = "x64"
           target_os = "linux"
