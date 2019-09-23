@@ -3,6 +3,13 @@ let { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, u
 let { get } = require('https');
 let { URL } = require('url');
 
+const iltorb = module => {
+  if (module !== undefined) return module();
+  if (zlib.createBrotliDecompress !== undefined) return zlib
+  if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs8.10') return require(`${__dirname}/iltorb`);
+  return require('iltorb');
+};
+
 class Chromium {
   /**
    * Downloads a custom font and returns its basename, patching the environment so that Chromium can find it.
@@ -132,7 +139,7 @@ class Chromium {
    * Inflates the current version of Chromium and returns the path to the binary.
    * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
    */
-  static get executablePath() {
+  static get executablePath({ iltorb } = {}) {
     if (this.headless !== true) {
       return null;
     }
@@ -157,9 +164,9 @@ class Chromium {
     });
 
     const promises = [
-      inflate(`${input}/${binary}`, '/tmp/chromium'),
-      inflate(`${input}/swiftshader/libEGL.so.br`, '/tmp/swiftshader/libEGL.so'),
-      inflate(`${input}/swiftshader/libGLESv2.so.br`, '/tmp/swiftshader/libGLESv2.so'),
+      inflate(`${input}/${binary}`, '/tmp/chromium', iltorb),
+      inflate(`${input}/swiftshader/libEGL.so.br`, '/tmp/swiftshader/libEGL.so', iltorb),
+      inflate(`${input}/swiftshader/libGLESv2.so.br`, '/tmp/swiftshader/libGLESv2.so', iltorb),
     ];
 
     return Promise.all(promises).then((result) => {
@@ -194,16 +201,8 @@ class Chromium {
   }
 }
 
-function inflate(input, output, mode = 0o700) {
-  if (createBrotliDecompress === undefined) {
-    let iltorb = 'iltorb';
-
-    if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs8.10') {
-      iltorb = `${__dirname}/iltorb`;
-    }
-
-    createBrotliDecompress = require(iltorb).decompressStream;
-  }
+function inflate(input, output, iltorbModule, mode = 0o700) {
+  const {createBrotliDecompress} = iltorb(iltorbModule)
 
   return new Promise((resolve, reject) => {
     const source = createReadStream(input, { highWaterMark: 8 * 1024 * 1024 });
