@@ -11,7 +11,8 @@
   "typings": "source/index.d.ts",
   "files": [
     "bin",
-    "source"
+    "source",
+    "_/nodejs10.x.zip"
   ],
   "engines": {
     "node": ">= 8.10"
