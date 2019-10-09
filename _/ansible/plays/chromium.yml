@@ -44,7 +44,7 @@
         key_name: ansible
         wait: yes
         spot_type: one-time
-        spot_price: "0.75"
+        spot_price: "1.00"
         spot_wait_timeout: 300
         spot_launch_group: chromium
         region: "{{ region }}"

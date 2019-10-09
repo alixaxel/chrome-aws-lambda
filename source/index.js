@@ -3,6 +3,16 @@ let { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, u
 let { get } = require('https');
 let { URL } = require('url');
 
+if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs10.x') {
+  if (process.env.FONTCONFIG_PATH === undefined) {
+    process.env.FONTCONFIG_PATH = '/opt/lib';
+  }
+
+  if (process.env.LD_LIBRARY_PATH.startsWith('/opt/lib:') !== true) {
+    process.env.LD_LIBRARY_PATH = [...new Set(['/opt/lib', ...process.env.LD_LIBRARY_PATH.split(':')])].join(':');
+  }
+}
+
 class Chromium {
   /**
    * Downloads a custom font and returns its basename, patching the environment so that Chromium can find it.
