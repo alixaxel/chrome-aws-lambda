@@ -3,6 +3,7 @@
 *.pem
 *.pem.pub
 *.zip
+bin/chromium-*.br
 node_modules/
 nodejs/
 package-lock.json

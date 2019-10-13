@@ -24,9 +24,7 @@ If you wish to install an older version of Chromium, take a look at [Versioning]
 
 ## Usage
 
-This package works with the `nodejs8.10` AWS Lambda runtime out of the box.
-
-The `nodejs10.x` AWS Lambda runtime is supported, but requires a [polyfill layer](_/nodejs10.x.zip) (due to a lighter execution environment).
+This package works with the `nodejs8.10` and `nodejs10.x` AWS Lambda runtimes out of the box.
 
 ```javascript
 const chromium = require('chrome-aws-lambda');
@@ -60,7 +58,7 @@ exports.handler = async (event, context) => {
 };
 ```
 
-You should allocate at least 512 MB of RAM to your Lambda, 1600 MB is recommended.
+You should allocate at least 512 MB of RAM to your Lambda, however 1600 MB (or more) is recommended.
 
 ### Running Locally
 
@@ -86,6 +84,8 @@ To use it, simply pass a **HTTPS** URL to a custom font face _before_ launching 
 ```javascript
 await chromium.font('https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf');
 ```
+
+> The above font is needed if you want to [render emojis](https://getemoji.com/).
 
 Fonts with the same basename will only be downloaded if they are not already cached.
 
@@ -135,7 +135,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
-| `1.20.*`            | `npm i chrome-aws-lambda@~1.20.1` | [`686378`](https://crrev.com/686378) (`78.0.3882.0`) |
+| `1.20.*`            | `npm i chrome-aws-lambda@~1.20.2` | [`686378`](https://crrev.com/686378) (`78.0.3882.0`) |
 | `1.19.*`            | `npm i chrome-aws-lambda@~1.19.0` | [`674921`](https://crrev.com/674921) (`77.0.3844.0`) |
 | `1.18.*`            | `npm i chrome-aws-lambda@~1.18.1` | [`672088`](https://crrev.com/672088) (`77.0.3835.0`) |
 | `1.18.*`            | `npm i chrome-aws-lambda@~1.18.0` | [`669486`](https://crrev.com/669486) (`77.0.3827.0`) |
@@ -176,12 +176,6 @@ make chrome_aws_lambda.zip
 ```
 
 The above will create a `chrome-aws-lambda.zip` file, which can be uploaded to your Layers console.
-
-Alternatively, if have `brotli` installed and wish to create a layer with the Chromium binary already decompressed:
-
-```shell
-make inflated chrome_aws_lambda.zip
-```
 
 ## Google Cloud Functions
 
@@ -230,8 +224,6 @@ This allows us to get the best compression ratio and faster decompression times.
 | chromium.br | Brotli    | 9     | 38853994  | 37.05     | 71.63%     | 0.673s     |
 | chromium.br | Brotli    | 10    | 36090087  | 34.42     | 73.65%     | 0.765s     |
 | chromium.br | Brotli    | 11    | 34820408  | **33.21** | **74.58%** | 0.712s     |
-
-For this reason, a stripped-down version of [`iltorb`](https://github.com/MayhemYDG/iltorb) is bundled as a dependency.
 
 ## License
 

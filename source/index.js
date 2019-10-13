@@ -1,17 +1,7 @@
-let { createBrotliDecompress } = require('zlib');
-let { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
-let { get } = require('https');
-let { URL } = require('url');
-
-if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs10.x') {
-  if (process.env.FONTCONFIG_PATH === undefined) {
-    process.env.FONTCONFIG_PATH = '/opt/lib';
-  }
-
-  if (process.env.LD_LIBRARY_PATH.startsWith('/opt/lib:') !== true) {
-    process.env.LD_LIBRARY_PATH = [...new Set(['/opt/lib', ...process.env.LD_LIBRARY_PATH.split(':')])].join(':');
-  }
-}
+const { createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
+const { get } = require('https');
+const { inflate } = require('lambdafs');
+const { URL } = require('url');
 
 class Chromium {
   /**
@@ -91,6 +81,7 @@ class Chromium {
       '--disable-translate',
       '--disable-voice-input',
       '--disable-wake-on-wifi',
+      '--disk-cache-size=33554432',
       '--enable-async-dns',
       '--enable-simple-cache-backend',
       '--enable-tcp-fast-open',
@@ -157,20 +148,23 @@ class Chromium {
       return '/tmp/chromium';
     }
 
-    if (existsSync('/tmp/swiftshader') !== true) {
-      mkdirSync('/tmp/swiftshader');
-    }
-
-    const input = `${__dirname}/../bin`;
-    const binary = readdirSync(input).find((file) => {
-      return file.startsWith('chromium-');
-    });
-
-    const promises = [
-      inflate(`${input}/${binary}`, '/tmp/chromium'),
-      inflate(`${input}/swiftshader/libEGL.so.br`, '/tmp/swiftshader/libEGL.so'),
-      inflate(`${input}/swiftshader/libGLESv2.so.br`, '/tmp/swiftshader/libGLESv2.so'),
+    let input = `${__dirname}/../bin`;
+    let promises = [
+      inflate(`${input}/chromium.br`),
+      inflate(`${input}/swiftshader.tar.br`),
     ];
+
+    if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs10.x') {
+      promises.push(inflate(`${input}/aws.tar.br`));
+
+      if (process.env.FONTCONFIG_PATH === undefined) {
+        process.env.FONTCONFIG_PATH = '/tmp/aws';
+      }
+
+      if (process.env.LD_LIBRARY_PATH.startsWith('/tmp/aws/lib') !== true) {
+        process.env.LD_LIBRARY_PATH = [...new Set(['/tmp/aws/lib', ...process.env.LD_LIBRARY_PATH.split(':')])].join(':');
+      }
+    }
 
     return Promise.all(promises).then((result) => {
       return result.shift();
@@ -202,41 +196,6 @@ class Chromium {
       return require('puppeteer-core');
     }
   }
-}
-
-function inflate(input, output, mode = 0o700) {
-  if (createBrotliDecompress === undefined) {
-    let iltorb = 'iltorb';
-
-    if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs8.10') {
-      iltorb = `${__dirname}/iltorb`;
-    }
-
-    createBrotliDecompress = require(iltorb).decompressStream;
-  }
-
-  return new Promise((resolve, reject) => {
-    const source = createReadStream(input, { highWaterMark: 8 * 1024 * 1024 });
-    const target = createWriteStream(output, { mode: mode });
-
-    source.once('error', (error) => {
-      return reject(error);
-    });
-
-    target.once('error', (error) => {
-      return reject(error);
-    });
-
-    target.once('close', () => {
-      return resolve(output);
-    });
-
-    if (input.endsWith('.br') === true) {
-      source.pipe(createBrotliDecompress({ chunkSize: 2 * 1024 * 1024 })).pipe(target);
-    } else {
-      source.pipe(target);
-    }
-  });
 }
 
 module.exports = Chromium;
