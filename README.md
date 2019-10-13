@@ -177,6 +177,8 @@ make chrome_aws_lambda.zip
 
 The above will create a `chrome-aws-lambda.zip` file, which can be uploaded to your Layers console.
 
+> The folks at [`shelfio/chrome-aws-lambda-layer`](https://github.com/shelfio/chrome-aws-lambda-layer) also maintain and publish AWS Lambda Layers of this package.
+
 ## Google Cloud Functions
 
 Since version `1.11.2`, it's also possible to use this package on Google/Firebase Cloud Functions.
