@@ -3,6 +3,16 @@ const { get } = require('https');
 const { inflate } = require('lambdafs');
 const { URL } = require('url');
 
+if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs10.x') {
+  if (process.env.FONTCONFIG_PATH === undefined) {
+    process.env.FONTCONFIG_PATH = '/tmp/aws';
+  }
+
+  if (process.env.LD_LIBRARY_PATH.startsWith('/tmp/aws/lib') !== true) {
+    process.env.LD_LIBRARY_PATH = [...new Set(['/tmp/aws/lib', ...process.env.LD_LIBRARY_PATH.split(':')])].join(':');
+  }
+}
+
 class Chromium {
   /**
    * Downloads a custom font and returns its basename, patching the environment so that Chromium can find it.
@@ -156,14 +166,6 @@ class Chromium {
 
     if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs10.x') {
       promises.push(inflate(`${input}/aws.tar.br`));
-
-      if (process.env.FONTCONFIG_PATH === undefined) {
-        process.env.FONTCONFIG_PATH = '/tmp/aws';
-      }
-
-      if (process.env.LD_LIBRARY_PATH.startsWith('/tmp/aws/lib') !== true) {
-        process.env.LD_LIBRARY_PATH = [...new Set(['/tmp/aws/lib', ...process.env.LD_LIBRARY_PATH.split(':')])].join(':');
-      }
     }
 
     return Promise.all(promises).then((result) => {
