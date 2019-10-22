@@ -43,6 +43,7 @@
         instance_initiated_shutdown_behavior: terminate
         key_name: ansible
         wait: yes
+        zone: "{{ region }}a"
         spot_type: one-time
         spot_price: "0.75"
         spot_wait_timeout: 300
