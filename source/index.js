@@ -3,6 +3,8 @@ const { get } = require('https');
 const { inflate } = require('lambdafs');
 const { URL } = require('url');
 
+const notHeadlessError = 'Error: not running with headless enabled';
+
 if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs10.x') {
   if (process.env.FONTCONFIG_PATH === undefined) {
     process.env.FONTCONFIG_PATH = '/tmp/aws';
@@ -140,12 +142,13 @@ class Chromium {
   }
 
   /**
-   * Inflates the current version of Chromium and returns the path to the binary.
-   * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
+   * Inflates the current version of Chromium and returns a promise
+   * that resolves with the path to the binary. If not running on AWS
+   * Lambda nor Google Cloud Functions, promise rejects.
    */
   static get executablePath() {
     if (this.headless !== true) {
-      return null;
+      return Promise.reject(notHeadlessError);
     }
 
     if (existsSync('/tmp/chromium') === true) {
@@ -155,7 +158,7 @@ class Chromium {
         }
       }
 
-      return '/tmp/chromium';
+      return Promise.resolve('/tmp/chromium');
     }
 
     let input = `${__dirname}/../bin`;
