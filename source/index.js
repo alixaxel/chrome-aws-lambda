@@ -3,7 +3,7 @@ const { get } = require('https');
 const { inflate } = require('lambdafs');
 const { URL } = require('url');
 
-if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs10.x') {
+if (['AWS_Lambda_nodejs10.x', 'AWS_Lambda_nodejs12.x'].includes(process.env.AWS_EXECUTION_ENV) === true) {
   if (process.env.FONTCONFIG_PATH === undefined) {
     process.env.FONTCONFIG_PATH = '/tmp/aws';
   }
@@ -155,7 +155,7 @@ class Chromium {
         }
       }
 
-      return '/tmp/chromium';
+      return Promise.resolve('/tmp/chromium');
     }
 
     let input = `${__dirname}/../bin`;
@@ -164,7 +164,7 @@ class Chromium {
       inflate(`${input}/swiftshader.tar.br`),
     ];
 
-    if (process.env.AWS_EXECUTION_ENV === 'AWS_Lambda_nodejs10.x') {
+    if (['AWS_Lambda_nodejs10.x', 'AWS_Lambda_nodejs12.x'].includes(process.env.AWS_EXECUTION_ENV) === true) {
       promises.push(inflate(`${input}/aws.tar.br`));
     }
 

@@ -24,7 +24,7 @@ If you wish to install an older version of Chromium, take a look at [Versioning]
 
 ## Usage
 
-This package works with the `nodejs8.10` and `nodejs10.x` AWS Lambda runtimes out of the box.
+This package works with the `nodejs8.10`, `nodejs10.x` and `nodejs12.x` AWS Lambda runtimes out of the box.
 
 ```javascript
 const chromium = require('chrome-aws-lambda');
@@ -135,7 +135,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
-| `2.0.*`             | `npm i chrome-aws-lambda@~2.0.0`  | [`705776`](https://crrev.com/705776) (`79.0.3945.0`) |
+| `2.0.*`             | `npm i chrome-aws-lambda@~2.0.1`  | [`705776`](https://crrev.com/705776) (`79.0.3945.0`) |
 | `1.20.*`            | `npm i chrome-aws-lambda@~1.20.4` | [`686378`](https://crrev.com/686378) (`78.0.3882.0`) |
 | `1.19.*`            | `npm i chrome-aws-lambda@~1.19.0` | [`674921`](https://crrev.com/674921) (`77.0.3844.0`) |
 | `1.18.*`            | `npm i chrome-aws-lambda@~1.18.1` | [`672088`](https://crrev.com/672088) (`77.0.3835.0`) |
