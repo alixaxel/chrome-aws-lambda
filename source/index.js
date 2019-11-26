@@ -1,4 +1,5 @@
 const { createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
+const { join } = require('path');
 const { get } = require('https');
 const { inflate } = require('lambdafs');
 const { URL } = require('url');
@@ -158,7 +159,7 @@ class Chromium {
       return Promise.resolve('/tmp/chromium');
     }
 
-    let input = `${__dirname}/../bin`;
+    const input = join(__dirname, '..', 'bin');
     let promises = [
       inflate(`${input}/chromium.br`),
       inflate(`${input}/swiftshader.tar.br`),
