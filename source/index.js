@@ -1,7 +1,7 @@
 const { createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
-const { join } = require('path');
 const { get } = require('https');
 const { inflate } = require('lambdafs');
+const { join } = require('path');
 const { URL } = require('url');
 
 if (['AWS_Lambda_nodejs10.x', 'AWS_Lambda_nodejs12.x'].includes(process.env.AWS_EXECUTION_ENV) === true) {
@@ -33,8 +33,8 @@ class Chromium {
     }
 
     return new Promise((resolve, reject) => {
-      let url = new URL(input);
-      let output = `${process.env.HOME}/.fonts/${url.pathname.split('/').pop()}`;
+      const url = new URL(input);
+      const output = `${process.env.HOME}/.fonts/${url.pathname.split('/').pop()}`;
 
       if (existsSync(output) === true) {
         return resolve(output);
@@ -68,7 +68,7 @@ class Chromium {
    * Returns a list of recommended additional Chromium flags.
    */
   static get args() {
-    let result = [
+    const result = [
       '--disable-background-timer-throttling',
       '--disable-breakpad',
       '--disable-client-side-phishing-detection',
@@ -146,11 +146,11 @@ class Chromium {
    */
   static get executablePath() {
     if (this.headless !== true) {
-      return null;
+      return Promise.resolve(null);
     }
 
     if (existsSync('/tmp/chromium') === true) {
-      for (let file of readdirSync('/tmp')) {
+      for (const file of readdirSync('/tmp')) {
         if (file.startsWith('core.chromium') === true) {
           unlinkSync(`/tmp/${file}`);
         }
@@ -160,7 +160,7 @@ class Chromium {
     }
 
     const input = join(__dirname, '..', 'bin');
-    let promises = [
+    const promises = [
       inflate(`${input}/chromium.br`),
       inflate(`${input}/swiftshader.tar.br`),
     ];
@@ -169,17 +169,18 @@ class Chromium {
       promises.push(inflate(`${input}/aws.tar.br`));
     }
 
-    return Promise.all(promises).then((result) => {
-      return result.shift();
-    });
+    return Promise.all(promises).then((result) => result.shift());
   }
 
   /**
    * Returns a boolean indicating if we are running on AWS Lambda or Google Cloud Functions.
-   * If Serverless `IS_LOCAL` is present, returns false by default.
+   * Returns false if Serverless environment variable `IS_LOCAL` is set.
    */
   static get headless() {
-    if (process.env['IS_LOCAL']) return false
+    if (process.env.IS_LOCAL !== undefined) {
+      return false;
+    }
+
     return ['AWS_LAMBDA_FUNCTION_NAME', 'FUNCTION_NAME', 'FUNCTION_TARGET'].some((key) => process.env[key] !== undefined);
   }
 
@@ -187,7 +188,7 @@ class Chromium {
    * Overloads puppeteer with useful methods and returns the resolved package.
    */
   static get puppeteer() {
-    for (let overload of ['FrameManager', 'Page']) {
+    for (const overload of ['FrameManager', 'Page']) {
       require(`${__dirname}/puppeteer/lib/${overload}`);
     }
 
