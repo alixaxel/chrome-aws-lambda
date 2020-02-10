@@ -9,7 +9,9 @@ if (['AWS_Lambda_nodejs10.x', 'AWS_Lambda_nodejs12.x'].includes(process.env.AWS_
     process.env.FONTCONFIG_PATH = '/tmp/aws';
   }
 
-  if (process.env.LD_LIBRARY_PATH.startsWith('/tmp/aws/lib') !== true) {
+  if (process.env.LD_LIBRARY_PATH === undefined) {
+    process.env.LD_LIBRARY_PATH = '/tmp/aws/lib';
+  } else if (process.env.LD_LIBRARY_PATH.startsWith('/tmp/aws/lib') !== true) {
     process.env.LD_LIBRARY_PATH = [...new Set(['/tmp/aws/lib', ...process.env.LD_LIBRARY_PATH.split(':')])].join(':');
   }
 }
