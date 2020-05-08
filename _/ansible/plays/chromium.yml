@@ -117,6 +117,7 @@
           - libatomic
           - libcap-devel
           - libffi-devel
+          - libgbm-devel
           - libgcc
           - libgnome-keyring-devel
           - libjpeg-devel
