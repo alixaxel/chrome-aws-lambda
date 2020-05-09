@@ -29,7 +29,7 @@ This package works with the `nodejs8.10`, `nodejs10.x` and `nodejs12.x` AWS Lamb
 ```javascript
 const chromium = require('chrome-aws-lambda');
 
-exports.handler = async (event, context) => {
+exports.handler = async (event, context, callback) => {
   let result = null;
   let browser = null;
 
@@ -39,6 +39,7 @@ exports.handler = async (event, context) => {
       defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath,
       headless: chromium.headless,
+      ignoreHTTPSErrors: true,
     });
 
     let page = await browser.newPage();
@@ -47,14 +48,14 @@ exports.handler = async (event, context) => {
 
     result = await page.title();
   } catch (error) {
-    return context.fail(error);
+    return callback(error);
   } finally {
     if (browser !== null) {
       await browser.close();
     }
   }
 
-  return context.succeed(result);
+  return callback(null, result);
 };
 ```
 

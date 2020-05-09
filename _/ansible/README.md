@@ -4,7 +4,7 @@ This Ansible playbook will launch an EC2 `c5.9xlarge` Spot Instance and compile 
 
 Once the compilation finishes, the binary will be compressed with Brotli and downloaded.
 
-The whole process usually takes around 1 hour to on a `c5.9xlarge` and nearly 2 hours on a `c5.4xlarge`.
+The whole process usually takes around 1 hour to on a `c5.9xlarge` instance.
 
 ## Chromium Version
 
