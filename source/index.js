@@ -1,5 +1,4 @@
-const { createWriteStream, existsSync, mkdirSync, readdirSync, unlinkSync } = require('fs');
-const { get } = require('https');
+const { createWriteStream, existsSync, mkdirSync, readdirSync, symlink, unlinkSync } = require('fs');
 const { inflate } = require('lambdafs');
 const { join } = require('path');
 const { URL } = require('url');
@@ -35,6 +34,10 @@ class Chromium {
     }
 
     return new Promise((resolve, reject) => {
+      if (/^https?:[/][/]/i.test(input) !== true) {
+        input = `file://${input}`;
+      }
+
       const url = new URL(input);
       const output = `${process.env.HOME}/.fonts/${url.pathname.split('/').pop()}`;
 
@@ -42,27 +45,35 @@ class Chromium {
         return resolve(output);
       }
 
-      get(input, (response) => {
-        if (response.statusCode !== 200) {
-          return reject(`Unexpected status code: ${response.statusCode}.`);
-        }
-
-        const stream = createWriteStream(output);
-
-        stream.once('error', (error) => {
-          return reject(error);
+      if (url.protocol === 'file:') {
+        symlink(url.pathname, output, (error) => {
+          return error != null ? reject(error) : resolve(url.pathname.split('/').pop());
         });
+      } else {
+        let handler = url.protocol === 'http:' ? require('http').get : require('https').get;
 
-        response.on('data', (chunk) => {
-          stream.write(chunk);
-        });
+        handler(input, (response) => {
+          if (response.statusCode !== 200) {
+            return reject(`Unexpected status code: ${response.statusCode}.`);
+          }
 
-        response.once('end', () => {
-          stream.end(() => {
-            return resolve(url.pathname.split('/').pop());
+          const stream = createWriteStream(output);
+
+          stream.once('error', (error) => {
+            return reject(error);
+          });
+
+          response.on('data', (chunk) => {
+            stream.write(chunk);
+          });
+
+          response.once('end', () => {
+            stream.end(() => {
+              return resolve(url.pathname.split('/').pop());
+            });
           });
         });
-      });
+      }
     });
   }
 

@@ -80,7 +80,7 @@ Please refer to the [Local Development Wiki page](https://github.com/alixaxel/ch
 
 Since version `1.12.2`, the `font()` method will download additional fonts and make them discoverable.
 
-To use it, simply pass a **HTTPS** URL to a custom font face _before_ launching Chromium, e.g.:
+To use it, simply pass a URL or file path to a custom font face _before_ launching Chromium, e.g.:
 
 ```javascript
 await chromium.font('https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf');
