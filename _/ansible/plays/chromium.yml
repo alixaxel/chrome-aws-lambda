@@ -39,7 +39,7 @@
       ec2:
         group: Chromium
         image: "{{ image }}"
-        instance_type: c5d.4xlarge
+        instance_type: c5.9xlarge
         instance_initiated_shutdown_behavior: terminate
         key_name: ansible
         wait: yes
@@ -53,7 +53,7 @@
         volumes:
           - device_name: /dev/xvda
             delete_on_termination: true
-            volume_size: 32
+            volume_size: 128
             volume_type: gp2
         instance_tags:
           Name: Chromium
@@ -76,8 +76,6 @@
 - name: AWS
   user: ec2-user
   hosts: aws
-  become: true
-  become_user: root
   gather_facts: true
   environment:
     LANG: en_US.UTF-8
@@ -86,6 +84,8 @@
 
   tasks:
     - name: Installing Packages
+      become: true
+      become_user: root
       yum:
         name:
           - "@Development Tools"
@@ -145,31 +145,93 @@
         state: latest
         update_cache: true
 
+    - name: Checking for NVMe SSD Device
+      become: true
+      become_user: root
+      stat:
+        path: /dev/nvme1n1
+      register: nvme
+
     - name: Creating NVMe SSD Filesystem
+      become: true
+      become_user: root
       filesystem:
         dev: /dev/nvme1n1
         fstype: xfs
+      when: nvme.stat.exists
 
     - name: Mounting NVMe SSD Filesystem
+      become: true
+      become_user: root
       shell: |
         mount /dev/nvme1n1 /srv
       args:
         warn: false
+      when: nvme.stat.exists
+
+    - name: Checking for Directory Structure
+      stat:
+        path: /srv/source/chromium
+      register:
+        structure
 
     - name: Creating Directory Structure
+      become: true
+      become_user: root
       file:
         path: /srv/{{ item }}/chromium
         state: directory
+        group: ec2-user
+        owner: ec2-user
         recurse: true
       with_items:
         - build
         - source
+      when: structure.stat.exists != true
+
+    - name: Checking for Brotli
+      stat:
+        path: /usr/local/bin/brotli
+      register: brotli
+
+    - name: Cloning Brotli
+      git:
+        repo: https://github.com/google/brotli.git
+        dest: /srv/source/brotli
+        force: yes
+        update: yes
+      when: brotli.stat.exists != true
+
+    - name: Compiling Brotli
+      become: true
+      become_user: root
+      shell: |
+        ./configure-cmake && \
+        make && \
+        make install
+      args:
+        chdir: /srv/source/brotli
+        creates: /usr/local/bin/brotli
+      when: brotli.stat.exists != true
 
     - name: Cloning Depot Tools
       git:
         repo: https://chromium.googlesource.com/chromium/tools/depot_tools.git
         dest: /srv/source/depot_tools
         force: yes
+        update: yes
+
+    - name: Checking for Chromium
+      stat:
+        path: /srv/source/chromium/.gclient
+      register: gclient
+
+    - name: Fetching Chromium
+      shell: |
+        fetch chromium
+      args:
+        chdir: /srv/source/chromium
+      when: gclient.stat.exists != true
 
     - name: Resolving Chromium Revision from Puppeteer Version
       uri:
@@ -183,13 +245,7 @@
         return_content: yes
       register: revision
 
-    - name: Fetching Chromium
-      shell: |
-        fetch chromium
-      args:
-        chdir: /srv/source/chromium
-
-    - name: Checking Out Chromium Commit
+    - name: Checking Out Git Commit
       shell: |
         git checkout {{ revision.json.git_sha }}
       args:
@@ -218,6 +274,8 @@
         state: directory
 
     - name: Mounting Build Directory in Memory
+      become: true
+      become_user: root
       shell: |
         mount --types tmpfs --options size=32G,nr_inodes=64k,mode=1777 tmpfs /srv/source/chromium/src/out/Headless
       args:
@@ -279,21 +337,6 @@
         strip -o /srv/build/chromium/chromium-{{ version.stdout | quote }} out/Headless/headless_shell
       args:
         chdir: /srv/source/chromium/src
-
-    - name: Cloning Brotli
-      git:
-        repo: https://github.com/google/brotli.git
-        dest: /srv/source/brotli
-        force: yes
-
-    - name: Compiling Brotli
-      shell: |
-        ./configure-cmake && \
-        make && \
-        make install
-      args:
-        chdir: /srv/source/brotli
-        creates: /usr/local/bin/brotli
 
     - name: Compressing Chromium
       shell: |
