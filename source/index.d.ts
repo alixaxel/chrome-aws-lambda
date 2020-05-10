@@ -1,17 +1,20 @@
 import { Browser, BrowserFetcher, ChromeArgOptions, ConnectOptions, FetcherOptions, LaunchOptions } from 'puppeteer';
 
-export const font: (input: string) => Promise<string>;
+declare class Chromium {
+  static font(input: string): Promise<string>;
+  static get args(): string[]
+  static get defaultViewport(): {
+    deviceScaleFactor: number;
+    hasTouch: boolean;
+    height: number;
+    isLandscape: boolean;
+    isMobile: boolean;
+    width: number;
+  }
 
-export const args: string[];
-export const defaultViewport: {
-  deviceScaleFactor: number;
-  hasTouch: boolean;
-  height: number;
-  isLandscape: boolean;
-  isMobile: boolean;
-  width: number;
-};
+  static get executablePath(): Promise<string>
+  static get headless(): boolean;
+  static get puppeteer(): typeof import('puppeteer');
+}
 
-export const executablePath: Promise<string>;
-export const headless: boolean;
-export const puppeteer: typeof import('puppeteer');
+export = Chromium;
