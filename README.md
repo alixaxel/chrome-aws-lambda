@@ -55,7 +55,11 @@ exports.handler = async (event, context, callback) => {
     }
   }
 
-  return callback(null, result);
+  return callback(null, {
+    statusCode: 200,
+    headers: { 'Content-Type': 'text/plain' },
+    body: result,
+  });
 };
 ```
 
