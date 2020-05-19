@@ -10,7 +10,7 @@ try {
  * Clicks an element and waits for navigation to finish.
  *
  * @param {string} selector - Selector to query for.
- * @param {NavigationOptions} [timeout=null] - How long to wait for, in milliseconds.
+ * @param {NavigationOptions} [options=null] - How long to wait for, in milliseconds.
  * @returns {Promise<Response>}
  */
 Super.prototype.clickAndWaitForNavigation = function (selector, options = null) {
