@@ -1,7 +1,7 @@
 # chrome-aws-lambda
 
 [![chrome-aws-lambda](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
-[![Chromium](https://img.shields.io/badge/chromium-39_MB-brightgreen.svg?style=for-the-badge)](bin/)
+[![Chromium](https://img.shields.io/badge/chromium-40_MB-brightgreen.svg?style=for-the-badge)](bin/)
 [![Donate](https://img.shields.io/badge/donate-paypal-orange.svg?style=for-the-badge)](https://paypal.me/alixaxel)
 
 Chromium Binary for AWS Lambda and Google Cloud Functions
@@ -112,14 +112,14 @@ Since version `1.7.0`, it's also possible to overload `puppeteer` / `puppeteer-c
   - `count(selector)`
   - `exists(selector)`
   - `fill(form, data, heuristic = 'name')`
-  - `go(url, options = null)`
+  - ~`go(url, options = null)`~
   - `number(selector, decimal = null, index = null, property = 'textContent')`
   - `selectByLabel(selector, ...values)`
   - `string(selector, property = 'textContent')`
   - `waitUntilVisible(selector, timeout = null)`
   - `waitWhileVisible(selector, timeout = null)`
 
-Besides the public API, the following browser-context methods will also be available if `Page.go()` is used:
+Besides the public API, the following browser-context methods will also be available:
 
  - `σ.$(selector, context = document)`
  - `σ.$$(selector, index = null, context = document)`
@@ -136,6 +136,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `3.1.*`             | `npm i chrome-aws-lambda@~3.1.0`  | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
 | `3.0.*`             | `npm i chrome-aws-lambda@~3.0.4`  | [`737027`](https://crrev.com/737027) (`81.0.4044.0`) |
 | `2.1.*`             | `npm i chrome-aws-lambda@~2.1.1`  | [`722234`](https://crrev.com/722234) (`80.0.3987.0`) |
 | `2.0.*`             | `npm i chrome-aws-lambda@~2.0.2`  | [`705776`](https://crrev.com/705776) (`79.0.3945.0`) |
