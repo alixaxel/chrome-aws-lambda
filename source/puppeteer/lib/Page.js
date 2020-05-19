@@ -88,7 +88,7 @@ Super.prototype.go = async function (url, options = null) {
  * @param {string} [property='textContent'] - Element property to extract content from.
  * @returns {Promise<number[] | number | null>}
  */
-Super.prototype.number = function (selector, decimal = null, index = null, property = 'textContent') {
+Super.prototype.number = function (selector, decimal = '.', index = null, property = 'textContent') {
   return this.mainFrame().number(selector, decimal, index, property);
 };
 
