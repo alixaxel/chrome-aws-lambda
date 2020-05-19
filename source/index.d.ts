@@ -1,5 +1,3 @@
-import { Browser, BrowserFetcher, ChromeArgOptions, ConnectOptions, FetcherOptions, LaunchOptions } from 'puppeteer';
-
 export const font: (input: string) => Promise<string>;
 
 export const args: string[];

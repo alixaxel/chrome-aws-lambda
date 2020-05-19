@@ -6,10 +6,16 @@ try {
   Super = require('puppeteer-core/lib/Page').Page;
 }
 
+/**
+ * Clicks an element and waits for navigation to finish.
+ *
+ * @param {string} selector - Selector to query for.
+ * @param {NavigationOptions} [timeout=null] - How long to wait for, in milliseconds.
+ * @returns {Promise<Response>}
+ */
 Super.prototype.clickAndWaitForNavigation = function (selector, options = null) {
   if (options == null) {
     options = {
-      timeout: this._defaultNavigationTimeout,
       waitUntil: [
         'domcontentloaded',
         'load',
@@ -25,183 +31,44 @@ Super.prototype.clickAndWaitForNavigation = function (selector, options = null) 
   return Promise.all(promises).then((value) => value.shift());
 };
 
+/**
+ * Returns the total number of elements that match the selector.
+ *
+ * @param {string} selector - Selector to query for.
+ * @returns {Promise<number>}
+ */
 Super.prototype.count = function (selector) {
   return this.mainFrame().count(selector);
 };
 
+/**
+ * Checks whether at least one element matching the selector exists.
+ *
+ * @param {string} selector - Selector to query for.
+ * @returns {Promise<boolean>}
+ */
 Super.prototype.exists = function (selector) {
   return this.mainFrame().exists(selector);
 };
 
+/**
+ * Fills a `form` with a variable number of inputs and returns its filled state.
+ *
+ * @param {string} form - Selector to query the `form` element for.
+ * @param {Object.<string, boolean | string | string[]>} data - Data to fill the form, as a selector-value[s] map.
+ * @param {'css' | 'label' | 'name' | 'xpath'} [heuristic='name'] - Heuristic to use for form input selectors.
+ * @returns {Promise<Object.<string, string[]>>}
+ */
 Super.prototype.fill = function (form, data, heuristic = 'name') {
   return this.mainFrame().fill(form, data, heuristic);
 };
 
+/**
+ * @deprecated Use `page.goto` instead.
+ */
 Super.prototype.go = async function (url, options = null) {
-  await this.browser().userAgent().then((agent) => {
-    return this.setUserAgent(agent.replace('Headless', ''));
-  });
-
-  await this.evaluateOnNewDocument(
-    () => {
-      window.chrome = {
-        app: {},
-        runtime: {},
-      };
-
-      Object.defineProperty(navigator, 'plugins', {
-        get: () => [
-          null,
-        ],
-      });
-
-      Object.defineProperty(navigator, 'languages', {
-        get: () => [
-          'en-US',
-          'en',
-        ],
-      });
-
-      Object.defineProperty(navigator, 'webdriver', {
-        get: () => false,
-      });
-
-      window.σ = {
-        $: function (selector, context = document) {
-          return context.querySelector(selector);
-        },
-        $$: function (selector, index = null, context = document) {
-          if ((index == null) || (index > 0)) {
-            let result = Array.from(context.querySelectorAll(selector));
-
-            if (index != null) {
-              return result[index] || null;
-            }
-
-            return result;
-          }
-
-          return context.querySelector(selector);
-        },
-        $x: function (expression, index = null, context = document) {
-          let node = null;
-          let nodes = document.evaluate(expression, context, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-          let result = [];
-
-          while ((node = nodes.iterateNext()) != null) {
-            result.push(node);
-          }
-
-          if (index != null) {
-            return result[index] || null;
-          }
-
-          return result;
-        },
-        $number: function (data, decimal = null, index = null, property = 'textContent') {
-          data = σ.$string(data, property);
-
-          if (typeof data === 'string') {
-            if (decimal === null) {
-              decimal = '.';
-            }
-
-            if (typeof decimal === 'string') {
-              decimal = decimal.replace(/[.]/g, '\\$&');
-            }
-
-            let result = data.match(/((?:[-+]|\b)[0-9]+(?:[ ,.'`´]*[0-9]+)*)\b/g);
-
-            if (result != null) {
-              result = result.map(
-                (value) => {
-                  return parseFloat(value.replace(new RegExp(`[^-+0-9${decimal}]+`, 'g'), '').replace(decimal, '.'));
-                }
-              );
-
-              if (index != null) {
-                return result[index] || null;
-              }
-            }
-
-            return result;
-          }
-
-          return null;
-        },
-        $string: function (data, property = 'textContent') {
-          if (data == null) {
-            return null;
-          }
-
-          if (typeof data === 'object') {
-            if (data instanceof NodeList) {
-              data = Array.from(data);
-            }
-
-            if (Array.isArray(data) === true) {
-              return data.map(
-                (value) => {
-                  return σ.$string(value, property);
-                }
-              );
-            }
-
-            if (property in data) {
-              return σ.$string(data[property]);
-            }
-
-            for (let key in data) {
-              data[key] = σ.$string(data[key], property);
-            }
-
-            return data;
-          }
-
-          if (typeof data === 'string') {
-            let patterns = {
-              ' ':    /[\u00A0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000]/g,
-              '-':    /[\u2013\u2014]/g,
-              '...':  /[\u2026]/g,
-              '':     /[\u200B\uFEFF]/g,
-              '"':    /[\u201C\u201D]/g,
-              '<':    /[\u00AB\u2039]/g,
-              '>':    /[\u00BB\u203A]/g,
-              '|':    /[\u007C\u00A6\u01C0\u2223\u2758]/g,
-              "'":    /[\u2018\u2019\u201A\u201B\u2032]/g,
-            };
-
-            for (let [key, value] of Object.entries(patterns)) {
-              data = data.replace(value, key);
-            }
-
-            return data.replace(/[\s]+/g, ' ').trim();
-          }
-
-          return null;
-        },
-        $regexp: function (data, pattern, index = null, property = 'textContent') {
-          data = σ.$string(data, property);
-
-          if (typeof data === 'string') {
-            let result = data.match(pattern);
-
-            if ((result != null) && (index != null)) {
-              return result[index] || null;
-            }
-
-            return result;
-          }
-
-          return null;
-        },
-      };
-    }
-  );
-
   if (options == null) {
     options = {
-      timeout: this._defaultNavigationTimeout,
       waitUntil: [
         'domcontentloaded',
         'load',
@@ -212,22 +79,59 @@ Super.prototype.go = async function (url, options = null) {
   return await this.goto(url, options);
 };
 
+/**
+ * Returns normalized number(s) found in the given selector.
+ *
+ * @param {string} selector - Selector to query for.
+ * @param {string} [decimal='.'] - Decimal separator to use.
+ * @param {number|null} [index=null] - Element to return.
+ * @param {string} [property='textContent'] - Element property to extract content from.
+ * @returns {Promise<number[] | number | null>}
+ */
 Super.prototype.number = function (selector, decimal = null, index = null, property = 'textContent') {
   return this.mainFrame().number(selector, decimal, index, property);
 };
 
+/**
+ * Selects multiple `select` options by label and returns the values of the selection.
+ *
+ * @param {string} selector - Selector to query the `select` element for.
+ * @param {...string} values - Option labels to select.
+ * @returns {Promise<string[]>}
+ */
 Super.prototype.selectByLabel = function (selector, ...values) {
   return this.mainFrame().selectByLabel(selector, ...values);
 };
 
+/**
+ * Returns normalized text found in the given selector.
+ *
+ * @param {string} selector - Selector to query for.
+ * @param {string} [property='textContent'] - Element property to extract content from.
+ * @returns {Promise<string[] | string | null>}
+ */
 Super.prototype.string = function (selector, property = 'textContent') {
   return this.mainFrame().string(selector, property);
 };
 
+/**
+ * Waits for element to be present in DOM and to be visible.
+ *
+ * @param {string} selector - Selector to query for.
+ * @param {number} [timeout=null] - How long to wait for, in milliseconds.
+ * @returns {Promise<ElementHandle>}
+ */
 Super.prototype.waitUntilVisible = function (selector, timeout = null) {
   return this.mainFrame().waitUntilVisible(selector, timeout);
 };
 
+/**
+ * Waits for element to not be found in the DOM or to be hidden.
+ *
+ * @param {string} selector - Selector to query for.
+ * @param {number} [timeout=null] - How long to wait for, in milliseconds.
+ * @returns {Promise<ElementHandle | null>}
+ */
 Super.prototype.waitWhileVisible = function (selector, timeout = null) {
   return this.mainFrame().waitWhileVisible(selector, timeout);
 };
