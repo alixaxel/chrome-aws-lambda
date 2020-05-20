@@ -17,7 +17,9 @@ Super.prototype.newPage = async function () {
     });
 
     console.log("******* Calling emulateTimezone ******");
-    await result.emulateTimezone('GMT').catch(e => console.log('Failed to emulateTimezone. Ignoring'));
+    await result.emulateTimezone('GMT')
+      .then(() => console.log('emulateTimezone: SUCESS!'))
+      .catch(e => console.log('emulateTimezone: FAILED! Ignoring'));
     await result.evaluateOnNewDocument(
       () => {
         window.chrome = {
