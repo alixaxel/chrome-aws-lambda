@@ -15,14 +15,12 @@ Super.prototype.newPage = async function () {
     return result.setUserAgent(agent.replace('Headless', ''));
   });
 
-  await result.emulateTimezone('GMT');
+  try {
+    await result.emulateTimezone('GMT');
+  } catch (error) {}
+
   await result.evaluateOnNewDocument(
     () => {
-      window.chrome = {
-        app: {},
-        runtime: {},
-      };
-
       Object.defineProperty(navigator, 'plugins', {
         get: () => [
           null,
@@ -169,6 +167,11 @@ Super.prototype.newPage = async function () {
 
           return null;
         },
+      };
+
+      window.chrome = {
+        app: {},
+        runtime: {},
       };
     }
   );
