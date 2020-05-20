@@ -16,6 +16,7 @@ Super.prototype.newPage = async function () {
       return result.setUserAgent(agent.replace('Headless', ''));
     });
 
+    console.log("******* Calling emulateTimezone ******");
     await result.emulateTimezone('GMT');
     await result.evaluateOnNewDocument(
       () => {
