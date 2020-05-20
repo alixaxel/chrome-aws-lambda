@@ -16,12 +16,11 @@ Super.prototype.newPage = async function () {
     return result.setUserAgent(agent.replace('Headless', ''));
   });
 
+  // emulateTimezone can only be called once per browser instance
+  // @see https://github.com/chromium/chromium/blob/master/third_party/blink/renderer/core/inspector/inspector_emulation_agent.cc#L615
   if (!timezoneSet) {
-    console.log("******* Calling emulateTimezone ******");
     timezoneSet = true;
-    await result.emulateTimezone('GMT')
-      .then(() => console.log('emulateTimezone: SUCESS!'))
-      .catch(e => console.log('emulateTimezone: FAILED! Ignoring'));      
+    await result.emulateTimezone('GMT');     
   }
 
   await result.evaluateOnNewDocument(
