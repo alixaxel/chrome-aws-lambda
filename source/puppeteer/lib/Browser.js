@@ -180,4 +180,5 @@ Super.prototype.newPage = async function () {
       };
     }
   );
+  return result;
 };
