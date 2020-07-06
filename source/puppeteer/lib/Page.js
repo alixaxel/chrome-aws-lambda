@@ -3,7 +3,7 @@ let Super = null;
 try {
   Super = require('puppeteer/lib/Page').Page;
 } catch (error) {
-  Super = require('puppeteer-core/lib/Page').Page;
+  Super = require('puppeteer-core/lib/cjs/common/Page').Page;
 }
 
 /**
