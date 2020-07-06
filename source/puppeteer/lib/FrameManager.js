@@ -3,7 +3,7 @@ let Super = null;
 try {
   Super = require('puppeteer/lib/FrameManager').Frame;
 } catch (error) {
-  Super = require('puppeteer-core/lib/FrameManager').Frame;
+  Super = require('puppeteer-core/lib/cjs/common/FrameManager').Frame;
 }
 
 /**
