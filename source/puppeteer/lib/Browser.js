@@ -3,7 +3,7 @@ let Super = null;
 try {
   Super = require('puppeteer/lib/Browser').BrowserContext;
 } catch (error) {
-  Super = require('puppeteer-core/lib/Browser').BrowserContext;
+  Super = require('puppeteer-core/lib/cjs/common/Browser').BrowserContext;
 }
 
 let newPage = Super.prototype.newPage;
