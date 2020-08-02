@@ -1,10 +1,10 @@
 # Chromium Playbook
 
-This Ansible playbook will launch an EC2 `c5.9xlarge` Spot Instance and compile Chromium statically.
+This Ansible playbook will launch an EC2 `c5.12xlarge` Spot Instance and compile Chromium statically.
 
 Once the compilation finishes, the binary will be compressed with Brotli and downloaded.
 
-The whole process usually takes around 1 hour to on a `c5.9xlarge` instance.
+The whole process usually takes around 1 hour to on a `c5.12xlarge` instance.
 
 ## Chromium Version
 
