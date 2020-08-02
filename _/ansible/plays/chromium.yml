@@ -233,15 +233,20 @@
         chdir: /srv/source/chromium
       when: gclient.stat.exists != true
 
-    - name: Resolving Chromium Revision from Puppeteer Version
+    - name: Resolving Puppeteer Version
       uri:
-        url: "https://raw.githubusercontent.com/GoogleChrome/puppeteer/{{ puppeteer_version | default('master') }}/package.json"
+        url: "https://raw.githubusercontent.com/GoogleChrome/puppeteer/{{ puppeteer_version | default('main') }}/src/revisions.ts"
         return_content: yes
-      register: puppeteer
+      register: puppeteer_revisions
+
+    - name: Resolving Chromium Revision from Puppeteer Version
+      set_fact:
+        chromium_revision: >
+          {{ puppeteer_revisions.content | regex_search("chromium: [']([0-9]+)[']", '\1') | first }}
 
     - name: Resolving Git Commit from Chromium Revision
       uri:
-        url: "https://cr-rev.appspot.com/_ah/api/crrev/v1/redirect/{{ puppeteer.json.puppeteer.chromium_revision }}"
+        url: "https://cr-rev.appspot.com/_ah/api/crrev/v1/redirect/{{ chromium_revision }}"
         return_content: yes
       register: revision
 

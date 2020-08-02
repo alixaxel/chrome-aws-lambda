@@ -14,7 +14,7 @@ To compile a specific version of Chromium, update the `puppeteer_version` variab
 puppeteer_version=v1.9.0
 ```
 
-If not specified, the current `master` will be used.
+If not specified, the current `main` will be used.
 
 ## Usage
 

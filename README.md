@@ -94,6 +94,10 @@ Fonts with the same basename will only be downloaded if they are not already cac
 
 It's recommended that you use a CDN, like [raw.githack.com](https://raw.githack.com/) or [gitcdn.xyz](https://gitcdn.xyz/).
 
+---
+
+As of version `3.0.4`, the `font()` method will also work with local file paths and HTTP URLs.
+
 ## Overloading
 
 Since version `1.7.0`, it's also possible to overload `puppeteer` / `puppeteer-core` API with useful methods:
@@ -119,6 +123,14 @@ Since version `1.7.0`, it's also possible to overload `puppeteer` / `puppeteer-c
   - `waitUntilVisible(selector, timeout = null)`
   - `waitWhileVisible(selector, timeout = null)`
 
+Since version `5.0.0` the number of overloads are further augmented:
+
+- `Browser`
+  - `newPage(...hooks)`
+- `Page`
+  - `allow(...resources)`
+  - `block(...resources)`
+
 Besides the public API, the following browser-context methods will also be available:
 
  - `σ.$(selector, context = document)`
@@ -130,12 +142,62 @@ Besides the public API, the following browser-context methods will also be avail
 
 To enable overloading, simply call the `puppeteer` property exposed by this package.
 
+## New Page Hooks
+
+Since version 5.0.0 you can specify a list of hooks to apply to created pages.
+
+For instance, to enable ad-blocking (using [`@cliqz/adblocker-puppeteer`](https://www.npmjs.com/package/@cliqz/adblocker-puppeteer)):
+
+```javascript
+const { fullLists, PuppeteerBlocker } = require('@cliqz/adblocker-puppeteer');
+const { promises } = require('fs');
+
+async function adblock(page) {
+  const fetch = (url) => {
+    let handler = url.startsWith('https://') ? require('https').get : require('http').get;
+
+    return new Promise((resolve, reject) => {
+      return handler(url, (response) => {
+        if (response.statusCode !== 200) {
+          return reject(`Unexpected status code: ${response.statusCode}.`);
+        }
+
+        let result = '';
+
+        response.on('data', (chunk) => {
+          result += chunk;
+        });
+
+        response.on('end', () => {
+          return resolve({ text: () => result });
+        });
+      });
+    });
+  };
+
+  await PuppeteerBlocker.fromLists(fetch, fullLists, { enableCompression: false }, {
+    path: '/tmp/adblocker.bin',
+    read: promises.readFile,
+    write: promises.writeFile,
+  }).then((blocker) => blocker.enableBlockingInPage(page));
+
+  return page;
+}
+```
+
+And then simply pass hooks hooks to `newPage()`:
+
+```javascript
+let page = await browser.newPage(adblock);
+```
+
 ## Versioning
 
 This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `5.0.*`             | `npm i chrome-aws-lambda@~5.0.0`  | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
 | `3.1.*`             | `npm i chrome-aws-lambda@~3.1.1`  | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
 | `3.0.*`             | `npm i chrome-aws-lambda@~3.0.4`  | [`737027`](https://crrev.com/737027) (`81.0.4044.0`) |
 | `2.1.*`             | `npm i chrome-aws-lambda@~2.1.1`  | [`722234`](https://crrev.com/722234) (`80.0.3987.0`) |

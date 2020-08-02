@@ -17,7 +17,7 @@ if (['AWS_Lambda_nodejs10.x', 'AWS_Lambda_nodejs12.x'].includes(process.env.AWS_
 
 class Chromium {
   /**
-   * Downloads a custom font and returns its basename, patching the environment so that Chromium can find it.
+   * Downloads or symlinks a custom font and returns its basename, patching the environment so that Chromium can find it.
    * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
    */
   static async font(input) {
