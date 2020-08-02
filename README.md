@@ -144,7 +144,7 @@ To enable overloading, simply call the `puppeteer` property exposed by this pack
 
 ## New Page Hooks
 
-Since version 5.0.0 you can specify a list of hooks to apply to created pages.
+Since version `5.0.0` you can specify a list of hooks to apply to created pages.
 
 For instance, to enable ad-blocking (using [`@cliqz/adblocker-puppeteer`](https://www.npmjs.com/package/@cliqz/adblocker-puppeteer)):
 
@@ -197,6 +197,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `5.1.*`             | `npm i chrome-aws-lambda@~5.1.0`  | [`768783`](https://crrev.com/768783) (`84.0.4147.0`) |
 | `5.0.*`             | `npm i chrome-aws-lambda@~5.0.0`  | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
 | `3.1.*`             | `npm i chrome-aws-lambda@~3.1.1`  | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
 | `3.0.*`             | `npm i chrome-aws-lambda@~3.0.4`  | [`737027`](https://crrev.com/737027) (`81.0.4044.0`) |
