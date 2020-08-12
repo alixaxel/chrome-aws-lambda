@@ -197,7 +197,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
-| `5.2.*`             | `npm i chrome-aws-lambda@~5.2.0`  | [`782078`](https://crrev.com/782078) (`85.0.4182.0`) |
+| `5.2.*`             | `npm i chrome-aws-lambda@~5.2.1`  | [`782078`](https://crrev.com/782078) (`85.0.4182.0`) |
 | `5.1.*`             | `npm i chrome-aws-lambda@~5.1.0`  | [`768783`](https://crrev.com/768783) (`84.0.4147.0`) |
 | `5.0.*`             | `npm i chrome-aws-lambda@~5.0.0`  | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
 | `3.1.*`             | `npm i chrome-aws-lambda@~3.1.1`  | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
@@ -246,7 +246,7 @@ make chrome_aws_lambda.zip
 
 The above will create a `chrome-aws-lambda.zip` file, which can be uploaded to your Layers console.
 
-> The folks at [`shelfio/chrome-aws-lambda-layer`](https://github.com/shelfio/chrome-aws-lambda-layer) also maintain and publish AWS Lambda Layers of this package.
+> The folks [`@shelfio`](https://github.com/shelfio/chrome-aws-lambda-layer) also maintain and publish AWS Lambda Layers of this package.
 
 ## Google Cloud Functions
 
