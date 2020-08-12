@@ -20,7 +20,7 @@
     "postversion": "git push && git push --tags && npm publish"
   },
   "dependencies": {
-    "lambdafs": "^1.3.0"
+    "lambdafs": "^2.0.0"
   },
   "devDependencies": {
     "@types/puppeteer": "~3.0.1"
