@@ -1,4 +1,4 @@
-import { BrowserOptions, DirectNavigationOptions, ElementHandle, NavigationOptions, ResourceType, Response} from 'puppeteer';
+import { BrowserOptions, DirectNavigationOptions, ElementHandle, NavigationOptions, ResourceType, Response } from 'puppeteer';
 
 declare namespace Chromium {
   export interface Frame {
@@ -215,6 +215,7 @@ declare module 'puppeteer' {
      * @param hooks - Optional hooks to apply on the new page.
      */
     newPage(...hooks: ((page: Page) => Page)[]): Promise<Page>;
+    targets(): Target[];
   }
 
   export interface Page extends Chromium.Page {}

@@ -184,7 +184,14 @@ class Chromium {
       return false;
     }
 
-    return ['AWS_LAMBDA_FUNCTION_NAME', 'FUNCTION_NAME', 'FUNCTION_TARGET', 'FUNCTIONS_EMULATOR'].some((key) => process.env[key] !== undefined);
+    const environments = [
+      'AWS_LAMBDA_FUNCTION_NAME',
+      'FUNCTION_NAME',
+      'FUNCTION_TARGET',
+      'FUNCTIONS_EMULATOR',
+    ];
+
+    return environments.some((key) => process.env[key] !== undefined);
   }
 
   /**
