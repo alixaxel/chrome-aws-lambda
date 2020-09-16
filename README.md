@@ -12,7 +12,7 @@ Chromium Binary for AWS Lambda and Google Cloud Functions
 npm install chrome-aws-lambda --save-prod
 ```
 
-This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a day or two).
+This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a few days).
 
 You will also need to install the corresponding version of `puppeteer` (or `puppeteer-core`):
 
@@ -197,6 +197,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `5.3.*`             | `npm i chrome-aws-lambda@~5.3.0`  | [`800071`](https://crrev.com/800071) (`86.0.4240.0`) |
 | `5.2.*`             | `npm i chrome-aws-lambda@~5.2.1`  | [`782078`](https://crrev.com/782078) (`85.0.4182.0`) |
 | `5.1.*`             | `npm i chrome-aws-lambda@~5.1.0`  | [`768783`](https://crrev.com/768783) (`84.0.4147.0`) |
 | `5.0.*`             | `npm i chrome-aws-lambda@~5.0.0`  | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
@@ -236,7 +237,7 @@ To compile your own version of Chromium check the [Ansible playbook instructions
 
 [Lambda Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) is a new convenient way to manage common dependencies between different Lambda Functions.
 
-The following set of (Linux) commands will create a well-structured layer of this package alongside `puppeteer-core`:
+The following set of (Linux) commands will create a layer of this package alongside `puppeteer-core`:
 
 ```shell
 git clone --depth=1 https://github.com/alixaxel/chrome-aws-lambda.git && \

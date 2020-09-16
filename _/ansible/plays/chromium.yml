@@ -282,7 +282,7 @@
       become: true
       become_user: root
       shell: |
-        mount --types tmpfs --options size=32G,nr_inodes=64k,mode=1777 tmpfs /srv/source/chromium/src/out/Headless
+        mount --types tmpfs --options size=48G,nr_inodes=128k,mode=1777 tmpfs /srv/source/chromium/src/out/Headless
       args:
         warn: false
 
