@@ -23,7 +23,7 @@
     "lambdafs": "^2.0.0"
   },
   "devDependencies": {
-    "@types/puppeteer": "~3.0.1"
+    "@types/puppeteer": "~3.0.2"
   },
   "peerDependencies": {
     "puppeteer-core": "5.3.x"

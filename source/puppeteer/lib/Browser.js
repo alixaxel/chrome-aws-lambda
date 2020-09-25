@@ -1,9 +1,9 @@
 let Super = null;
 
 try {
-  Super = require('puppeteer/lib/cjs/puppeteer/common/Browser').BrowserContext;
+  Super = require('puppeteer/lib/cjs/puppeteer/common/Browser').Browser;
 } catch (error) {
-  Super = require('puppeteer-core/lib/cjs/puppeteer/common/Browser').BrowserContext;
+  Super = require('puppeteer-core/lib/cjs/puppeteer/common/Browser').Browser;
 }
 
 let newPage = Super.prototype.newPage;
