@@ -26,7 +26,7 @@
     "@types/puppeteer": "~3.0.2"
   },
   "peerDependencies": {
-    "puppeteer-core": "5.4.x"
+    "puppeteer-core": "5.5.x"
   },
   "bugs": {
     "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"
