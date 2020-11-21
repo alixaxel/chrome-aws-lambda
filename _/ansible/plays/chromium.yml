@@ -80,7 +80,7 @@
   environment:
     LANG: en_US.UTF-8
     LC_ALL: en_US.UTF-8
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:/srv/source/depot_tools"
+    PATH: "{{ ansible_env.PATH }}:/srv/source/depot_tools"
 
   tasks:
     - name: Installing Packages
