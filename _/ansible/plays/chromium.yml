@@ -271,6 +271,9 @@
         backrefs: yes
       with_items:
         - { path: 'content/browser/sandbox_ipc_linux.cc', regexp: '^(\s+)PLOG[(]WARNING[)] << "poll";$', line: '\1PLOG(WARNING) << "poll"; failed_polls = 0;' }
+        - { path: 'content/browser/renderer_host/render_process_host_impl.cc', regexp: '^(\s+)CHECK\(render_process_host->InSameStoragePartition\($', line: '\1' }
+        - { path: 'content/browser/renderer_host/render_process_host_impl.cc', regexp: '^(\s+)BrowserContext::GetStoragePartition\(browser_context, site_instance,$', line: '\1' }
+        - { path: 'content/browser/renderer_host/render_process_host_impl.cc', regexp: '^(\s+)false \/\* can_create \*\/\)\)\);$', line: '\1' }
 
     - name: Creating Build Configuration Directory
       file:
