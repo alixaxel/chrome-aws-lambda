@@ -107,7 +107,7 @@ class Chromium {
       '--disable-sync',
       '--disk-cache-size=33554432',
       '--hide-scrollbars',
-      '--ignore-gpu-blacklist',
+      '--ignore-gpu-blocklist',
       '--metrics-recording-only',
       '--mute-audio',
       '--no-default-browser-check',
