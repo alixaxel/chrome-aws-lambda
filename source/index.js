@@ -177,15 +177,15 @@ class Chromium {
 
   /**
    * Returns a boolean indicating if we are running on AWS Lambda or Google Cloud Functions.
-   * Returns false if Serverless environment variable `IS_LOCAL` is set.
+   * Returns false if Serverless environment variable `IS_LOCAL` is set, or serverless-offline `IS_OFFLINE` is set.
    */
   static get headless() {
-    if (process.env.IS_LOCAL !== undefined) {
+    if (process.env.IS_LOCAL !== undefined || process.env.IS_OFFLINE !== undefined) {
       return false;
     }
 
     const environments = [
-      'AWS_LAMBDA_FUNCTION_NAME',
+      'AWS_EXECUTION_ENV',
       'FUNCTION_NAME',
       'FUNCTION_TARGET',
       'FUNCTIONS_EMULATOR',
