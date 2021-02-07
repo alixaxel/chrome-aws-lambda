@@ -3,15 +3,11 @@ name: Bug Report
 about: Standard Bug Report
 title: "[BUG]"
 labels: bug
-assignees: alixaxel
 ---
 
 <!---
-For Chromium-specific bugs, please refer to:
-https://bugs.chromium.org/p/chromium
-
-For Puppeteer-specific bugs, please refer to:
-https://github.com/GoogleChrome/puppeteer/issues
+For Chromium-specific bugs, please refer to: https://bugs.chromium.org/p/chromium
+For Puppeteer-specific bugs, please refer to: https://github.com/GoogleChrome/puppeteer/issues
 -->
 
 ## Environment
@@ -22,12 +18,15 @@ https://github.com/GoogleChrome/puppeteer/issues
 * Lambda / GCF Runtime: <!-- `nodejs8.10` | `nodejs10.x` | `nodejs12.x` -->
 
 ## Expected Behavior
+
 <!-- What should have happened. -->
 
 ## Current Behavior
+
 <!-- What happened instead. -->
 
 ## Steps to Reproduce
+
 <!-- Include code and/or URLs to reproduce this issue. -->
 
 <!--
@@ -66,4 +65,5 @@ exports.handler = async (event, context, callback) => {
 -->
 
 ## Possible Solution
+
 <!-- Not mandatory, but you can suggest a fix or reason for the bug. -->
