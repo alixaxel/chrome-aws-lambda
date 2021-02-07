@@ -14,19 +14,16 @@
     "source"
   ],
   "engines": {
-    "node": ">= 8.10"
+    "node": ">= 10.16"
   },
   "scripts": {
     "postversion": "git push && git push --tags && npm publish"
   },
   "dependencies": {
-    "lambdafs": "^2.0.0"
-  },
-  "devDependencies": {
-    "@types/puppeteer": "~3.0.2"
+    "lambdafs": "^2.0.2"
   },
   "peerDependencies": {
-    "puppeteer-core": "5.5.x"
+    "puppeteer-core": "6.0.x"
   },
   "bugs": {
     "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"
