@@ -21,7 +21,7 @@ class Chromium {
    * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
    */
   static async font(input) {
-    if (this.headless !== true) {
+    if (Chromium.headless !== true) {
       return null;
     }
 
@@ -120,7 +120,7 @@ class Chromium {
       '--use-mock-keychain',
     ];
 
-    if (this.headless === true) {
+    if (Chromium.headless === true) {
       result.push('--single-process');
     } else {
       result.push('--start-maximized');
@@ -148,7 +148,7 @@ class Chromium {
    * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
    */
   static get executablePath() {
-    if (this.headless !== true) {
+    if (Chromium.headless !== true) {
       return Promise.resolve(null);
     }
 
