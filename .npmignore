@@ -1,3 +1,5 @@
 _
-.idea/
+.fonts
+.idea
 *.zip
+Dockerfile

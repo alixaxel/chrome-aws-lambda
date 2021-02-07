@@ -24,7 +24,7 @@ If you wish to install an older version of Chromium, take a look at [Versioning]
 
 ## Usage
 
-This package works with the `nodejs8.10`, `nodejs10.x` and `nodejs12.x` AWS Lambda runtimes out of the box.
+This package works with all the currently supported AWS Lambda Node.js runtimes out of the box.
 
 ```javascript
 const chromium = require('chrome-aws-lambda');
@@ -96,7 +96,29 @@ It's recommended that you use a CDN, like [raw.githack.com](https://raw.githack.
 
 ---
 
-As of version `3.0.4`, the `font()` method will also work with local file paths and HTTP URLs.
+As of version `3.0.4`, the `font()` method will also work with local **absolute** file paths and HTTP URLs:
+
+```javascript
+await chromium.font('/absolute/path/to/font.ttf');
+```
+
+---
+
+Since version `6.0.0`, fonts provisioned by AWS Lambda Layers are also supported.
+
+To make use of them, simply create a directory named `.fonts` and place any font faces you want there:
+
+```
+.fonts
+├── NotoColorEmoji.ttf
+└── Roboto.ttf
+```
+
+Afterwards, you just need to ZIP the directory and upload it as a AWS Lambda Layer:
+
+```shell
+zip -9 --filesync --move --recurse-paths .fonts.zip .fonts/
+```
 
 ## Overloading
 
@@ -197,6 +219,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `6.0.*`             | `npm i chrome-aws-lambda@~6.0.0`  | [`843427`](https://crrev.com/843427) (`89.0.4389.0`) |
 | `5.5.*`             | `npm i chrome-aws-lambda@~5.5.0`  | [`818858`](https://crrev.com/818858) (`88.0.4298.0`) |
 | `5.4.*`             | `npm i chrome-aws-lambda@~5.4.0`  | [`809590`](https://crrev.com/809590) (`87.0.4272.0`) |
 | `5.3.*`             | `npm i chrome-aws-lambda@~5.3.1`  | [`800071`](https://crrev.com/800071) (`86.0.4240.0`) |
@@ -255,13 +278,13 @@ The above will create a `chrome-aws-lambda.zip` file, which can be uploaded to y
 
 Since version `1.11.2`, it's also possible to use this package on Google/Firebase Cloud Functions.
 
-The only additional requirement is that `iltorb` must also be added as a dependency:
+According to our benchmarks, it's 40% to 50% faster than using the off-the-shelf `puppeteer` bundle.
+
+> If running on Node 10.15 or lower, `iltorb` must also be added as a dependency:
 
 ```shell
 npm install iltorb --save-prod
 ```
-
-According to our benchmarks, it's 40% to 50% faster than using the off-the-shelf `puppeteer` bundle.
 
 ## Compression
 

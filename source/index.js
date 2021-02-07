@@ -1,4 +1,4 @@
-const { createWriteStream, existsSync, mkdirSync, readdirSync, symlink, unlinkSync } = require('fs');
+const { access, createWriteStream, existsSync, mkdirSync, readdirSync, symlink, unlinkSync } = require('fs');
 const { inflate } = require('lambdafs');
 const { join } = require('path');
 const { URL } = require('url');
@@ -42,12 +42,18 @@ class Chromium {
       const output = `${process.env.HOME}/.fonts/${url.pathname.split('/').pop()}`;
 
       if (existsSync(output) === true) {
-        return resolve(output);
+        return resolve(output.split('/').pop());
       }
 
       if (url.protocol === 'file:') {
-        symlink(url.pathname, output, (error) => {
-          return error != null ? reject(error) : resolve(url.pathname.split('/').pop());
+        access(url.pathname, (error) => {
+          if (error != null) {
+            return reject(error);
+          }
+
+          symlink(url.pathname, output, (error) => {
+            return error != null ? reject(error) : resolve(url.pathname.split('/').pop());
+          });
         });
       } else {
         let handler = url.protocol === 'http:' ? require('http').get : require('https').get;
