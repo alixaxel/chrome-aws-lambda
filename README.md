@@ -1,7 +1,7 @@
 # chrome-aws-lambda
 
 [![chrome-aws-lambda](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
-[![Chromium](https://img.shields.io/badge/chromium-40_MB-brightgreen.svg?style=for-the-badge)](bin/)
+[![Chromium](https://img.shields.io/badge/chromium-43_MB-brightgreen.svg?style=for-the-badge)](bin/)
 [![Donate](https://img.shields.io/badge/donate-paypal-orange.svg?style=for-the-badge)](https://paypal.me/alixaxel)
 
 Chromium Binary for AWS Lambda and Google Cloud Functions
@@ -219,6 +219,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `7.0.*`             | `npm i chrome-aws-lambda@~7.0.0`  | [`848005`](https://crrev.com/848005) (`90.0.4403.0`) |
 | `6.0.*`             | `npm i chrome-aws-lambda@~6.0.0`  | [`843427`](https://crrev.com/843427) (`89.0.4389.0`) |
 | `5.5.*`             | `npm i chrome-aws-lambda@~5.5.0`  | [`818858`](https://crrev.com/818858) (`88.0.4298.0`) |
 | `5.4.*`             | `npm i chrome-aws-lambda@~5.4.0`  | [`809590`](https://crrev.com/809590) (`87.0.4272.0`) |

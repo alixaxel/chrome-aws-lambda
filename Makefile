@@ -8,7 +8,7 @@ clean:
 
 %.zip:
 	mkdir -p nodejs/node_modules/chrome-aws-lambda/
-	cd nodejs/ && npm install lambdafs@~2.0.2 puppeteer-core@~6.0.0 --no-bin-links --no-optional --no-package-lock --no-save --no-shrinkwrap && cd -
+	cd nodejs/ && npm install lambdafs@~2.0.2 puppeteer-core@~7.0.1 --no-bin-links --no-optional --no-package-lock --no-save --no-shrinkwrap && cd -
 	npm pack
 	tar --directory nodejs/node_modules/chrome-aws-lambda/ --extract --file chrome-aws-lambda-*.tgz --strip-components=1
 	rm chrome-aws-lambda-*.tgz
