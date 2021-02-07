@@ -30,13 +30,17 @@ Super.prototype.newPage = async function (...hooks) {
   }
 
   await result.evaluateOnNewDocument(() => {
-    Object.defineProperty(navigator, 'languages', {
-      get: () => ['en-US', 'en'],
-    });
+    if (navigator.languages === undefined) {
+      Object.defineProperty(navigator, 'languages', {
+        get: () => ['en-US', 'en'],
+      });
+    }
 
-    Object.defineProperty(navigator, 'webdriver', {
-      get: () => false,
-    });
+    if (navigator.webdriver === undefined) {
+      Object.defineProperty(navigator, 'webdriver', {
+        get: () => false,
+      });
+    }
 
     window.σ = {
       $: function (selector, context = document) {
