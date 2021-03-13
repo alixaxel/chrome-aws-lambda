@@ -1,7 +1,8 @@
 # chrome-aws-lambda
 
 [![chrome-aws-lambda](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
-[![Chromium](https://img.shields.io/badge/chromium-43_MB-brightgreen.svg?style=for-the-badge)](bin/)
+[![TypeScript](https://img.shields.io/npm/types/chrome-aws-lambda?style=for-the-badge)](https://www.typescriptlang.org/dt/search?search=chrome-aws-lambda)
+[![Chromium](https://img.shields.io/badge/chromium-44_MB-brightgreen.svg?style=for-the-badge)](bin/)
 [![Donate](https://img.shields.io/badge/donate-paypal-orange.svg?style=for-the-badge)](https://paypal.me/alixaxel)
 
 Chromium Binary for AWS Lambda and Google Cloud Functions
@@ -14,7 +15,7 @@ npm install chrome-aws-lambda --save-prod
 
 This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a few days).
 
-You will also need to install the corresponding version of `puppeteer` (or `puppeteer-core`):
+You also need to install the corresponding version of `puppeteer-core` (or `puppeteer`):
 
 ```shell
 npm install puppeteer-core --save-prod
@@ -69,44 +70,44 @@ Please refer to the [Local Development Wiki page](https://github.com/alixaxel/ch
 
 | Method / Property | Returns              | Description                                               |
 | ----------------- | -------------------- | --------------------------------------------------------- |
-| `font(url)`       | `{?Promise<string>}` | Downloads a custom font and returns its basename.         |
+| `font(url)`       | `{?Promise<string>}` | Provisions a custom font and returns its basename.        |
 | `args`            | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
 | `defaultViewport` | `{!Object}`          | Returns more sensible default viewport settings.          |
-| `executablePath`  | `{?Promise<string>}` | Returns the path where the Chromium binary was extracted. |
+| `executablePath`  | `{?Promise<string>}` | Returns the path the Chromium binary was extracted to.    |
 | `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda or GCF.    |
-| `puppeteer`       | `{!Object}`          | Overloads puppeteer and returns the resolved package.     |
+| `puppeteer`       | `{!Object}`          | Overloads `puppeteer` and returns the resolved package.   |
 
 ## Fonts
 
-Since version `1.12.2`, the `font()` method will download additional fonts and make them discoverable.
+The Amazon Linux 2 AWS Lambda runtime is no longer provisioned with any font faces.
 
-To use it, simply pass a URL or local file path to a custom font face _before_ launching Chromium, e.g.:
+Because of this, this package ships with [Open Sans](https://fonts.google.com/specimen/Open+Sans), which supports the following scripts:
 
-```javascript
+* Latin
+* Greek
+* Cyrillic
+
+To provision additional fonts, simply call the `font()` method with an absolute path or URL:
+
+```typescript
+await chromium.font('/var/task/fonts/NotoColorEmoji.ttf');
+// or
 await chromium.font('https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf');
 ```
 
-> The above font is needed if you want to [render emojis](https://getemoji.com/).
+> `Noto Color Emoji` (or similar) is needed if you want to [render emojis](https://getemoji.com/).
 
-Fonts with the same basename will only be downloaded if they are not already cached.
+> For URLs, it's recommended that you use a CDN, like [raw.githack.com](https://raw.githack.com/) or [gitcdn.xyz](https://gitcdn.xyz/).
+
+This method should be invoked _before_ launching Chromium.
 
 > On non-serverless environments, the `font()` method is a no-op to avoid polluting the user space.
 
-It's recommended that you use a CDN, like [raw.githack.com](https://raw.githack.com/) or [gitcdn.xyz](https://gitcdn.xyz/).
-
 ---
 
-As of version `3.0.4`, the `font()` method will also work with local **absolute** file paths and HTTP URLs:
+Alternatively, it's also possible to provision fonts via AWS Lambda Layers.
 
-```javascript
-await chromium.font('/absolute/path/to/font.ttf');
-```
-
----
-
-Since version `6.0.0`, fonts provisioned by AWS Lambda Layers are also supported.
-
-To make use of them, simply create a directory named `.fonts` and place any font faces you want there:
+Simply create a directory named `.fonts` and place any font faces you want there:
 
 ```
 .fonts
@@ -122,96 +123,100 @@ zip -9 --filesync --move --recurse-paths .fonts.zip .fonts/
 
 ## Overloading
 
-Since version `1.7.0`, it's also possible to overload `puppeteer` / `puppeteer-core` API with useful methods:
+Since version `8.0.0`, it's possible to [overload puppeteer](/typings/chrome-aws-lambda.d.ts) with the following convenient API:
 
-- `Frame`
-  - `count(selector)`
-  - `exists(selector)`
-  - `fill(form, data, heuristic = 'name')`
-  - `number(selector, decimal = null, index = null, property = 'textContent')`
-  - `selectByLabel(selector, ...values)`
-  - `string(selector, property = 'textContent')`
-  - `waitUntilVisible(selector, timeout = null)`
-  - `waitWhileVisible(selector, timeout = null)`
-- `Page`
-  - `clickAndWaitForNavigation(selector, options = null)`
-  - `count(selector)`
-  - `exists(selector)`
-  - `fill(form, data, heuristic = 'name')`
-  - ~`go(url, options = null)`~
-  - `number(selector, decimal = null, index = null, property = 'textContent')`
-  - `selectByLabel(selector, ...values)`
-  - `string(selector, property = 'textContent')`
-  - `waitUntilVisible(selector, timeout = null)`
-  - `waitWhileVisible(selector, timeout = null)`
+```typescript
+interface Browser {
+  defaultPage(...hooks: ((page: Page) => Promise<Page>)[])
+  newPage(...hooks: ((page: Page) => Promise<Page>)[])
+}
 
-Since version `5.0.0` the number of overloads are further augmented:
+interface BrowserContext {
+  defaultPage(...hooks: ((page: Page) => Promise<Page>)[])
+  newPage(...hooks: ((page: Page) => Promise<Page>)[])
+}
 
-- `Browser`
-  - `newPage(...hooks)`
-- `Page`
-  - `allow(...resources)`
-  - `block(...resources)`
+interface Page {
+  block(patterns: string[])
+  clickAndWaitForNavigation(selector: string, options?: WaitForOptions)
+  clickAndWaitForRequest(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForResponse(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions)
+  count(selector: string)
+  exists(selector: string)
+  fillFormByLabel(selector: string, data: Record<string, boolean | string | string[]>)
+  fillFormByName(selector: string, data: Record<string, boolean | string | string[]>)
+  fillFormBySelector(selector: string, data: Record<string, boolean | string | string[]>)
+  fillFormByXPath(selector: string, data: Record<string, boolean | string | string[]>)
+  number(selector: string, decimal?: string, property?: string)
+  selectByLabel(selector: string, ...values: string[])
+  string(selector: string, property?: string)
+  waitUntilVisible(selector: string, options?: WaitTimeoutOptions)
+  waitWhileVisible(selector: string, options?: WaitTimeoutOptions)
+  withTracing(options: TracingOptions, callback: (page: Page) => Promise<any>)
+}
 
-Besides the public API, the following browser-context methods will also be available:
+interface Frame {
+  clickAndWaitForNavigation(selector: string, options?: WaitForOptions)
+  clickAndWaitForRequest(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForResponse(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions)
+  count(selector: string)
+  exists(selector: string)
+  fillFormByLabel(selector: string, data: Record<string, boolean | string | string[]>)
+  fillFormByName(selector: string, data: Record<string, boolean | string | string[]>)
+  fillFormBySelector(selector: string, data: Record<string, boolean | string | string[]>)
+  fillFormByXPath(selector: string, data: Record<string, boolean | string | string[]>)
+  number(selector: string, decimal?: string, property?: string)
+  selectByLabel(selector: string, ...values: string[])
+  string(selector: string, property?: string)
+  waitUntilVisible(selector: string, options?: WaitTimeoutOptions)
+  waitWhileVisible(selector: string, options?: WaitTimeoutOptions)
+}
 
- - `σ.$(selector, context = document)`
- - `σ.$$(selector, index = null, context = document)`
- - `σ.$x(expression, index = null, context = document)`
- - `σ.$number(data, decimal = null, index = null, property = 'textContent')`
- - `σ.$string(data, property = 'textContent')`
- - `σ.$regexp(data, pattern, index = null, property = 'textContent')`
+interface ElementHandle {
+  clickAndWaitForNavigation(options?: WaitForOptions)
+  clickAndWaitForRequest(pattern: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForResponse(pattern: string | RegExp, options?: WaitTimeoutOptions)
+  fillFormByLabel(data: Record<string, boolean | string | string[]>)
+  fillFormByName(data: Record<string, boolean | string | string[]>)
+  fillFormBySelector(data: Record<string, boolean | string | string[]>)
+  fillFormByXPath(data: Record<string, boolean | string | string[]>)
+  getInnerHTML()
+  getInnerText()
+  number(decimal?: string, property?: string)
+  selectByLabel(...values: string[])
+  string(property?: string)
+}
+```
 
-To enable overloading, simply call the `puppeteer` property exposed by this package.
+To enable this behavior, simply call the `puppeteer` property exposed by this package.
 
-## New Page Hooks
+> Refer to the [TypeScript typings](/typings/chrome-aws-lambda.d.ts) for general documentation.
 
-Since version `5.0.0` you can specify a list of hooks to apply to created pages.
+## Page Hooks
 
-For instance, to enable ad-blocking (using [`@cliqz/adblocker-puppeteer`](https://www.npmjs.com/package/@cliqz/adblocker-puppeteer)):
+When overloaded, you can specify a list of hooks to automatically apply to pages.
 
-```javascript
-const { fullLists, PuppeteerBlocker } = require('@cliqz/adblocker-puppeteer');
-const { promises } = require('fs');
+For instance, to remove the `Headless` substring from the user agent:
 
-async function adblock(page) {
-  const fetch = (url) => {
-    let handler = url.startsWith('https://') ? require('https').get : require('http').get;
+```typescript
+async function replaceUserAgent(page: Page): Promise<Page> {
+  let value = await page.browser().userAgent();
 
-    return new Promise((resolve, reject) => {
-      return handler(url, (response) => {
-        if (response.statusCode !== 200) {
-          return reject(`Unexpected status code: ${response.statusCode}.`);
-        }
-
-        let result = '';
-
-        response.on('data', (chunk) => {
-          result += chunk;
-        });
-
-        response.on('end', () => {
-          return resolve({ text: () => result });
-        });
-      });
-    });
-  };
-
-  await PuppeteerBlocker.fromLists(fetch, fullLists, { enableCompression: false }, {
-    path: '/tmp/adblocker.bin',
-    read: promises.readFile,
-    write: promises.writeFile,
-  }).then((blocker) => blocker.enableBlockingInPage(page));
+  if (value.includes('Headless') === true) {
+    await page.setUserAgent(value.replace('Headless', ''));
+  }
 
   return page;
 }
 ```
 
-And then simply pass hooks hooks to `newPage()`:
+And then simply pass that page hook to `defaultPage()` or `newPage()`:
 
-```javascript
-let page = await browser.newPage(adblock);
+```typescript
+let page = await browser.defaultPage(replaceUserAgent);
 ```
+
+> Additional bundled page hooks can be found on [`/build/hooks`](/source/hooks).
 
 ## Versioning
 
@@ -219,6 +224,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `8.0.*`             | `npm i chrome-aws-lambda@~8.0.0`  | [`856583`](https://crrev.com/856583) (`90.0.4427.0`) |
 | `7.0.*`             | `npm i chrome-aws-lambda@~7.0.0`  | [`848005`](https://crrev.com/848005) (`90.0.4403.0`) |
 | `6.0.*`             | `npm i chrome-aws-lambda@~6.0.0`  | [`843427`](https://crrev.com/843427) (`89.0.4389.0`) |
 | `5.5.*`             | `npm i chrome-aws-lambda@~5.5.0`  | [`818858`](https://crrev.com/818858) (`88.0.4298.0`) |
@@ -255,6 +261,8 @@ This package is versioned based on the underlying `puppeteer` minor version:
 | `1.0.*`             | `npm i chrome-aws-lambda@~1.0.0`  | [`526987`](https://crrev.com/526987) (`65.0.3312.0`) |
 | `0.13.*`            | `npm i chrome-aws-lambda@~0.13.0` | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) |
 
+Patch versions are reserved for bug fixes in `chrome-aws-lambda` and general maintenance.
+
 ## Compiling
 
 To compile your own version of Chromium check the [Ansible playbook instructions](_/ansible).
@@ -273,19 +281,11 @@ make chrome_aws_lambda.zip
 
 The above will create a `chrome-aws-lambda.zip` file, which can be uploaded to your Layers console.
 
-> The folks [`@shelfio`](https://github.com/shelfio/chrome-aws-lambda-layer) also maintain and publish AWS Lambda Layers of this package.
-
 ## Google Cloud Functions
 
 Since version `1.11.2`, it's also possible to use this package on Google/Firebase Cloud Functions.
 
 According to our benchmarks, it's 40% to 50% faster than using the off-the-shelf `puppeteer` bundle.
-
-> If running on Node 10.15 or lower, `iltorb` must also be added as a dependency:
-
-```shell
-npm install iltorb --save-prod
-```
 
 ## Compression
 
@@ -295,33 +295,33 @@ This allows us to get the best compression ratio and faster decompression times.
 
 | File        | Algorithm | Level | Bytes     | MiB       | %          | Inflation  |
 | ----------- | --------- | ----- | --------- | --------- | ---------- | ---------- |
-| chromium    | -         | -     | 136964856 | 130.62    | -          | -          |
-| chromium.gz | Gzip      | 1     | 51662087  | 49.27     | 62.28%     | 1.035s     |
-| chromium.gz | Gzip      | 2     | 50438352  | 48.10     | 63.17%     | 1.016s     |
-| chromium.gz | Gzip      | 3     | 49428459  | 47.14     | 63.91%     | 0.968s     |
-| chromium.gz | Gzip      | 4     | 47873978  | 45.66     | 65.05%     | 0.950s     |
-| chromium.gz | Gzip      | 5     | 46929422  | 44.76     | 65.74%     | 0.938s     |
-| chromium.gz | Gzip      | 6     | 46522529  | 44.37     | 66.03%     | 0.919s     |
-| chromium.gz | Gzip      | 7     | 46406406  | 44.26     | 66.12%     | 0.917s     |
-| chromium.gz | Gzip      | 8     | 46297917  | 44.15     | 66.20%     | 0.916s     |
-| chromium.gz | Gzip      | 9     | 46270972  | 44.13     | 66.22%     | 0.968s     |
-| chromium.gz | Zopfli    | 10    | 45089161  | 43.00     | 67.08%     | 0.919s     |
-| chromium.gz | Zopfli    | 20    | 45085868  | 43.00     | 67.08%     | 0.919s     |
-| chromium.gz | Zopfli    | 30    | 45085003  | 43.00     | 67.08%     | 0.925s     |
-| chromium.gz | Zopfli    | 40    | 45084328  | 43.00     | 67.08%     | 0.921s     |
-| chromium.gz | Zopfli    | 50    | 45084098  | 43.00     | 67.08%     | 0.935s     |
-| chromium.br | Brotli    | 0     | 55401211  | 52.83     | 59.55%     | 0.778s     |
-| chromium.br | Brotli    | 1     | 54429523  | 51.91     | 60.26%     | 0.757s     |
-| chromium.br | Brotli    | 2     | 46436126  | 44.28     | 66.10%     | 0.659s     |
-| chromium.br | Brotli    | 3     | 46122033  | 43.99     | 66.33%     | 0.616s     |
-| chromium.br | Brotli    | 4     | 45050239  | 42.96     | 67.11%     | 0.692s     |
-| chromium.br | Brotli    | 5     | 40813510  | 38.92     | 70.20%     | **0.598s** |
-| chromium.br | Brotli    | 6     | 40116951  | 38.26     | 70.71%     | 0.601s     |
-| chromium.br | Brotli    | 7     | 39302281  | 37.48     | 71.30%     | 0.615s     |
-| chromium.br | Brotli    | 8     | 39038303  | 37.23     | 71.50%     | 0.668s     |
-| chromium.br | Brotli    | 9     | 38853994  | 37.05     | 71.63%     | 0.673s     |
-| chromium.br | Brotli    | 10    | 36090087  | 34.42     | 73.65%     | 0.765s     |
-| chromium.br | Brotli    | 11    | 34820408  | **33.21** | **74.58%** | 0.712s     |
+| `chromium`    | -         | -     | 136964856 | 130.62    | -          | -          |
+| `chromium.gz` | Gzip      | 1     | 51662087  | 49.27     | 62.28%     | 1.035s     |
+| `chromium.gz` | Gzip      | 2     | 50438352  | 48.10     | 63.17%     | 1.016s     |
+| `chromium.gz` | Gzip      | 3     | 49428459  | 47.14     | 63.91%     | 0.968s     |
+| `chromium.gz` | Gzip      | 4     | 47873978  | 45.66     | 65.05%     | 0.950s     |
+| `chromium.gz` | Gzip      | 5     | 46929422  | 44.76     | 65.74%     | 0.938s     |
+| `chromium.gz` | Gzip      | 6     | 46522529  | 44.37     | 66.03%     | 0.919s     |
+| `chromium.gz` | Gzip      | 7     | 46406406  | 44.26     | 66.12%     | 0.917s     |
+| `chromium.gz` | Gzip      | 8     | 46297917  | 44.15     | 66.20%     | 0.916s     |
+| `chromium.gz` | Gzip      | 9     | 46270972  | 44.13     | 66.22%     | 0.968s     |
+| `chromium.gz` | Zopfli    | 10    | 45089161  | 43.00     | 67.08%     | 0.919s     |
+| `chromium.gz` | Zopfli    | 20    | 45085868  | 43.00     | 67.08%     | 0.919s     |
+| `chromium.gz` | Zopfli    | 30    | 45085003  | 43.00     | 67.08%     | 0.925s     |
+| `chromium.gz` | Zopfli    | 40    | 45084328  | 43.00     | 67.08%     | 0.921s     |
+| `chromium.gz` | Zopfli    | 50    | 45084098  | 43.00     | 67.08%     | 0.935s     |
+| `chromium.br` | Brotli    | 0     | 55401211  | 52.83     | 59.55%     | 0.778s     |
+| `chromium.br` | Brotli    | 1     | 54429523  | 51.91     | 60.26%     | 0.757s     |
+| `chromium.br` | Brotli    | 2     | 46436126  | 44.28     | 66.10%     | 0.659s     |
+| `chromium.br` | Brotli    | 3     | 46122033  | 43.99     | 66.33%     | 0.616s     |
+| `chromium.br` | Brotli    | 4     | 45050239  | 42.96     | 67.11%     | 0.692s     |
+| `chromium.br` | Brotli    | 5     | 40813510  | 38.92     | 70.20%     | **0.598s** |
+| `chromium.br` | Brotli    | 6     | 40116951  | 38.26     | 70.71%     | 0.601s     |
+| `chromium.br` | Brotli    | 7     | 39302281  | 37.48     | 71.30%     | 0.615s     |
+| `chromium.br` | Brotli    | 8     | 39038303  | 37.23     | 71.50%     | 0.668s     |
+| `chromium.br` | Brotli    | 9     | 38853994  | 37.05     | 71.63%     | 0.673s     |
+| `chromium.br` | Brotli    | 10    | 36090087  | 34.42     | 73.65%     | 0.765s     |
+| `chromium.br` | Brotli    | 11    | 34820408  | **33.21** | **74.58%** | 0.712s     |
 
 ## License
 

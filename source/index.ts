@@ -1,7 +1,11 @@
-const { access, createWriteStream, existsSync, mkdirSync, readdirSync, symlink, unlinkSync } = require('fs');
-const { inflate } = require('lambdafs');
-const { join } = require('path');
-const { URL } = require('url');
+/// <reference path="../typings/chrome-aws-lambda.d.ts" />
+
+import { access, createWriteStream, existsSync, mkdirSync, readdirSync, symlink, unlinkSync } from 'fs';
+import { IncomingMessage } from 'http';
+import LambdaFS from 'lambdafs';
+import { join } from 'path';
+import { PuppeteerNode, Viewport } from 'puppeteer-core';
+import { URL } from 'url';
 
 if (/^AWS_Lambda_nodejs(?:10|12|14)[.]x$/.test(process.env.AWS_EXECUTION_ENV) === true) {
   if (process.env.FONTCONFIG_PATH === undefined) {
@@ -20,7 +24,7 @@ class Chromium {
    * Downloads or symlinks a custom font and returns its basename, patching the environment so that Chromium can find it.
    * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
    */
-  static async font(input) {
+  static font(input: string): Promise<string> {
     if (Chromium.headless !== true) {
       return null;
     }
@@ -58,7 +62,7 @@ class Chromium {
       } else {
         let handler = url.protocol === 'http:' ? require('http').get : require('https').get;
 
-        handler(input, (response) => {
+        handler(input, (response: IncomingMessage) => {
           if (response.statusCode !== 200) {
             return reject(`Unexpected status code: ${response.statusCode}.`);
           }
@@ -86,7 +90,7 @@ class Chromium {
   /**
    * Returns a list of recommended additional Chromium flags.
    */
-  static get args() {
+  static get args(): string[] {
     const result = [
       '--autoplay-policy=user-gesture-required',
       '--disable-background-networking',
@@ -99,10 +103,9 @@ class Chromium {
       '--disable-dev-shm-usage',
       '--disable-domain-reliability',
       '--disable-extensions',
-      '--disable-features=AudioServiceOutOfProcess',
+      '--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process',
       '--disable-hang-monitor',
       '--disable-ipc-flooding-protection',
-      '--disable-notifications',
       '--disable-offer-store-unmasked-wallet-cards',
       '--disable-popup-blocking',
       '--disable-print-preview',
@@ -111,6 +114,7 @@ class Chromium {
       '--disable-setuid-sandbox',
       '--disable-speech-api',
       '--disable-sync',
+      '--disable-web-security',
       '--disk-cache-size=33554432',
       '--hide-scrollbars',
       '--ignore-gpu-blocklist',
@@ -124,6 +128,7 @@ class Chromium {
       '--password-store=basic',
       '--use-gl=swiftshader',
       '--use-mock-keychain',
+      '--window-size=1920,1080',
     ];
 
     if (Chromium.headless === true) {
@@ -136,16 +141,16 @@ class Chromium {
   }
 
   /**
-   * Returns more sensible default viewport settings.
+   * Returns sensible default viewport settings.
    */
-  static get defaultViewport() {
+  static get defaultViewport(): Required<Viewport> {
     return {
       deviceScaleFactor: 1,
       hasTouch: false,
-      height: Chromium.headless === true ? 1080 : 0,
+      height: 1080,
       isLandscape: true,
       isMobile: false,
-      width: Chromium.headless === true ? 1920 : 0,
+      width: 1920,
     };
   }
 
@@ -153,7 +158,7 @@ class Chromium {
    * Inflates the current version of Chromium and returns the path to the binary.
    * If not running on AWS Lambda nor Google Cloud Functions, `null` is returned instead.
    */
-  static get executablePath() {
+  static get executablePath(): Promise<string> {
     if (Chromium.headless !== true) {
       return Promise.resolve(null);
     }
@@ -170,12 +175,12 @@ class Chromium {
 
     const input = join(__dirname, '..', 'bin');
     const promises = [
-      inflate(`${input}/chromium.br`),
-      inflate(`${input}/swiftshader.tar.br`),
+      LambdaFS.inflate(`${input}/chromium.br`),
+      LambdaFS.inflate(`${input}/swiftshader.tar.br`),
     ];
 
     if (/^AWS_Lambda_nodejs(?:10|12|14)[.]x$/.test(process.env.AWS_EXECUTION_ENV) === true) {
-      promises.push(inflate(`${input}/aws.tar.br`));
+      promises.push(LambdaFS.inflate(`${input}/aws.tar.br`));
     }
 
     return Promise.all(promises).then((result) => result.shift());
@@ -203,8 +208,8 @@ class Chromium {
   /**
    * Overloads puppeteer with useful methods and returns the resolved package.
    */
-  static get puppeteer() {
-    for (const overload of ['Browser', 'FrameManager', 'Page']) {
+  static get puppeteer(): PuppeteerNode {
+    for (const overload of ['Browser', 'BrowserContext', 'ElementHandle', 'FrameManager', 'Page']) {
       require(`${__dirname}/puppeteer/lib/${overload}`);
     }
 
@@ -220,4 +225,4 @@ class Chromium {
   }
 }
 
-module.exports = Chromium;
+export = Chromium;
