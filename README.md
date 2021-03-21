@@ -276,6 +276,7 @@ The following set of (Linux) commands will create a layer of this package alongs
 ```shell
 git clone --depth=1 https://github.com/alixaxel/chrome-aws-lambda.git && \
 cd chrome-aws-lambda && \
+npm install --only=dev && \
 make chrome_aws_lambda.zip
 ```
 
