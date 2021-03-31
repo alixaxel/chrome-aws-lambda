@@ -8,6 +8,7 @@ clean:
 
 %.zip:
 	npm install --no-fund --no-package-lock --no-shrinkwrap --only=dev
+	mkdir -p nodejs/
 	npm install --prefix nodejs/ lambdafs@~2.0.3 puppeteer-core@~8.0.0 --no-bin-links --no-fund --no-optional --no-package-lock --no-save --no-shrinkwrap
 	npm pack
 	mkdir -p nodejs/node_modules/chrome-aws-lambda/
