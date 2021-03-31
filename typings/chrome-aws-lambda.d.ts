@@ -49,18 +49,34 @@ declare module 'puppeteer-core' {
     /**
      * Clicks an element and waits for a request to be initiated.
      *
-     * @param pattern - URL pattern to wait for, wildcards `*` are allowed.
+     * @param predicate - URL pattern to wait for, wildcards `*` are allowed.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForRequest(pattern: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPRequest>;
+    clickAndWaitForRequest(predicate: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPRequest>;
+
+    /**
+     * Clicks an element and waits for a request to be initiated.
+     *
+     * @param predicate - Predicate to wait for.
+     * @param options - Optional waiting parameters.
+     */
+    clickAndWaitForRequest(predicate: ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions): Promise<HTTPRequest>;
 
     /**
      * Clicks an element and waits for a request to be finalized.
      *
-     * @param pattern - URL pattern to wait for, wildcards `*` are allowed.
+     * @param predicate - URL pattern to wait for, wildcards `*` are allowed.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForResponse(pattern: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPResponse>;
+    clickAndWaitForResponse(predicate: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPResponse>;
+
+    /**
+     * Clicks an element and waits for a request to be finalized.
+     *
+     * @param predicate - Predicate to wait for.
+     * @param options - Optional waiting parameters.
+     */
+    clickAndWaitForResponse(predicate: ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions): Promise<HTTPResponse>;
 
     /**
      * Fills a `form` with a variable number of inputs and returns its actual filled state.
@@ -139,16 +155,34 @@ declare module 'puppeteer-core' {
      * @param pattern - URL pattern to wait for, wildcards `*` are allowed.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForRequest(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPRequest>;
+    clickAndWaitForRequest(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPRequest>;
+
+    /**
+     * Clicks an element and waits for a request to be initiated.
+     *
+     * @param selector - Selector to query for.
+     * @param pattern - Predicate to wait for.
+     * @param options - Optional waiting parameters.
+     */
+    clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions): Promise<HTTPRequest>;
 
     /**
      * Clicks an element and waits for a request to be finalized.
      *
      * @param selector - Selector to query for.
-     * @param pattern - URL pattern to wait for, wildcards `*` are allowed.
+     * @param predicate - URL pattern to wait for, wildcards `*` are allowed.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForResponse(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPResponse>;
+    clickAndWaitForResponse(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPResponse>;
+
+    /**
+     * Clicks an element and waits for a request to be finalized.
+     *
+     * @param selector - Selector to query for.
+     * @param predicate - Predicate to wait for.
+     * @param options - Optional waiting parameters.
+     */
+    clickAndWaitForResponse(selector: string, predicate: ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions): Promise<HTTPResponse>;
 
     /**
      * Returns the total number of elements that match the selector.
@@ -220,6 +254,14 @@ declare module 'puppeteer-core' {
      * @param property - Element property to extract content from, defaults to `textContent`.
      */
     string<T = HTMLElement>(selector: string, property?: KeysOfType<T, string>): Promise<string>;
+
+    /**
+     * Wait for a string to be present and visible.
+     *
+     * @param predicate - String to wait for.
+     * @param options - Optional waiting parameters.
+     */
+    waitForText(predicate: string, options?: WaitTimeoutOptions): Promise<ElementHandle>;
 
     /**
      * Waits for element to be present in DOM and to be visible.
@@ -259,19 +301,37 @@ declare module 'puppeteer-core' {
      * Clicks an element and waits for a request to be initiated.
      *
      * @param selector - Selector to query for.
-     * @param pattern - URL pattern to wait for, wildcards `*` are allowed.
+     * @param predicate - URL pattern to wait for, wildcards `*` are allowed.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForRequest(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPRequest>;
+    clickAndWaitForRequest(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPRequest>;
+
+    /**
+     * Clicks an element and waits for a request to be initiated.
+     *
+     * @param selector - Selector to query for.
+     * @param predicate - Predicate to wait for.
+     * @param options - Optional waiting parameters.
+     */
+    clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions): Promise<HTTPRequest>;
 
     /**
      * Clicks an element and waits for a request to be finalized.
      *
      * @param selector - Selector to query for.
-     * @param pattern - URL pattern to wait for, wildcards `*` are allowed.
+     * @param predicate - URL pattern to wait for, wildcards `*` are allowed.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForResponse(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPResponse>;
+    clickAndWaitForResponse(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions): Promise<HTTPResponse>;
+
+    /**
+     * Clicks an element and waits for a request to be finalized.
+     *
+     * @param selector - Selector to query for.
+     * @param predicate - Predicate to wait for.
+     * @param options - Optional waiting parameters.
+     */
+    clickAndWaitForResponse(selector: string, predicate: ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions): Promise<HTTPResponse>;
 
     /**
      * Returns the total number of elements that match the selector.
@@ -343,6 +403,14 @@ declare module 'puppeteer-core' {
      * @param property - Element property to extract content from, defaults to `textContent`.
      */
     string<T = HTMLElement>(selector: string, property?: KeysOfType<T, string>): Promise<string>;
+
+    /**
+     * Wait for a string to be present and visible.
+     *
+     * @param predicate - String to wait for.
+     * @param options - Optional waiting parameters.
+     */
+    waitForText(predicate: string, options?: WaitTimeoutOptions): Promise<ElementHandle>;
 
     /**
      * Waits for element to be present in DOM and to be visible.

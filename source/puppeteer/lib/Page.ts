@@ -1,4 +1,4 @@
-import { CDPSession, Page, TracingOptions, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
+import { CDPSession, HTTPRequest, HTTPResponse, Page, TracingOptions, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
 import { KeysOfType, Prototype } from '../../../typings/chrome-aws-lambda';
 
 let Super: Prototype<Page> = null;
@@ -19,12 +19,12 @@ Super.prototype.clickAndWaitForNavigation = function (selector: string, options?
   return this.mainFrame().clickAndWaitForNavigation(selector, options);
 };
 
-Super.prototype.clickAndWaitForRequest = function (selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions) {
-  return this.mainFrame().clickAndWaitForRequest(selector, pattern, options);
+Super.prototype.clickAndWaitForRequest = function (selector: string, predicate: string | RegExp | ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions) {
+  return this.mainFrame().clickAndWaitForRequest(selector, predicate as any, options);
 };
 
-Super.prototype.clickAndWaitForResponse = function (selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions) {
-  return this.mainFrame().clickAndWaitForResponse(selector, pattern, options);
+Super.prototype.clickAndWaitForResponse = function (selector: string, predicate: string | RegExp | ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions) {
+  return this.mainFrame().clickAndWaitForResponse(selector, predicate as any, options);
 };
 
 Super.prototype.count = function (selector: string) {
@@ -63,12 +63,15 @@ Super.prototype.string = function <T = HTMLElement>(selector: string, property: 
   return this.mainFrame().string(selector, property);
 };
 
+Super.prototype.waitForText = function (predicate: string, options?: WaitTimeoutOptions) {
+  return this.mainFrame().waitForText(predicate, options);
+};
+
 Super.prototype.waitUntilVisible = function (selector: string, options?: WaitTimeoutOptions) {
   return this.mainFrame().waitUntilVisible(selector, options);
 };
 
 Super.prototype.waitWhileVisible = function (selector: string, options?: WaitTimeoutOptions) {
-  this.coverage.startCSSCoverage()
   return this.mainFrame().waitWhileVisible(selector, options);
 };
 

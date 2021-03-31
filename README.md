@@ -60,6 +60,25 @@ exports.handler = async (event, context, callback) => {
 };
 ```
 
+### Usage with Playwright
+
+```javascript
+const chromium = require('chrome-aws-lambda');
+const playwright = require('playwright-core');
+
+(async () => {
+  const browser = await playwright.chromium.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+  });
+
+  // ...
+
+  await browser.close();
+})();
+```
+
 You should allocate at least 512 MB of RAM to your Lambda, however 1600 MB (or more) is recommended.
 
 ### Running Locally
@@ -139,8 +158,10 @@ interface BrowserContext {
 interface Page {
   block(patterns: string[])
   clickAndWaitForNavigation(selector: string, options?: WaitForOptions)
-  clickAndWaitForRequest(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions)
-  clickAndWaitForResponse(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForRequest(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions)
+  clickAndWaitForResponse(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForResponse(selector: string, predicate: ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions)
   count(selector: string)
   exists(selector: string)
   fillFormByLabel(selector: string, data: Record<string, boolean | string | string[]>)
@@ -150,6 +171,7 @@ interface Page {
   number(selector: string, decimal?: string, property?: string)
   selectByLabel(selector: string, ...values: string[])
   string(selector: string, property?: string)
+  waitForText(predicate: string, options?: WaitTimeoutOptions)
   waitUntilVisible(selector: string, options?: WaitTimeoutOptions)
   waitWhileVisible(selector: string, options?: WaitTimeoutOptions)
   withTracing(options: TracingOptions, callback: (page: Page) => Promise<any>)
@@ -157,8 +179,10 @@ interface Page {
 
 interface Frame {
   clickAndWaitForNavigation(selector: string, options?: WaitForOptions)
-  clickAndWaitForRequest(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions)
-  clickAndWaitForResponse(selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForRequest(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions)
+  clickAndWaitForResponse(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForResponse(selector: string, predicate: ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions)
   count(selector: string)
   exists(selector: string)
   fillFormByLabel(selector: string, data: Record<string, boolean | string | string[]>)
@@ -168,14 +192,17 @@ interface Frame {
   number(selector: string, decimal?: string, property?: string)
   selectByLabel(selector: string, ...values: string[])
   string(selector: string, property?: string)
+  waitForText(predicate: string, options?: WaitTimeoutOptions)
   waitUntilVisible(selector: string, options?: WaitTimeoutOptions)
   waitWhileVisible(selector: string, options?: WaitTimeoutOptions)
 }
 
 interface ElementHandle {
   clickAndWaitForNavigation(options?: WaitForOptions)
-  clickAndWaitForRequest(pattern: string | RegExp, options?: WaitTimeoutOptions)
-  clickAndWaitForResponse(pattern: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForRequest(predicate: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForRequest(predicate: ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions)
+  clickAndWaitForResponse(predicate: string | RegExp, options?: WaitTimeoutOptions)
+  clickAndWaitForResponse(predicate: ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions)
   fillFormByLabel(data: Record<string, boolean | string | string[]>)
   fillFormByName(data: Record<string, boolean | string | string[]>)
   fillFormBySelector(data: Record<string, boolean | string | string[]>)
@@ -224,7 +251,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
-| `8.0.*`             | `npm i chrome-aws-lambda@~8.0.0`  | [`856583`](https://crrev.com/856583) (`90.0.4427.0`) |
+| `8.0.*`             | `npm i chrome-aws-lambda@~8.0.1`  | [`856583`](https://crrev.com/856583) (`90.0.4427.0`) |
 | `7.0.*`             | `npm i chrome-aws-lambda@~7.0.0`  | [`848005`](https://crrev.com/848005) (`90.0.4403.0`) |
 | `6.0.*`             | `npm i chrome-aws-lambda@~6.0.0`  | [`843427`](https://crrev.com/843427) (`89.0.4389.0`) |
 | `5.5.*`             | `npm i chrome-aws-lambda@~5.5.0`  | [`818858`](https://crrev.com/818858) (`88.0.4298.0`) |
@@ -276,7 +303,6 @@ The following set of (Linux) commands will create a layer of this package alongs
 ```shell
 git clone --depth=1 https://github.com/alixaxel/chrome-aws-lambda.git && \
 cd chrome-aws-lambda && \
-npm install --only=dev && \
 make chrome_aws_lambda.zip
 ```
 
@@ -294,8 +320,8 @@ The Chromium binary is compressed using the Brotli algorithm.
 
 This allows us to get the best compression ratio and faster decompression times.
 
-| File        | Algorithm | Level | Bytes     | MiB       | %          | Inflation  |
-| ----------- | --------- | ----- | --------- | --------- | ---------- | ---------- |
+| File          | Algorithm | Level | Bytes     | MiB       | %          | Inflation  |
+| ------------- | --------- | ----- | --------- | --------- | ---------- | ---------- |
 | `chromium`    | -         | -     | 136964856 | 130.62    | -          | -          |
 | `chromium.gz` | Gzip      | 1     | 51662087  | 49.27     | 62.28%     | 1.035s     |
 | `chromium.gz` | Gzip      | 2     | 50438352  | 48.10     | 63.17%     | 1.016s     |

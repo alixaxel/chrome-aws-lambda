@@ -24,46 +24,46 @@ Super.prototype.clickAndWaitForNavigation = function (selector: string, options?
   return Promise.all(promises).then((value) => value.shift() as HTTPResponse);
 };
 
-Super.prototype.clickAndWaitForRequest = function (selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions) {
+Super.prototype.clickAndWaitForRequest = function (selector: string, predicate: string | RegExp | ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions) {
   let callback = (request: HTTPRequest) => {
     let url = request.url();
 
-    if (typeof pattern === 'string' && pattern.includes('*') === true) {
-      pattern = new RegExp(pattern.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&').replace(/[*]+/g, '.*?'), 'g');
+    if (typeof predicate === 'string' && predicate.includes('*') === true) {
+      predicate = new RegExp(predicate.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&').replace(/[*]+/g, '.*?'), 'g');
     }
 
-    if (pattern instanceof RegExp) {
-      return pattern.test(url);
+    if (predicate instanceof RegExp) {
+      return predicate.test(url);
     }
 
-    return pattern === url;
+    return predicate === url;
   };
 
   let promises: [Promise<HTTPRequest>, Promise<void>] = [
-    ((this._frameManager as any)._page as Page).waitForRequest(callback, options),
+    ((this._frameManager as any)._page as Page).waitForRequest((typeof predicate === 'function') ? predicate : callback, options),
     this.click(selector),
   ];
 
   return Promise.all(promises).then((value) => value.shift() as HTTPRequest);
 };
 
-Super.prototype.clickAndWaitForResponse = function (selector: string, pattern: string | RegExp, options?: WaitTimeoutOptions) {
+Super.prototype.clickAndWaitForResponse = function (selector: string, predicate: string | RegExp | ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions) {
   let callback = (request: HTTPResponse) => {
     let url = request.url();
 
-    if (typeof pattern === 'string' && pattern.includes('*') === true) {
-      pattern = new RegExp(pattern.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&').replace(/[*]+/g, '.*?'), 'g');
+    if (typeof predicate === 'string' && predicate.includes('*') === true) {
+      predicate = new RegExp(predicate.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&').replace(/[*]+/g, '.*?'), 'g');
     }
 
-    if (pattern instanceof RegExp) {
-      return pattern.test(url);
+    if (predicate instanceof RegExp) {
+      return predicate.test(url);
     }
 
-    return pattern === url;
+    return predicate === url;
   };
 
   let promises: [Promise<HTTPResponse>, Promise<void>] = [
-    ((this._frameManager as any)._page as Page).waitForResponse(callback, options),
+    ((this._frameManager as any)._page as Page).waitForResponse((typeof predicate === 'function') ? predicate : callback, options),
     this.click(selector),
   ];
 
@@ -112,6 +112,21 @@ Super.prototype.selectByLabel = function (selector: string, ...values: string[])
 
 Super.prototype.string = function <T = HTMLElement>(selector: string, property: KeysOfType<T, string> = 'textContent' as any) {
   return this.$(selector).then((element) => element?.string(property) ?? null);
+};
+
+Super.prototype.waitForText = function (predicate: string, options?: WaitTimeoutOptions) {
+  if (predicate.includes(`"`) !== true) {
+    predicate = `"${predicate}"`;
+  } else if (predicate.includes(`'`) !== true) {
+    predicate = `'${predicate}'`;
+  } else {
+    throw new Error('Predicate cannot include both single and double quotes.');
+  }
+
+  return this.waitForXPath(`//*[contains(concat(' ', normalize-space(text()), ' '), ${predicate})]`, {
+    ...options,
+    visible: true,
+  });
 };
 
 Super.prototype.waitUntilVisible = function (selector: string, options?: WaitTimeoutOptions) {
