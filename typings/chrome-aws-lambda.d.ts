@@ -1,4 +1,4 @@
-import { Page, PuppeteerNode, Viewport } from 'puppeteer-core';
+import { Page } from 'puppeteer-core';
 
 export type Hook = (page: Page) => Promise<Page>;
 export type KeysOfType<T, V> = { [K in keyof T]: T[K] extends V ? K : never }[keyof T]
@@ -403,6 +403,19 @@ declare module 'puppeteer-core' {
      * @param property - Element property to extract content from, defaults to `textContent`.
      */
     string<T = HTMLElement>(selector: string, property?: KeysOfType<T, string>): Promise<string>;
+
+    /**
+     * Wait for the total number of inflight requests to not exceed a specific threshold.
+     *
+     * @param requests Maximum number of inflight requests, defaults to 0.
+     * @param alpha The number of milliseconds to wait for any requests to be issued, defaults to `500` ms.
+     * @param omega The number of milliseconds to wait for any outstanding inflight requests to settle, defaults to `500` ms.
+     * @param options Optional waiting parameters. Defaults to the navigation timeout, pass 0 to disable.
+     *
+     * @author [mifi](https://github.com/puppeteer/puppeteer/issues/1353#issuecomment-629271737)
+     * @author [DevBrent](https://github.com/puppeteer/puppeteer/issues/1353#issuecomment-648299486)
+     */
+    waitForInflightRequests(requests?: number, alpha?: number, omega?: number, options?: WaitTimeoutOptions): Promise<void>;
 
     /**
      * Wait for a string to be present and visible.

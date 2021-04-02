@@ -63,6 +63,100 @@ Super.prototype.string = function <T = HTMLElement>(selector: string, property: 
   return this.mainFrame().string(selector, property);
 };
 
+Super.prototype.waitForInflightRequests = function (requests: number = 0, alpha: number = 500, omega: number = 500, options?: WaitTimeoutOptions) {
+  let result: Record<string, Function> = {
+    reject: null,
+    resolve: null,
+  };
+
+  let timeout: NodeJS.Timeout;
+  let timeoutAlpha: NodeJS.Timeout;
+  let timeoutOmega: NodeJS.Timeout;
+
+  if (options == null) {
+    options = {
+      timeout: (this as any)._timeoutSettings.navigationTimeout(),
+    };
+  }
+
+  let inflight = 0;
+
+  const check = () => {
+    if (inflight <= Math.max(0, requests)) {
+      if (timeoutOmega !== undefined) {
+        clearTimeout(timeoutOmega);
+      }
+
+      timeoutOmega = setTimeout(onTimeoutOmega, omega);
+    }
+  };
+
+  const clear = () => {
+    if (timeout !== undefined) {
+      clearTimeout(timeout);
+    }
+
+    if (timeoutAlpha !== undefined) {
+      clearTimeout(timeoutAlpha);
+    }
+
+    if (timeoutOmega !== undefined) {
+      clearTimeout(timeoutOmega);
+    }
+
+    this.off('request', onRequestStarted);
+    this.off('requestfailed', onRequestSettled);
+    this.off('requestfinished', onRequestSettled);
+  };
+
+  function onRequestStarted() {
+    if (timeoutAlpha !== undefined) {
+      clearTimeout(timeoutAlpha);
+    }
+
+    if (timeoutOmega !== undefined) {
+      clearTimeout(timeoutOmega);
+    }
+
+    ++inflight;
+  }
+
+  function onRequestSettled() {
+    if (inflight > 0) {
+      --inflight;
+    }
+
+    check();
+  }
+
+  function onTimeout() {
+    clear(); return result.reject(new Error(`Navigation timeout of ${options.timeout} ms exceeded.`));
+  }
+
+  function onTimeoutAlpha() {
+    clear(); return result.resolve();
+  }
+
+  function onTimeoutOmega() {
+    clear(); return result.resolve();
+  }
+
+  this.on('request', onRequestStarted);
+  this.on('requestfailed', onRequestSettled);
+  this.on('requestfinished', onRequestSettled);
+
+  if (options.timeout !== 0) {
+    timeout = setTimeout(onTimeout, options.timeout);
+  }
+
+  timeoutAlpha = setTimeout(onTimeoutAlpha, alpha);
+
+  return new Promise((resolve, reject) => {
+    result.reject = reject;
+    result.resolve = resolve;
+  });
+};
+
 Super.prototype.waitForText = function (predicate: string, options?: WaitTimeoutOptions) {
   return this.mainFrame().waitForText(predicate, options);
 };

@@ -171,6 +171,7 @@ interface Page {
   number(selector: string, decimal?: string, property?: string)
   selectByLabel(selector: string, ...values: string[])
   string(selector: string, property?: string)
+  waitForInflightRequests(requests?: number, alpha: number, omega: number, options?: WaitTimeoutOptions)
   waitForText(predicate: string, options?: WaitTimeoutOptions)
   waitUntilVisible(selector: string, options?: WaitTimeoutOptions)
   waitWhileVisible(selector: string, options?: WaitTimeoutOptions)
