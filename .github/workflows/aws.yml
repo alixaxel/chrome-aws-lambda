@@ -1,0 +1,24 @@
+name: AWS SAM CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  layer:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: make
+
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 12.x
+    - run: npm ci
+    - run: npm run build
+    - run: bash _/actions/bootstrap.sh
