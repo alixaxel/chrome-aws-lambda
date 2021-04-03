@@ -25,29 +25,36 @@ jobs:
     - name: Create Lambda Layer
       run: make chrome_aws_lambda.zip
 
-    - name: Upload Artifact
+    - name: Upload Layer Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: Lambda Layer
+        name: chrome_aws_lambda
         path: chrome_aws_lambda.zip
         retention-days: 1
 
-    #   run: unzip chrome_aws_lambda.zip -d _/amazon/code
-    # - name: Temporarily save Docker image
+  node10:
+    name: Lambda CI (Node 10.x)
+    runs-on: ubuntu-20.04
+    needs: layer
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
 
-  # node10:
-  #   needs: layer
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   # - uses: actions/setup-node@v2
-  #   #   with:
-  #   #     node-version: 10.x
-  #   - uses: aws-actions/setup-sam@v0
-  #   # - run: npm install
-  #   # - run: make chrome_aws_lambda.zip
-  #   # - run: unzip chrome_aws_lambda.zip -d _/amazon/code
-  #   - run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node10 2>&1 | (grep 'Error' && exit 1 || exit 0)
+    - name: Setup AWS SAM
+      uses:
+
+    - name: Download Layer Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: chrome_aws_lambda
+        path: chrome_aws_lambda.zip
+
+    - name: Extract Layer Artifact
+      run: unzip chrome_aws_lambda.zip -d _/amazon/code
+
+    - name: Invoke AWS SAM
+      uses: aws-actions/setup-sam@v0
+      run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node10 2>&1 | (grep 'Error' && exit 1 || exit 0)
 
   # node12:
   #   needs: layer
