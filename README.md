@@ -309,6 +309,8 @@ make chrome_aws_lambda.zip
 
 The above will create a `chrome-aws-lambda.zip` file, which can be uploaded to your Layers console.
 
+Alternatively, you can also download the layer artifact from one of our [CI workflow runs](https://github.com/alixaxel/chrome-aws-lambda/actions/workflows/aws.yml?query=is%3Asuccess+branch%3Amaster).
+
 ## Google Cloud Functions
 
 Since version `1.11.2`, it's also possible to use this package on Google/Firebase Cloud Functions.
