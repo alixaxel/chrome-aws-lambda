@@ -8,7 +8,7 @@ on:
 
 jobs:
   layer:
-    name: Build Lambda Layer
+    name: Lambda Layer
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
@@ -34,8 +34,8 @@ jobs:
 
   node10:
     name: Lambda CI (Node 10.x)
-    runs-on: ubuntu-20.04
     needs: layer
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -49,8 +49,11 @@ jobs:
         name: chrome_aws_lambda
         path: chrome_aws_lambda.zip
 
-    - name: Extract Layer Artifact
-      run: unzip chrome_aws_lambda.zip -d _/amazon/code
+    - name: CWD
+      run: pwd
+
+    - name: Provision Layer
+      run: unzip /home/runner/work/chrome-aws-lambda/chrome-aws-lambda/chrome_aws_lambda.zip -d _/amazon/code
 
     - name: Invoke Lambda
       run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node10 2>&1 | (grep 'Error' && exit 1 || exit 0)
