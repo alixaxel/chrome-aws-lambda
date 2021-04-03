@@ -12,9 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
-    - uses: aws-actions/setup-sam@v0
       with:
         node-version: 14.x
+    - uses: aws-actions/setup-sam@v0
     - run: npm install
     - run: make chrome_aws_lambda.zip
     - run: unzip chrome_aws_lambda.zip -d _/amazon/puppetter/code
