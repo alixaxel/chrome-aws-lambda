@@ -18,6 +18,6 @@ jobs:
     - run: npm install
     - run: make chrome_aws_lambda.zip
     - run: unzip chrome_aws_lambda.zip -d _/amazon/puppetter/code
-    - run: sam local invoke --template ./_/amazon/puppetter/template.yml --event ./_/amazon/puppetter/events/example.com.json node14
+    - run: sam local invoke --template ./_/amazon/puppetter/template.yml --event ./_/amazon/puppetter/events/example.com.json node14 2>&1 | (grep -q 'Error' && exit 1 || exit 0)
     # - run: npm run build
     # - run: bash _/actions/bootstrap.sh
