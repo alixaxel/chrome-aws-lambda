@@ -7,41 +7,53 @@ on:
     branches: [ master ]
 
 jobs:
-  node10:
+  layer:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
-      with:
-        node-version: 10.x
-    - uses: aws-actions/setup-sam@v0
     - run: npm install
     - run: make chrome_aws_lambda.zip
     - run: unzip chrome_aws_lambda.zip -d _/amazon/code
+
+  node10:
+    needs: layer
+    runs-on: ubuntu-20.04
+    steps:
+    # - uses: actions/checkout@v2
+    # - uses: actions/setup-node@v2
+    #   with:
+    #     node-version: 10.x
+    - uses: aws-actions/setup-sam@v0
+    # - run: npm install
+    # - run: make chrome_aws_lambda.zip
+    # - run: unzip chrome_aws_lambda.zip -d _/amazon/code
     - run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node10 2>&1 | (grep 'Error' && exit 1 || exit 0)
 
   node12:
+    needs: layer
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: 12.x
+    # - uses: actions/checkout@v2
+    # - uses: actions/setup-node@v2
+    #   with:
+    #     node-version: 12.x
     - uses: aws-actions/setup-sam@v0
-    - run: npm install
-    - run: make chrome_aws_lambda.zip
-    - run: unzip chrome_aws_lambda.zip -d _/amazon/code
+    # - run: npm install
+    # - run: make chrome_aws_lambda.zip
+    # - run: unzip chrome_aws_lambda.zip -d _/amazon/code
     - run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node12 2>&1 | (grep 'Error' && exit 1 || exit 0)
 
   node14:
+    needs: layer
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: 14.x
+    # - uses: actions/checkout@v2
+    # - uses: actions/setup-node@v2
+    #   with:
+    #     node-version: 14.x
     - uses: aws-actions/setup-sam@v0
-    - run: npm install
-    - run: make chrome_aws_lambda.zip
-    - run: unzip chrome_aws_lambda.zip -d _/amazon/code
+    # - run: npm install
+    # - run: make chrome_aws_lambda.zip
+    # - run: unzip chrome_aws_lambda.zip -d _/amazon/code
     - run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node14 2>&1 | (grep 'Error' && exit 1 || exit 0)
