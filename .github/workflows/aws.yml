@@ -55,7 +55,7 @@ jobs:
       run: ls -al
 
     - name: Provision Layer
-      run: unzip /home/runner/work/chrome-aws-lambda/chrome-aws-lambda/chrome_aws_lambda.zip -d _/amazon/code
+      run: unzip chrome_aws_lambda.zip -d _/amazon/code
 
     - name: Invoke Lambda
       run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node10 2>&1 | (grep 'Error' && exit 1 || exit 0)
