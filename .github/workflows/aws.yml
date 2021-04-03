@@ -47,12 +47,11 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: chrome_aws_lambda
-        path: chrome_aws_lambda.zip
 
-    - name: CWD
+    - name: Working Directory
       run: pwd
 
-    - name: CWD
+    - name: List Files
       run: ls -al
 
     - name: Provision Layer
