@@ -40,6 +40,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Setup AWS SAM
+      uses: aws-actions/setup-sam@v0
+
     - name: Download Layer Artifact
       uses: actions/download-artifact@v2
       with:
@@ -49,8 +52,7 @@ jobs:
     - name: Extract Layer Artifact
       run: unzip chrome_aws_lambda.zip -d _/amazon/code
 
-    - name: Invoke AWS SAM
-      uses: aws-actions/setup-sam@v0
+    - name: Invoke Lambda
       run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node10 2>&1 | (grep 'Error' && exit 1 || exit 0)
 
   # node12:
