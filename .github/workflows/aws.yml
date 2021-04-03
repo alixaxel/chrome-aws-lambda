@@ -7,14 +7,14 @@ on:
     branches: [ master ]
 
 jobs:
-  layer:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 12.x
-      - run: make
+  # layer:
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 12.x
+  #     - run: make
 
   test:
     runs-on: ubuntu-20.04
@@ -25,4 +25,4 @@ jobs:
         node-version: 12.x
     - run: npm ci
     - run: npm run build
-    - run: bash _/actions/bootstrap.sh
+    # - run: bash _/actions/bootstrap.sh
