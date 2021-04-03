@@ -1,0 +1,62 @@
+name: AWS Lambda CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build Lambda Layer
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14.x
+
+    - name: Install Packages
+      run: npm install
+
+    - name: Create Lambda Layer
+      run: make chrome_aws_lambda.zip
+
+    - name: Upload Layer Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: chrome_aws_lambda
+        path: chrome_aws_lambda.zip
+
+  execute:
+    name: Lambda (Node ${{ matrix.version }}.x)
+    needs: build
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        event:
+          - example.com
+        version:
+          - 10
+          - 12
+          - 14
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup AWS SAM CLI
+      uses: aws-actions/setup-sam@v0
+
+    - name: Download Layer Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: chrome_aws_lambda
+
+    - name: Provision Layer
+      run: unzip chrome_aws_lambda.zip -d _/amazon/code
+
+    - name: Invoke Lambda on SAM
+      run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/${{ matrix.event }}.json node${{ matrix.version }} 2>&1 | (grep 'Error' && exit 1 || exit 0)

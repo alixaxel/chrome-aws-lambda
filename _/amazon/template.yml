@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    MemorySize: 512
+    Timeout: 30
+
+Resources:
+  layer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+        LayerName: chrome-aws-lambda
+        ContentUri: code/
+        CompatibleRuntimes:
+          - nodejs10.x
+          - nodejs12.x
+          - nodejs14.x
+
+  node10:
+    Type: AWS::Serverless::Function
+    Properties:
+      Layers:
+        - !Ref layer
+      Handler: handlers/index.handler
+      Runtime: nodejs10.x
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
+  node12:
+    Type: AWS::Serverless::Function
+    Properties:
+      Layers:
+        - !Ref layer
+      Handler: handlers/index.handler
+      Runtime: nodejs12.x
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
+  node14:
+    Type: AWS::Serverless::Function
+    Properties:
+      Layers:
+        - !Ref layer
+      Handler: handlers/index.handler
+      Runtime: nodejs14.x
+      Policies:
+        - AWSLambdaBasicExecutionRole
