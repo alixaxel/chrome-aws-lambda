@@ -32,7 +32,7 @@ jobs:
         path: chrome_aws_lambda.zip
 
   execute:
-    name: Execute Lambda (Node ${{ matrix.version }}.x)
+    name: Lambda (Node ${{ matrix.version }}.x)
     needs: build
     runs-on: ubuntu-20.04
     strategy:

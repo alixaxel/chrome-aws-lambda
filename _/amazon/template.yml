@@ -6,6 +6,16 @@ Globals:
     Timeout: 30
 
 Resources:
+  layer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+        LayerName: chrome-aws-lambda
+        ContentUri: code/
+        CompatibleRuntimes:
+          - nodejs10.x
+          - nodejs12.x
+          - nodejs14.x
+
   node10:
     Type: AWS::Serverless::Function
     Properties:
@@ -35,13 +45,3 @@ Resources:
       Runtime: nodejs14.x
       Policies:
         - AWSLambdaBasicExecutionRole
-
-  layer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-        LayerName: chrome-aws-lambda
-        ContentUri: code/
-        CompatibleRuntimes:
-          - nodejs10.x
-          - nodejs12.x
-          - nodejs14.x
