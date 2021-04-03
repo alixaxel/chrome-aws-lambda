@@ -32,8 +32,36 @@ jobs:
         path: chrome_aws_lambda.zip
         retention-days: 1
 
-  node10:
-    name: Lambda CI (Node 10.x)
+  # node10:
+  #   name: Lambda CI (Node 10.x)
+  #   needs: layer
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+
+  #   - name: Setup AWS SAM
+  #     uses: aws-actions/setup-sam@v0
+
+  #   - name: Download Layer Artifact
+  #     uses: actions/download-artifact@v2
+  #     with:
+  #       name: chrome_aws_lambda
+
+  #   - name: Provision Layer
+  #     run: unzip chrome_aws_lambda.zip -d _/amazon/code
+
+  #   - name: Invoke Lambda
+  #     run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node10 2>&1 | (grep 'Error' && exit 1 || exit 0)
+
+  lambda:
+    strategy:
+      matrix:
+        node_version:
+          - 10
+          - 12
+          - 14
+    name: Lambda (Node ${{ matrix.node_version }}.x)
     needs: layer
     runs-on: ubuntu-20.04
     steps:
@@ -48,17 +76,11 @@ jobs:
       with:
         name: chrome_aws_lambda
 
-    - name: Working Directory
-      run: pwd
-
-    - name: List Files
-      run: ls -al
-
     - name: Provision Layer
       run: unzip chrome_aws_lambda.zip -d _/amazon/code
 
     - name: Invoke Lambda
-      run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node10 2>&1 | (grep 'Error' && exit 1 || exit 0)
+      run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node${{ matrix.node_version }} 2>&1 | (grep 'Error' && exit 1 || exit 0)
 
   # node12:
   #   needs: layer
