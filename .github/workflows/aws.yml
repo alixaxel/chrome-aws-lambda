@@ -52,6 +52,9 @@ jobs:
     - name: CWD
       run: pwd
 
+    - name: CWD
+      run: ls -al
+
     - name: Provision Layer
       run: unzip /home/runner/work/chrome-aws-lambda/chrome-aws-lambda/chrome_aws_lambda.zip -d _/amazon/code
 
