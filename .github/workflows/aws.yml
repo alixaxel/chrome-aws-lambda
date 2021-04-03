@@ -55,15 +55,15 @@ jobs:
   #     run: sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node10 2>&1 | (grep 'Error' && exit 1 || exit 0)
 
   lambda:
+    name: Lambda (Node ${{ matrix.node_version }}.x)
+    needs: layer
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         node_version:
           - 10
           - 12
           - 14
-    name: Lambda (Node ${{ matrix.node_version }}.x)
-    needs: layer
-    runs-on: ubuntu-20.04
     steps:
     - name: Checkout
       uses: actions/checkout@v2
