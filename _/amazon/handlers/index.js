@@ -14,20 +14,29 @@ exports.handler = async (event, context) => {
       ignoreHTTPSErrors: true,
     });
 
-    const page = await browser.defaultPage();
+    const contexts = [
+      browser.defaultBrowserContext(),
+    ];
 
-    if (event.hasOwnProperty('url') === true) {
-      await page.goto(event.url, {
-        waitUntil: ['domcontentloaded', 'load'],
-      });
+    while (contexts.length < event.length) {
+      contexts.push(await browser.createIncognitoBrowserContext());
+    }
 
-      if (event.hasOwnProperty('expected') === true) {
-        if (event.expected.hasOwnProperty('title') === true) {
-          ok(await page.title() === event.expected.title, `Title assertion failed.`);
-        }
+    for (let context of contexts) {
+      const job = event.shift();
+      const page = await context.defaultPage();
 
-        if (event.expected.hasOwnProperty('screenshot') === true) {
-          ok(createHash('sha1').update((await page.screenshot()).toString('base64')).digest('hex') === event.expected.screenshot, `Screenshot assertion failed.`);
+      if (job.hasOwnProperty('url') === true) {
+        await page.goto(job.url, { waitUntil: ['domcontentloaded', 'load'] });
+
+        if (job.hasOwnProperty('expected') === true) {
+          if (job.expected.hasOwnProperty('title') === true) {
+            ok(await page.title() === job.expected.title, `Title assertion failed.`);
+          }
+
+          if (job.expected.hasOwnProperty('screenshot') === true) {
+            ok(createHash('sha1').update((await page.screenshot()).toString('base64')).digest('hex') === event.expected.screenshot, `Screenshot assertion failed.`);
+          }
         }
       }
     }
