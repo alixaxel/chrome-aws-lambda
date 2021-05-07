@@ -35,7 +35,7 @@ exports.handler = async (event, context) => {
           }
 
           if (job.expected.hasOwnProperty('screenshot') === true) {
-            ok(createHash('sha1').update((await page.screenshot()).toString('base64')).digest('hex') === event.expected.screenshot, `Screenshot assertion failed.`);
+            ok(createHash('sha1').update((await page.screenshot()).toString('base64')).digest('hex') === job.expected.screenshot, `Screenshot assertion failed.`);
           }
         }
       }
