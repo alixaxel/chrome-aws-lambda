@@ -60,7 +60,7 @@ declare module 'puppeteer-core' {
      * @param predicate - Predicate to wait for.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForRequest(predicate: ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions): Promise<HTTPRequest>;
+    clickAndWaitForRequest(predicate: ((request: HTTPRequest) => boolean | Promise<boolean>), options?: WaitTimeoutOptions): Promise<HTTPRequest>;
 
     /**
      * Clicks an element and waits for a request to be finalized.
@@ -76,7 +76,7 @@ declare module 'puppeteer-core' {
      * @param predicate - Predicate to wait for.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForResponse(predicate: ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions): Promise<HTTPResponse>;
+    clickAndWaitForResponse(predicate: ((request: HTTPResponse) => boolean | Promise<boolean>), options?: WaitTimeoutOptions): Promise<HTTPResponse>;
 
     /**
      * Fills a `form` with a variable number of inputs and returns its actual filled state.
@@ -164,7 +164,7 @@ declare module 'puppeteer-core' {
      * @param pattern - Predicate to wait for.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions): Promise<HTTPRequest>;
+    clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean | Promise<boolean>), options?: WaitTimeoutOptions): Promise<HTTPRequest>;
 
     /**
      * Clicks an element and waits for a request to be finalized.
@@ -182,7 +182,7 @@ declare module 'puppeteer-core' {
      * @param predicate - Predicate to wait for.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForResponse(selector: string, predicate: ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions): Promise<HTTPResponse>;
+    clickAndWaitForResponse(selector: string, predicate: ((request: HTTPResponse) => boolean | Promise<boolean>), options?: WaitTimeoutOptions): Promise<HTTPResponse>;
 
     /**
      * Returns the total number of elements that match the selector.
@@ -313,7 +313,7 @@ declare module 'puppeteer-core' {
      * @param predicate - Predicate to wait for.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions): Promise<HTTPRequest>;
+    clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean | Promise<boolean>), options?: WaitTimeoutOptions): Promise<HTTPRequest>;
 
     /**
      * Clicks an element and waits for a request to be finalized.
@@ -331,7 +331,7 @@ declare module 'puppeteer-core' {
      * @param predicate - Predicate to wait for.
      * @param options - Optional waiting parameters.
      */
-    clickAndWaitForResponse(selector: string, predicate: ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions): Promise<HTTPResponse>;
+    clickAndWaitForResponse(selector: string, predicate: ((request: HTTPResponse) => boolean | Promise<boolean>), options?: WaitTimeoutOptions): Promise<HTTPResponse>;
 
     /**
      * Returns the total number of elements that match the selector.

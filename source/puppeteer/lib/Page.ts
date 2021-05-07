@@ -19,11 +19,11 @@ Super.prototype.clickAndWaitForNavigation = function (selector: string, options?
   return this.mainFrame().clickAndWaitForNavigation(selector, options);
 };
 
-Super.prototype.clickAndWaitForRequest = function (selector: string, predicate: string | RegExp | ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions) {
+Super.prototype.clickAndWaitForRequest = function (selector: string, predicate: string | RegExp | ((request: HTTPRequest) => boolean | Promise<boolean>), options?: WaitTimeoutOptions) {
   return this.mainFrame().clickAndWaitForRequest(selector, predicate as any, options);
 };
 
-Super.prototype.clickAndWaitForResponse = function (selector: string, predicate: string | RegExp | ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions) {
+Super.prototype.clickAndWaitForResponse = function (selector: string, predicate: string | RegExp | ((request: HTTPResponse) => boolean | Promise<boolean>), options?: WaitTimeoutOptions) {
   return this.mainFrame().clickAndWaitForResponse(selector, predicate as any, options);
 };
 

@@ -39,13 +39,13 @@
       ec2:
         group: Chromium
         image: "{{ image }}"
-        instance_type: c5.12xlarge
+        instance_type: c5.18xlarge
         instance_initiated_shutdown_behavior: terminate
         key_name: ansible
         wait: yes
         zone: "{{ region }}a"
         spot_type: one-time
-        spot_price: "1.00"
+        spot_price: "1.25"
         spot_wait_timeout: 300
         spot_launch_group: chromium
         region: "{{ region }}"
@@ -100,6 +100,7 @@
           - cairo-devel
           - cmake
           - cups-devel
+          - curl
           - dbus-devel
           - dbus-glib-devel
           - expat-devel
@@ -107,8 +108,10 @@
           - freetype-devel
           - gcc-c++
           - git
+          - git-core
           - glib2-devel
           - glibc
+          - gperf
           - gperf
           - gtk3-devel
           - htop
@@ -133,13 +136,22 @@
           - nss-devel
           - pam-devel
           - pango-devel
+          - patch
           - pciutils-devel
+          - perl
           - php
           - php-cli
           - pkgconfig
           - pulseaudio-libs-devel
           - python
+          - python-setuptools
+          - python3
+          - python3
+          - rpm
+          - ruby
+          - subversion
           - tar
+          - zip
           - zlib
           - zlib-devel
         state: latest
@@ -264,21 +276,31 @@
 
     - name: Patching Chromium
       lineinfile:
+        path: "/srv/source/chromium/src/content/browser/{{ item.path }}"
         line: "{{ item.line }}"
         regexp: "{{ item.regexp }}"
-        path: "/srv/source/chromium/src/{{ item.path }}"
         state: present
         backrefs: yes
       with_items:
         - {
-            path: 'content/browser/sandbox_ipc_linux.cc',
+            path: 'sandbox_ipc_linux.cc',
+            line: '\1PLOG(WARNING) << "poll"; failed_polls = 0;',
             regexp: '^(\s+)PLOG[(]WARNING[)] << "poll";$',
-            line: '\1PLOG(WARNING) << "poll"; failed_polls = 0;'
           }
         - {
-            path: 'content/browser/renderer_host/render_process_host_impl.cc',
-            regexp: '^(  )(\s*)(CHECK[(]render_process_host->InSameStoragePartition[(]|BrowserContext::GetStoragePartition[(]browser_context, site_instance,|false /[*] can_create [*]/[)][)][)];)$',
-            line: '\1// \2\3'
+            path: 'renderer_host/render_process_host_impl.cc',
+            line: '\1// \2\3',
+            regexp: '^(  )(\s*)(CHECK[(]render_process_host->InSameStoragePartition[(])$',
+          }
+        - {
+            path: 'renderer_host/render_process_host_impl.cc',
+            line: '\1// \2\3',
+            regexp: '^(  )(\s*)(BrowserContext::GetStoragePartition[(]browser_context, site_instance,)$',
+          }
+        - {
+            path: 'renderer_host/render_process_host_impl.cc',
+            line: '\1// \2\3',
+            regexp: '^(  )(\s*)(false /[*] can_create [*]/[)][)][)];)$',
           }
 
     - name: Creating Build Configuration Directory
@@ -325,6 +347,19 @@
           use_sysroot = true
           v8_target_cpu = "x64"
         dest: /srv/source/chromium/src/out/Headless/args.gn
+
+    - name: Patching ICU Build Configuration to use Python 2
+      replace:
+        path: '/srv/source/chromium/src/third_party/icu/BUILD.gn'
+        regexp: '^(\s*)action[(]"([^"]+)"[)](.+)$'
+        replace: '\1python2_action("\2")\3'
+
+    - name: Adding Python 2 Support to ICU Build Configuration
+      lineinfile:
+        path: '/srv/source/chromium/src/third_party/icu/BUILD.gn'
+        line: 'import("//build/config/python.gni")'
+        insertafter: 'import[(]"//build/config/host_byteorder[.]gni"[)]'
+        state: present
 
     - name: Generating Headless Chromium Configuration
       shell: |

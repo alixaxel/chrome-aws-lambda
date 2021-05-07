@@ -24,7 +24,7 @@ Super.prototype.clickAndWaitForNavigation = function (options?: WaitForOptions) 
   return Promise.all(promises).then((value) => value.shift() as HTTPResponse);
 };
 
-Super.prototype.clickAndWaitForRequest = function (predicate: string | RegExp | ((request: HTTPRequest) => boolean), options?: WaitTimeoutOptions) {
+Super.prototype.clickAndWaitForRequest = function (predicate: string | RegExp | ((request: HTTPRequest) => boolean | Promise<boolean>), options?: WaitTimeoutOptions) {
   let callback = (request: HTTPRequest) => {
     let url = request.url();
 
@@ -47,7 +47,7 @@ Super.prototype.clickAndWaitForRequest = function (predicate: string | RegExp | 
   return Promise.all(promises).then((value) => value.shift() as HTTPRequest);
 };
 
-Super.prototype.clickAndWaitForResponse = function (predicate: string | RegExp | ((request: HTTPResponse) => boolean), options?: WaitTimeoutOptions) {
+Super.prototype.clickAndWaitForResponse = function (predicate: string | RegExp | ((request: HTTPResponse) => boolean | Promise<boolean>), options?: WaitTimeoutOptions) {
   let callback = (request: HTTPResponse) => {
     let url = request.url();
 
