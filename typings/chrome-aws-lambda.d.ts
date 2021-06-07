@@ -40,6 +40,11 @@ declare module 'puppeteer-core' {
 
   interface ElementHandle {
     /**
+     * Selects all text in a editable element and clears it.
+     */
+    clear(): Promise<void>;
+
+    /**
      * Clicks an element and waits for navigation to finish.
      *
      * @param options - Options to configure when the navigation is consided finished.
@@ -140,6 +145,13 @@ declare module 'puppeteer-core' {
   }
 
   interface Frame {
+    /**
+     * Selects all text in a editable element and clears it.
+     *
+     * @param selector - Selector to query for.
+     */
+    clear(selector: string): Promise<void>;
+
     /**
      * Clicks an element and waits for navigation to finish.
      *
@@ -288,6 +300,13 @@ declare module 'puppeteer-core' {
      * @param patterns - URL patterns to block, wildcards `*` are allowed.
      */
     block(patterns: string[]): Promise<void>;
+
+    /**
+     * Selects all text in a editable element and clears it.
+     *
+     * @param selector - Selector to query for.
+     */
+    clear(selector: string): Promise<void>;
 
     /**
      * Clicks an element and waits for navigation to finish.

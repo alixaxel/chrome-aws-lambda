@@ -9,6 +9,10 @@ try {
   Super = require('puppeteer-core/lib/cjs/puppeteer/common/FrameManager').Frame;
 }
 
+Super.prototype.clear = function (selector: string) {
+  return this.$(selector).then((element) => element?.clear());
+};
+
 Super.prototype.clickAndWaitForNavigation = function (selector: string, options?: WaitForOptions) {
   options = options ?? {
     waitUntil: [

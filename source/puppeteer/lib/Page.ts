@@ -15,6 +15,10 @@ Super.prototype.block = function (predicates: string[]) {
   });
 };
 
+Super.prototype.clear = function (selector: string) {
+  return this.mainFrame().clear(selector);
+};
+
 Super.prototype.clickAndWaitForNavigation = function (selector: string, options?: WaitForOptions) {
   return this.mainFrame().clickAndWaitForNavigation(selector, options);
 };

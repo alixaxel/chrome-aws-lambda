@@ -9,6 +9,10 @@ try {
   Super = require('puppeteer-core/lib/cjs/puppeteer/common/JSHandle').ElementHandle;
 }
 
+Super.prototype.clear = function () {
+  return this.click({ clickCount: 3 }).then(() => this.press('Backspace'));
+};
+
 Super.prototype.clickAndWaitForNavigation = function (options?: WaitForOptions) {
   options = options ?? {
     waitUntil: [
