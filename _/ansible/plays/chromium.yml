@@ -89,71 +89,23 @@
       yum:
         name:
           - "@Development Tools"
-          - alsa-lib-devel
-          - atk-devel
           - binutils
           - bison
-          - bluez-libs-devel
-          - brlapi-devel
           - bzip2
-          - bzip2-devel
-          - cairo-devel
           - cmake
-          - cups-devel
           - curl
-          - dbus-devel
-          - dbus-glib-devel
-          - expat-devel
-          - fontconfig-devel
-          - freetype-devel
-          - gcc-c++
-          - git
+          - dbus-x11
+          - flex
           - git-core
-          - glib2-devel
-          - glibc
           - gperf
-          - gperf
-          - gtk3-devel
-          - htop
-          - httpd
-          - java-1.*.0-openjdk-devel
-          - libatomic
-          - libcap-devel
-          - libffi-devel
-          - libgcc
-          - libgnome-keyring-devel
-          - libjpeg-devel
-          - libstdc++
-          - libuuid-devel
-          - libX11-devel
-          - libxkbcommon-x11-devel
-          - libXScrnSaver-devel
-          - libXtst-devel
-          - mercurial
-          - mod_ssl
-          - ncurses-compat-libs
-          - nspr-devel
-          - nss-devel
-          - pam-devel
-          - pango-devel
           - patch
-          - pciutils-devel
           - perl
-          - php
-          - php-cli
-          - pkgconfig
-          - pulseaudio-libs-devel
-          - python
           - python-setuptools
-          - python3
           - python3
           - rpm
           - ruby
           - subversion
-          - tar
           - zip
-          - zlib
-          - zlib-devel
         state: latest
         update_cache: true
 
@@ -295,7 +247,7 @@
         - {
             path: 'renderer_host/render_process_host_impl.cc',
             line: '\1// \2\3',
-            regexp: '^(  )(\s*)(BrowserContext::GetStoragePartition[(]browser_context, site_instance,)$',
+            regexp: '^(  )(\s*)(browser_context->GetStoragePartition[(]site_instance,)$',
           }
         - {
             path: 'renderer_host/render_process_host_impl.cc',
@@ -347,19 +299,6 @@
           use_sysroot = true
           v8_target_cpu = "x64"
         dest: /srv/source/chromium/src/out/Headless/args.gn
-
-    - name: Patching ICU Build Configuration to use Python 2
-      replace:
-        path: '/srv/source/chromium/src/third_party/icu/BUILD.gn'
-        regexp: '^(\s*)action[(]"([^"]+)"[)](.+)$'
-        replace: '\1python2_action("\2")\3'
-
-    - name: Adding Python 2 Support to ICU Build Configuration
-      lineinfile:
-        path: '/srv/source/chromium/src/third_party/icu/BUILD.gn'
-        line: 'import("//build/config/python.gni")'
-        insertafter: 'import[(]"//build/config/host_byteorder[.]gni"[)]'
-        state: present
 
     - name: Generating Headless Chromium Configuration
       shell: |

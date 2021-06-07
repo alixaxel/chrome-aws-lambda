@@ -87,14 +87,14 @@ Please refer to the [Local Development Wiki page](https://github.com/alixaxel/ch
 
 ## API
 
-| Method / Property | Returns              | Description                                               |
-| ----------------- | -------------------- | --------------------------------------------------------- |
-| `font(url)`       | `{?Promise<string>}` | Provisions a custom font and returns its basename.        |
-| `args`            | `{!Array<string>}`   | Provides a list of recommended additional Chromium flags. |
-| `defaultViewport` | `{!Object}`          | Returns more sensible default viewport settings.          |
-| `executablePath`  | `{?Promise<string>}` | Returns the path the Chromium binary was extracted to.    |
-| `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda or GCF.    |
-| `puppeteer`       | `{!Object}`          | Overloads `puppeteer` and returns the resolved package.   |
+| Method / Property | Returns              | Description                                                                                                                                             |
+| ----------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `font(url)`       | `{?Promise<string>}` | Provisions a custom font and returns its basename.                                                                                                      |
+| `args`            | `{!Array<string>}`   | Provides a list of recommended additional [Chromium flags](https://github.com/GoogleChrome/chrome-launcher/blob/master/docs/chrome-flags-for-tools.md). |
+| `defaultViewport` | `{!Object}`          | Returns more sensible default viewport settings.                                                                                                        |
+| `executablePath`  | `{?Promise<string>}` | Returns the path the Chromium binary was extracted to.                                                                                                  |
+| `headless`        | `{!boolean}`         | Returns `true` if we are running on AWS Lambda or GCF.                                                                                                  |
+| `puppeteer`       | `{!Object}`          | Overloads `puppeteer` and returns the resolved package.                                                                                                 |
 
 ## Fonts
 
@@ -157,6 +157,7 @@ interface BrowserContext {
 
 interface Page {
   block(patterns: string[])
+  clear(selector: string)
   clickAndWaitForNavigation(selector: string, options?: WaitForOptions)
   clickAndWaitForRequest(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions)
   clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean | Promise<boolean>), options?: WaitTimeoutOptions)
@@ -179,6 +180,7 @@ interface Page {
 }
 
 interface Frame {
+  clear(selector: string)
   clickAndWaitForNavigation(selector: string, options?: WaitForOptions)
   clickAndWaitForRequest(selector: string, predicate: string | RegExp, options?: WaitTimeoutOptions)
   clickAndWaitForRequest(selector: string, predicate: ((request: HTTPRequest) => boolean | Promise<boolean>), options?: WaitTimeoutOptions)
@@ -199,6 +201,7 @@ interface Frame {
 }
 
 interface ElementHandle {
+  clear()
   clickAndWaitForNavigation(options?: WaitForOptions)
   clickAndWaitForRequest(predicate: string | RegExp, options?: WaitTimeoutOptions)
   clickAndWaitForRequest(predicate: ((request: HTTPRequest) => boolean | Promise<boolean>), options?: WaitTimeoutOptions)
@@ -252,6 +255,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version       | Chromium Revision                                    |
 | ------------------- | --------------------------------- | ---------------------------------------------------- |
+| `10.0.*`            | `npm i chrome-aws-lambda@~10.0.0` | [`884014`](https://crrev.com/884014) (`92.0.4512.0`) |
 | `9.1.*`             | `npm i chrome-aws-lambda@~9.1.0`  | [`869685`](https://crrev.com/869685) (`91.0.4469.0`) |
 | `9.0.*`             | `npm i chrome-aws-lambda@~9.0.0`  | [`869685`](https://crrev.com/869685) (`91.0.4469.0`) |
 | `8.0.*`             | `npm i chrome-aws-lambda@~8.0.2`  | [`856583`](https://crrev.com/856583) (`90.0.4427.0`) |
