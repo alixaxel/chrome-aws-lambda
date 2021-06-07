@@ -6,7 +6,7 @@ import { Page } from 'puppeteer-core';
  * @param page - Page to hook to.
  */
 export = async function (page: Page): Promise<Page> {
-  await page.evaluateOnNewDocument(() => {
+  const handler = () => {
     let query = window.navigator.permissions.query;
 
     (Permissions as any).prototype.query = function (parameters: DevicePermissionDescriptor | MidiPermissionDescriptor | PermissionDescriptor | PushPermissionDescriptor) {
@@ -19,7 +19,10 @@ export = async function (page: Page): Promise<Page> {
 
       return query(parameters);
     };
-  });
+  };
+
+  await page.evaluate(handler);
+  await page.evaluateOnNewDocument(handler);
 
   return page;
 }

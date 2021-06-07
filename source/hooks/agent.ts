@@ -1,14 +1,16 @@
 import { Page } from 'puppeteer-core';
 
 /**
- * Removes `Headless` from the User Agent string.
+ * Removes `Headless` from the User Agent string, if present.
  *
  * @param page - Page to hook to.
  */
-export = function (page: Page): Promise<Page> {
-  return page
-    .browser()
-    .userAgent()
-    .then((value) => page.setUserAgent(value.replace('Headless', '')))
-    .then(() => page);
+export = async function (page: Page): Promise<Page> {
+  let result = await page.browser().userAgent();
+
+  if (result.includes('Headless') === true) {
+    await page.setUserAgent(result.replace('Headless', ''));
+  }
+
+  return page;
 };

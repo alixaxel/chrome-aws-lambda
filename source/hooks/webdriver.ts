@@ -6,9 +6,14 @@ import { Page } from 'puppeteer-core';
  * @param page - Page to hook to.
  */
 export = async function (page: Page): Promise<Page> {
-  await page.evaluateOnNewDocument(() => {
-    delete Object.getPrototypeOf(navigator).webdriver;
-  });
+  const handler = () => {
+    Object.defineProperty(Object.getPrototypeOf(navigator), 'webdriver', {
+      get: () => false,
+    });
+  };
+
+  await page.evaluate(handler);
+  await page.evaluateOnNewDocument(handler);
 
   return page;
 }

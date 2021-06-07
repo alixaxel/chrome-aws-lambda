@@ -7,7 +7,7 @@ import { Writeable } from '../../typings/chrome-aws-lambda';
  * @param page - Page to hook to.
  */
 export = async function (page: Page): Promise<Page> {
-  await page.evaluateOnNewDocument(() => {
+  const handler = () => {
     let alpha = Date.now();
     let delta = Math.floor(500 * Math.random());
 
@@ -179,8 +179,11 @@ export = async function (page: Page): Promise<Page> {
           };
         },
       });
-    }
-  });
+    };
+  }
+
+  await page.evaluate(handler);
+  await page.evaluateOnNewDocument(handler);
 
   return page;
 }
