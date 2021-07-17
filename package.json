@@ -1,7 +1,7 @@
 {
   "name": "chrome-aws-lambda",
   "private": false,
-  "version": "10.0.0",
+  "version": "10.1.0",
   "author": {
     "name": "Alix Axel"
   },
