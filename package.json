@@ -28,12 +28,12 @@
   },
   "devDependencies": {
     "@types/node": "^10.17.55",
-    "puppeteer-core": "^10.0.0",
+    "puppeteer-core": "^10.1.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.2"
   },
   "peerDependencies": {
-    "puppeteer-core": "^10.0.0"
+    "puppeteer-core": "^10.1.0"
   },
   "bugs": {
     "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"
