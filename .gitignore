@@ -9,3 +9,4 @@ build
 node_modules
 nodejs
 package-lock.json
+.DS_Store
