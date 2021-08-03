@@ -18,6 +18,7 @@
     "node": ">= 10.16"
   },
   "scripts": {
+    "prepare": "npm run build",
     "build": "rimraf build && tsc -p tsconfig.json",
     "postversion": "git push && git push --tags && npm publish",
     "prepack": "npm run build",
