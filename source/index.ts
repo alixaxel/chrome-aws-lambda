@@ -195,9 +195,11 @@ class Chromium {
    * Overloads puppeteer with useful methods and returns the resolved package.
    */
   static get puppeteer(): PuppeteerNode {
-    for (const overload of ['Browser', 'BrowserContext', 'ElementHandle', 'FrameManager', 'Page']) {
-      require(`${__dirname}/puppeteer/lib/${overload}`);
-    }
+    require('./puppeteer/lib/Browser')
+    require('./puppeteer/lib/BrowserContext')
+    require('./puppeteer/lib/ElementHandle')
+    require('./puppeteer/lib/FrameManager')
+    require('./puppeteer/lib/Page')
 
     try {
       return require('puppeteer');
