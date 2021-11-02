@@ -162,7 +162,7 @@ class Chromium {
     const input = join(__dirname, '..', 'bin');
     const promises = [
       LambdaFS.inflate(`${input}/chromium.br`),
-      LambdaFS.inflate(`${input}/swiftshader.tar.br`),
+      LambdaFS.inflate(`${input}/swiftshader.tar.br`)
     ];
 
     if (/^AWS_Lambda_nodejs(?:10|12|14)[.]x$/.test(process.env.AWS_EXECUTION_ENV) === true) {
