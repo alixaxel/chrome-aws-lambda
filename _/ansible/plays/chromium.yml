@@ -197,26 +197,9 @@
         chdir: /srv/source/chromium
       when: gclient.stat.exists != true
 
-    - name: Resolving Puppeteer Version
-      uri:
-        url: "https://raw.githubusercontent.com/GoogleChrome/puppeteer/{{ puppeteer_version | default('main') }}/src/revisions.ts"
-        return_content: yes
-      register: puppeteer_revisions
-
-    - name: Resolving Chromium Revision from Puppeteer Version
-      set_fact:
-        chromium_revision: >
-          {{ puppeteer_revisions.content | regex_search("chromium: [']([0-9]+)[']", '\1') | first }}
-
-    - name: Resolving Git Commit from Chromium Revision
-      uri:
-        url: "https://cr-rev.appspot.com/_ah/api/crrev/v1/redirect/{{ chromium_revision }}"
-        return_content: yes
-      register: revision
-
     - name: Checking Out Git Commit
       shell: |
-        git checkout {{ revision.json.git_sha }}
+        "git checkout {{ chromium_version }}"
       args:
         chdir: /srv/source/chromium/src
 
@@ -254,6 +237,11 @@
             line: '\1// \2\3',
             regexp: '^(  )(\s*)(false /[*] can_create [*]/[)][)][)];)$',
           }
+    - name: Patch the if statement
+      replace:
+        path: /srv/source/chromium/src/content/browser/browser_context_impl.cc
+        regexp: '\!rph_crash_key_value\.empty\(\)'
+        replace: 'false'
 
     - name: Creating Build Configuration Directory
       file:
@@ -319,6 +307,11 @@
         chdir: /srv/source/chromium/src
         warn: false
       register: version
+
+    # - name: Move to file
+    #   shell: "mv out/Headless/headless_shell /srv/build/chromium/chromium-{{ version.stdout | quote }}"
+    #   args:
+    #     chdir: /srv/source/chromium/src
 
     - name: Striping Symbols from Chromium Binary
       shell: |
