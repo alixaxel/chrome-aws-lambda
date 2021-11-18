@@ -198,8 +198,7 @@
       when: gclient.stat.exists != true
 
     - name: Checking Out Git Commit
-      shell: |
-        "git checkout {{ chromium_version }}"
+      shell: "git checkout {{ chromium_version }}"
       args:
         chdir: /srv/source/chromium/src
 
