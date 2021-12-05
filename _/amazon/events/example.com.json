@@ -3,14 +3,14 @@
     "url": "https://example.com",
     "expected": {
       "title": "Example Domain",
-      "screenshot": "aabec363d69b6ae44bd17d4724bab665767d56f2"
+      "screenshot": "5be64ad7fd9db18ee1c345ab8a33f3ce1c6be339"
     }
   },
   {
     "url": "https://example.com",
     "expected": {
       "title": "Example Domain",
-      "screenshot": "aabec363d69b6ae44bd17d4724bab665767d56f2"
+      "screenshot": "5be64ad7fd9db18ee1c345ab8a33f3ce1c6be339"
     }
   }
 ]
