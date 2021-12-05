@@ -14,8 +14,8 @@ For Puppeteer-specific bugs, please refer to: https://github.com/GoogleChrome/pu
 * `chrome-aws-lambda` Version:
 * `puppeteer` / `puppeteer-core` Version:
 * OS: <!-- Linux | Mac | Windows -->
-* Node.js Version: <!-- 8.x | 10.x | 12.x | 14.x -->
-* Lambda / GCF Runtime: <!-- `nodejs8.10` | `nodejs10.x` | `nodejs12.x` -->
+* Node.js Version: <!-- 12.x | 14.x | 16.x -->
+* Lambda / GCF Runtime: <!-- `nodejs12.x` | `nodejs14.x` | `nodejs16.x` -->
 
 ## Expected Behavior
 

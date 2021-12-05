@@ -39,13 +39,13 @@
       ec2:
         group: Chromium
         image: "{{ image }}"
-        instance_type: c5.18xlarge
+        instance_type: c5a.8xlarge
         instance_initiated_shutdown_behavior: terminate
         key_name: ansible
         wait: yes
         zone: "{{ region }}a"
         spot_type: one-time
-        spot_price: "1.25"
+        spot_price: "1.00"
         spot_wait_timeout: 300
         spot_launch_group: chromium
         region: "{{ region }}"
@@ -74,7 +74,7 @@
       with_items: "{{ ec2.instances }}"
 
 - name: AWS
-  user: ec2-user
+  user: ubuntu
   hosts: aws
   gather_facts: true
   environment:
@@ -86,26 +86,11 @@
     - name: Installing Packages
       become: true
       become_user: root
-      yum:
+      apt:
         name:
-          - "@Development Tools"
-          - binutils
-          - bison
-          - bzip2
+          - brotli
           - cmake
-          - curl
-          - dbus-x11
-          - flex
-          - git-core
-          - gperf
-          - patch
-          - perl
-          - python-setuptools
-          - python3
-          - rpm
-          - ruby
-          - subversion
-          - zip
+          - htop
         state: latest
         update_cache: true
 
@@ -133,52 +118,20 @@
         warn: false
       when: nvme.stat.exists
 
-    - name: Checking for Directory Structure
-      stat:
-        path: /srv/source/chromium
-      register:
-        structure
-
     - name: Creating Directory Structure
       become: true
       become_user: root
       file:
         path: /srv/{{ item }}/chromium
         state: directory
-        group: ec2-user
-        owner: ec2-user
         recurse: true
       with_items:
         - build
         - source
-      when: structure.stat.exists != true
-
-    - name: Checking for Brotli
-      stat:
-        path: /usr/local/bin/brotli
-      register: brotli
-
-    - name: Cloning Brotli
-      git:
-        repo: https://github.com/google/brotli.git
-        dest: /srv/source/brotli
-        force: yes
-        update: yes
-      when: brotli.stat.exists != true
-
-    - name: Compiling Brotli
-      become: true
-      become_user: root
-      shell: |
-        ./configure-cmake && \
-        make && \
-        make install
-      args:
-        chdir: /srv/source/brotli
-        creates: /usr/local/bin/brotli
-      when: brotli.stat.exists != true
 
     - name: Cloning Depot Tools
+      become: true
+      become_user: root
       git:
         repo: https://chromium.googlesource.com/chromium/tools/depot_tools.git
         dest: /srv/source/depot_tools
@@ -186,15 +139,28 @@
         update: yes
 
     - name: Checking for Chromium
+      become: true
+      become_user: root
       stat:
         path: /srv/source/chromium/.gclient
       register: gclient
 
     - name: Fetching Chromium
+      become: true
+      become_user: root
       shell: |
-        fetch chromium
+        fetch --nohooks chromium
       args:
         chdir: /srv/source/chromium
+      when: gclient.stat.exists != true
+
+    - name: Installing Build Dependencies
+      become: true
+      become_user: root
+      shell: |
+        ./build/install-build-deps.sh --no-prompt
+      args:
+        chdir: /srv/source/chromium/src
       when: gclient.stat.exists != true
 
     - name: Resolving Puppeteer Version
@@ -204,29 +170,31 @@
       register: puppeteer_revisions
 
     - name: Resolving Chromium Revision from Puppeteer Version
+      become: true
+      become_user: root
       set_fact:
         chromium_revision: >
           {{ puppeteer_revisions.content | regex_search("chromium: [']([0-9]+)[']", '\1') | first }}
 
     - name: Resolving Git Commit from Chromium Revision
+      become: true
+      become_user: root
       uri:
         url: "https://cr-rev.appspot.com/_ah/api/crrev/v1/redirect/{{ chromium_revision }}"
         return_content: yes
       register: revision
 
-    - name: Checking Out Git Commit
-      shell: |
-        git checkout {{ revision.json.git_sha }}
-      args:
-        chdir: /srv/source/chromium/src
-
     - name: Synchronizing Chromium
+      become: true
+      become_user: root
       shell: |
-        gclient sync --with_branch_heads
+        gclient sync --delete_unversioned_trees --revision src@{{ revision.json.git_sha }} --with_branch_heads
       args:
         chdir: /srv/source/chromium
 
     - name: Patching Chromium
+      become: true
+      become_user: root
       lineinfile:
         path: "/srv/source/chromium/src/content/browser/{{ item.path }}"
         line: "{{ item.line }}"
@@ -256,10 +224,12 @@
           }
 
     - name: Creating Build Configuration Directory
+      become: true
+      become_user: root
       file:
-        mode: 0755
         path: /srv/source/chromium/src/out/Headless
         state: directory
+        recurse: true
 
     - name: Mounting Build Directory in Memory
       become: true
@@ -270,11 +240,13 @@
         warn: false
 
     - name: Creating Headless Chromium Configuration
+      become: true
+      become_user: root
       copy:
         content: |
           import("//build/args/headless.gn")
           blink_symbol_level = 0
-          disable_ftp_support = true
+          dcheck_always_on = false
           disable_histogram_support = false
           enable_basic_print_dialog = false
           enable_basic_printing = true
@@ -301,18 +273,24 @@
         dest: /srv/source/chromium/src/out/Headless/args.gn
 
     - name: Generating Headless Chromium Configuration
+      become: true
+      become_user: root
       shell: |
         gn gen out/Headless
       args:
         chdir: /srv/source/chromium/src
 
     - name: Compiling Headless Chromium
+      become: true
+      become_user: root
       shell: |
         autoninja -C out/Headless headless_shell
       args:
         chdir: /srv/source/chromium/src
 
     - name: Getting Chromium Version
+      become: true
+      become_user: root
       shell: |
         sed --regexp-extended 's~[^0-9]+~~g' chrome/VERSION | tr '\n' '.' | sed 's~[.]$~~'
       args:
@@ -321,12 +299,16 @@
       register: version
 
     - name: Striping Symbols from Chromium Binary
+      become: true
+      become_user: root
       shell: |
         strip -o /srv/build/chromium/chromium-{{ version.stdout | quote }} out/Headless/headless_shell
       args:
         chdir: /srv/source/chromium/src
 
     - name: Compressing Chromium
+      become: true
+      become_user: root
       shell: |
         brotli --best --force {{ item }}
       args:
@@ -335,6 +317,8 @@
         - "chromium-{{ version.stdout }}"
 
     - name: Downloading Chromium
+      become: true
+      become_user: root
       fetch:
         src: "/srv/build/chromium/{{ item }}"
         dest: ../../../bin/
@@ -344,6 +328,8 @@
         - "chromium-{{ version.stdout }}.br"
 
     - name: Archiving SwiftShader
+      become: true
+      become_user: root
       shell: |
         tar --directory /srv/source/chromium/src/out/Headless/swiftshader --create --file swiftshader.tar libEGL.so libGLESv2.so
       args:
@@ -352,6 +338,8 @@
         warn: false
 
     - name: Compressing SwiftShader
+      become: true
+      become_user: root
       shell: |
         brotli --best --force swiftshader.tar
       args:
@@ -359,6 +347,8 @@
         creates: /srv/build/chromium/swiftshader.tar.br
 
     - name: Downloading SwiftShader
+      become: true
+      become_user: root
       fetch:
         src: /srv/build/chromium/swiftshader.tar.br
         dest: ../../../bin/
