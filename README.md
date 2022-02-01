@@ -30,11 +30,10 @@ This package works with all the currently supported AWS Lambda Node.js runtimes 
 ```javascript
 const chromium = require('chrome-aws-lambda');
 
-exports.handler = async (event, context, callback) => {
-  let result = null;
-  let browser = null;
+let browser = null;
 
-  try {
+exports.handler = async (event) => {
+  if (!browser) {
     browser = await chromium.puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
@@ -42,21 +41,13 @@ exports.handler = async (event, context, callback) => {
       headless: chromium.headless,
       ignoreHTTPSErrors: true,
     });
-
-    let page = await browser.newPage();
-
-    await page.goto(event.url || 'https://example.com');
-
-    result = await page.title();
-  } catch (error) {
-    return callback(error);
-  } finally {
-    if (browser !== null) {
-      await browser.close();
-    }
   }
 
-  return callback(null, result);
+  let page = await browser.newPage();
+  await page.goto(event.url || 'https://example.com');
+  let result = await page.title();
+  await page.close();
+  return result;
 };
 ```
 
