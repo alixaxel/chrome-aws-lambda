@@ -278,28 +278,21 @@
         content: |
           import("//build/args/headless.gn")
           blink_symbol_level = 0
-          disable_ftp_support = true
+          dcheck_always_on = false
           disable_histogram_support = false
           enable_basic_print_dialog = false
           enable_basic_printing = true
           enable_keystone_registration_framework = false
           enable_linux_installer = false
           enable_media_remoting = false
-          enable_media_remoting_rpc = false
-          enable_nacl = false
           enable_one_click_signin = false
           ffmpeg_branding = "Chrome"
-          headless_use_embedded_resources = true
-          icu_use_data_file = false
           is_component_build = false
           is_debug = false
           proprietary_codecs = true
           symbol_level = 0
           target_cpu = "x64"
           target_os = "linux"
-          use_bundled_fontconfig = true
-          use_cups = false
-          use_pulseaudio = false
           use_sysroot = true
           v8_target_cpu = "x64"
         dest: /srv/source/chromium/src/out/Headless/args.gn
