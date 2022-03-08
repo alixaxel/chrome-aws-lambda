@@ -86,26 +86,50 @@
     - name: Installing Packages
       become: true
       become_user: root
-      yum:
+      dnf:
         name:
           - "@Development Tools"
-          - binutils
-          - bison
-          - bzip2
+          - alsa-lib-devel
+          - atk-devel
+          - bc
+          - bluez-libs-devel
+          - brlapi-devel
+          - bzip2-devel
+          - cairo-devel
           - cmake
-          - curl
+          - cups-devel
+          - dbus-devel
+          - dbus-glib-devel
           - dbus-x11
-          - flex
-          - git-core
+          - expat-devel
+          - glibc.i686
+          - glibc-langpack-en
           - gperf
-          - patch
+          - gtk3-devel
+          - httpd
+          - java-11-openjdk-devel
+          - libatomic
+          - libcap-devel
+          - libjpeg-devel
+          - libstdc++.i686
+          - libXScrnSaver-devel
+          - libxkbcommon-x11-devel
+          - mod_ssl
+          - ncurses-compat-libs
+          - nspr-devel
+          - nss-devel
+          - pam-devel
+          - pciutils-devel
           - perl
+          - php
+          - php-cli
+          - pulseaudio-libs-devel
+          - python
+          - python-psutil
           - python-setuptools
-          - python3
-          - rpm
           - ruby
-          - subversion
-          - zip
+          - xorg-x11-server-Xvfb
+          - zlib.i686
         state: latest
         update_cache: true
 
@@ -157,26 +181,6 @@
       stat:
         path: /usr/local/bin/brotli
       register: brotli
-
-    - name: Cloning Brotli
-      git:
-        repo: https://github.com/google/brotli.git
-        dest: /srv/source/brotli
-        force: yes
-        update: yes
-      when: brotli.stat.exists != true
-
-    - name: Compiling Brotli
-      become: true
-      become_user: root
-      shell: |
-        ./configure-cmake && \
-        make && \
-        make install
-      args:
-        chdir: /srv/source/brotli
-        creates: /usr/local/bin/brotli
-      when: brotli.stat.exists != true
 
     - name: Cloning Depot Tools
       git:
