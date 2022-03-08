@@ -196,14 +196,14 @@
 
     - name: Fetching Chromium
       shell: |
-        fetch chromium
+        fetch --nohooks chromium
       args:
         chdir: /srv/source/chromium
       when: gclient.stat.exists != true
 
     - name: Resolving Puppeteer Version
       uri:
-        url: "https://raw.githubusercontent.com/GoogleChrome/puppeteer/{{ puppeteer_version | default('main') }}/src/revisions.ts"
+        url: "https://raw.githubusercontent.com/puppeteer/puppeteer/{{ puppeteer_version | default('main') }}/src/revisions.ts"
         return_content: yes
       register: puppeteer_revisions
 
@@ -218,15 +218,15 @@
         return_content: yes
       register: revision
 
-    - name: Checking Out Git Commit
+    - name: Checking Out Chromium revision
       shell: |
-        git checkout {{ revision.json.git_sha }}
+        gclient sync --delete_unversioned_trees --revision {{ revision.json.git_sha }} --with_branch_heads
       args:
-        chdir: /srv/source/chromium/src
+        chdir: /srv/source/chromium
 
-    - name: Synchronizing Chromium
+    - name: Run Chromium hooks
       shell: |
-        gclient sync --with_branch_heads
+        gclient runhooks
       args:
         chdir: /srv/source/chromium
 
