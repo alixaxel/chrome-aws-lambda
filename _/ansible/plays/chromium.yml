@@ -340,22 +340,22 @@
       with_items:
         - "chromium-{{ version.stdout }}.br"
 
-    - name: Archiving SwiftShader
+    - name: Archiving OpenGL ES driver
       shell: |
-        tar --directory /srv/source/chromium/src/out/Headless/swiftshader --create --file swiftshader.tar libEGL.so libGLESv2.so
+        tar --directory /srv/source/chromium/src/out/Headless --create --file swiftshader.tar libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 vk_swiftshader_icd.json
       args:
         chdir: /srv/build/chromium
         creates: /srv/build/chromium/swiftshader.tar
         warn: false
 
-    - name: Compressing SwiftShader
+    - name: Compressing OpenGL ES driver
       shell: |
         brotli --best --force swiftshader.tar
       args:
         chdir: /srv/build/chromium
         creates: /srv/build/chromium/swiftshader.tar.br
 
-    - name: Downloading SwiftShader
+    - name: Downloading OpenGL ES driver
       fetch:
         src: /srv/build/chromium/swiftshader.tar.br
         dest: ../../../bin/
