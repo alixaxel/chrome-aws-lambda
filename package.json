@@ -1,5 +1,5 @@
 {
-  "name": "chrome-aws-lambda",
+  "name": "@checkly/chrome-aws-lambda",
   "private": false,
   "version": "10.1.0",
   "author": {
@@ -38,12 +38,12 @@
     "puppeteer-core": "^10.1.0"
   },
   "bugs": {
-    "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"
+    "url": "https://github.com/checkly/chrome-aws-lambda/issues"
   },
-  "homepage": "https://github.com/alixaxel/chrome-aws-lambda",
+  "homepage": "https://github.com/checkly/chrome-aws-lambda",
   "repository": {
     "type": "git",
-    "url": "git://github.com/alixaxel/chrome-aws-lambda.git"
+    "url": "git://github.com/checkly/chrome-aws-lambda.git"
   },
   "keywords": [
     "aws",
