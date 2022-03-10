@@ -202,7 +202,7 @@ class Chromium {
 
     try {
       return require('puppeteer');
-    } catch (error) {
+    } catch (error: any) {
       if (error.code !== 'MODULE_NOT_FOUND') {
         throw error;
       }
