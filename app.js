@@ -2,10 +2,19 @@ const playwright = require('playwright-core')
 const chromium = require('./build')
 
 async function runTest(args) {
+  const { config, chromium: chrome } = await chromium.prepare(`/tmp/random`)
+
+  const FONTCONFIG_PATH = config.fontConfigPath
+  const LD_LIBRARY_PATH = [...new Set([config.awsLibrarPath, ...process.env.LD_LIBRARY_PATH.split(':')])].join(':')
+
   const options = {
     headless: true, // Always true
+    env: {
+      LD_LIBRARY_PATH,
+      FONTCONFIG_PATH
+    },
     args,
-    executablePath: await chromium.executablePath || undefined,
+    executablePath: chrome.path,
     logger: {      
         isEnabled: (name, severity) => true,
         log: (name, severity, message, args) => console.log(`${name} ${message}`)    
@@ -21,8 +30,9 @@ async function runTest(args) {
       })
 
     await page.setViewportSize({ width: 1280, height: 800 })
-    await page.goto('https://www.nytimes.com/')
-    await page.screenshot({ path: 'nytimes.png', fullPage: true })
+    await page.goto('https://www.google.com/')
+    await page.screenshot({ path: 'google.png', fullPage: true })
+    await page.close()
     await browser.close()
 }
 
