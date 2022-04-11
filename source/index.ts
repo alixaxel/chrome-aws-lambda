@@ -83,13 +83,9 @@ class Chromium {
       await fs.writeFile(join(awsFolder, 'fonts.conf'), fontConfig(awsFolder), { encoding: 'utf8', mode: 0o700})
     }
     return {
-      config: {
-        fontConfigPath: join(folder, 'aws'),
-        awsLibrarPath: join(folder, 'aws', 'lib'),
-      },
-      chromium: {
-        path: chromiumExpectedPath
-      }
+      fontConfigPath: join(folder, 'aws'),
+      ldLibraryPath: join(folder, 'aws', 'lib'),
+      chromiumPath: chromiumExpectedPath,
     }
   }
 

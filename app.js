@@ -2,10 +2,10 @@ const playwright = require('playwright-core')
 const chromium = require('./build')
 
 async function runTest(args) {
-  const { config, chromium: chrome } = await chromium.prepare(`/tmp/random`)
+  const { fontConfigPath, ldLibraryPath, chromiumPath } = await chromium.prepare(`/tmp/random`)
 
-  const FONTCONFIG_PATH = config.fontConfigPath
-  const LD_LIBRARY_PATH = [...new Set([config.awsLibrarPath, ...process.env.LD_LIBRARY_PATH.split(':')])].join(':')
+  const FONTCONFIG_PATH = fontConfigPath
+  const LD_LIBRARY_PATH = [...new Set([ldLibraryPath, ...process.env.LD_LIBRARY_PATH.split(':')])].join(':')
 
   const options = {
     headless: true, // Always true
@@ -14,7 +14,7 @@ async function runTest(args) {
       FONTCONFIG_PATH
     },
     args,
-    executablePath: chrome.path,
+    executablePath: chromiumPath,
     logger: {      
         isEnabled: (name, severity) => true,
         log: (name, severity, message, args) => console.log(`${name} ${message}`)    
