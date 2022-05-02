@@ -37,7 +37,7 @@ export async function fileExists(filepath: string) {
         source.once('error', (error) => {
             return reject(error);
         });
-        target.once('error', (error) => {
+        target.once('error', (error: any) => {
             return reject(error);
         });
         target.once('close', () => {
