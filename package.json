@@ -1,7 +1,7 @@
 {
   "name": "chrome-aws-lambda",
   "private": false,
-  "version": "13.6.0",
+  "version": "13.7.0",
   "author": {
     "name": "Alix Axel"
   },
@@ -28,12 +28,12 @@
   },
   "devDependencies": {
     "@types/node": "^10.17.55",
-    "puppeteer-core": "13.6.0",
+    "puppeteer-core": "13.7.0",
     "rimraf": "^3.0.2",
     "typescript": "4.3.2"
   },
   "peerDependencies": {
-    "puppeteer-core": "13.6.0"
+    "puppeteer-core": "13.7.0"
   },
   "bugs": {
     "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"
