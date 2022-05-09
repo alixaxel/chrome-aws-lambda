@@ -86,26 +86,50 @@
     - name: Installing Packages
       become: true
       become_user: root
-      yum:
+      dnf:
         name:
           - "@Development Tools"
-          - binutils
-          - bison
-          - bzip2
+          - alsa-lib-devel
+          - atk-devel
+          - bc
+          - bluez-libs-devel
+          - brlapi-devel
+          - bzip2-devel
+          - cairo-devel
           - cmake
-          - curl
+          - cups-devel
+          - dbus-devel
+          - dbus-glib-devel
           - dbus-x11
-          - flex
-          - git-core
+          - expat-devel
+          - glibc.i686
+          - glibc-langpack-en
           - gperf
-          - patch
+          - gtk3-devel
+          - httpd
+          - java-11-openjdk-devel
+          - libatomic
+          - libcap-devel
+          - libjpeg-devel
+          - libstdc++.i686
+          - libXScrnSaver-devel
+          - libxkbcommon-x11-devel
+          - mod_ssl
+          - ncurses-compat-libs
+          - nspr-devel
+          - nss-devel
+          - pam-devel
+          - pciutils-devel
           - perl
+          - php
+          - php-cli
+          - pulseaudio-libs-devel
+          - python
+          - python-psutil
           - python-setuptools
-          - python3
-          - rpm
           - ruby
-          - subversion
-          - zip
+          - xorg-x11-server-Xvfb
+          - zlib.i686
         state: latest
         update_cache: true
 
@@ -158,26 +182,6 @@
         path: /usr/local/bin/brotli
       register: brotli
 
-    - name: Cloning Brotli
-      git:
-        repo: https://github.com/google/brotli.git
-        dest: /srv/source/brotli
-        force: yes
-        update: yes
-      when: brotli.stat.exists != true
-
-    - name: Compiling Brotli
-      become: true
-      become_user: root
-      shell: |
-        ./configure-cmake && \
-        make && \
-        make install
-      args:
-        chdir: /srv/source/brotli
-        creates: /usr/local/bin/brotli
-      when: brotli.stat.exists != true
-
     - name: Cloning Depot Tools
       git:
         repo: https://chromium.googlesource.com/chromium/tools/depot_tools.git
@@ -192,14 +196,14 @@
 
     - name: Fetching Chromium
       shell: |
-        fetch chromium
+        fetch --nohooks chromium
       args:
         chdir: /srv/source/chromium
       when: gclient.stat.exists != true
 
     - name: Resolving Puppeteer Version
       uri:
-        url: "https://raw.githubusercontent.com/GoogleChrome/puppeteer/{{ puppeteer_version | default('main') }}/src/revisions.ts"
+        url: "https://raw.githubusercontent.com/puppeteer/puppeteer/{{ puppeteer_version | default('main') }}/src/revisions.ts"
         return_content: yes
       register: puppeteer_revisions
 
@@ -214,15 +218,15 @@
         return_content: yes
       register: revision
 
-    - name: Checking Out Git Commit
+    - name: Checking Out Chromium revision
       shell: |
-        git checkout {{ revision.json.git_sha }}
+        gclient sync --delete_unversioned_trees --revision {{ revision.json.git_sha }} --with_branch_heads
       args:
-        chdir: /srv/source/chromium/src
+        chdir: /srv/source/chromium
 
-    - name: Synchronizing Chromium
+    - name: Run Chromium hooks
       shell: |
-        gclient sync --with_branch_heads
+        gclient runhooks
       args:
         chdir: /srv/source/chromium
 
@@ -274,28 +278,21 @@
         content: |
           import("//build/args/headless.gn")
           blink_symbol_level = 0
-          disable_ftp_support = true
+          dcheck_always_on = false
           disable_histogram_support = false
           enable_basic_print_dialog = false
           enable_basic_printing = true
           enable_keystone_registration_framework = false
           enable_linux_installer = false
           enable_media_remoting = false
-          enable_media_remoting_rpc = false
-          enable_nacl = false
           enable_one_click_signin = false
           ffmpeg_branding = "Chrome"
-          headless_use_embedded_resources = true
-          icu_use_data_file = false
           is_component_build = false
           is_debug = false
           proprietary_codecs = true
           symbol_level = 0
           target_cpu = "x64"
           target_os = "linux"
-          use_bundled_fontconfig = true
-          use_cups = false
-          use_pulseaudio = false
           use_sysroot = true
           v8_target_cpu = "x64"
         dest: /srv/source/chromium/src/out/Headless/args.gn
@@ -343,22 +340,22 @@
       with_items:
         - "chromium-{{ version.stdout }}.br"
 
-    - name: Archiving SwiftShader
+    - name: Archiving OpenGL ES driver
       shell: |
-        tar --directory /srv/source/chromium/src/out/Headless/swiftshader --create --file swiftshader.tar libEGL.so libGLESv2.so
+        tar --directory /srv/source/chromium/src/out/Headless --create --file swiftshader.tar libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 vk_swiftshader_icd.json
       args:
         chdir: /srv/build/chromium
         creates: /srv/build/chromium/swiftshader.tar
         warn: false
 
-    - name: Compressing SwiftShader
+    - name: Compressing OpenGL ES driver
       shell: |
         brotli --best --force swiftshader.tar
       args:
         chdir: /srv/build/chromium
         creates: /srv/build/chromium/swiftshader.tar.br
 
-    - name: Downloading SwiftShader
+    - name: Downloading OpenGL ES driver
       fetch:
         src: /srv/build/chromium/swiftshader.tar.br
         dest: ../../../bin/

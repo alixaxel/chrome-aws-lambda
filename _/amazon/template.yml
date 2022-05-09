@@ -12,29 +12,7 @@ Resources:
         LayerName: chrome-aws-lambda
         ContentUri: code/
         CompatibleRuntimes:
-          - nodejs10.x
-          - nodejs12.x
           - nodejs14.x
-
-  node10:
-    Type: AWS::Serverless::Function
-    Properties:
-      Layers:
-        - !Ref layer
-      Handler: handlers/index.handler
-      Runtime: nodejs10.x
-      Policies:
-        - AWSLambdaBasicExecutionRole
-
-  node12:
-    Type: AWS::Serverless::Function
-    Properties:
-      Layers:
-        - !Ref layer
-      Handler: handlers/index.handler
-      Runtime: nodejs12.x
-      Policies:
-        - AWSLambdaBasicExecutionRole
 
   node14:
     Type: AWS::Serverless::Function
