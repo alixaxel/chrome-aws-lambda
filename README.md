@@ -1,16 +1,16 @@
 # chrome-aws-lambda
 
-[![chrome-aws-lambda](https://img.shields.io/npm/v/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/chrome-aws-lambda)
+[![@sparticuz/chrome-aws-lambda](https://img.shields.io/npm/v/@sparticuz/chrome-aws-lambda.svg?style=for-the-badge)](https://www.npmjs.com/package/@sparticuz/chrome-aws-lambda)
 [![TypeScript](https://img.shields.io/npm/types/chrome-aws-lambda?style=for-the-badge)](https://www.typescriptlang.org/dt/search?search=chrome-aws-lambda)
-[![Chromium](https://img.shields.io/badge/chromium-44_MB-brightgreen.svg?style=for-the-badge)](bin/)
-[![Donate](https://img.shields.io/badge/donate-paypal-orange.svg?style=for-the-badge)](https://paypal.me/alixaxel)
+[![Chromium](https://img.shields.io/badge/chromium-48_MB-brightgreen.svg?style=for-the-badge)](bin/)
+[![Donate](https://img.shields.io/badge/donate-paypal-orange.svg?style=for-the-badge)](https://paypal.me/sparticuz)
 
 Chromium Binary for AWS Lambda and Google Cloud Functions
 
 ## Install
 
 ```shell
-npm install chrome-aws-lambda --save-prod
+npm install @sparticuz/chrome-aws-lambda --save-prod
 ```
 
 This will ship with appropriate binary for the latest stable release of [`puppeteer`](https://github.com/GoogleChrome/puppeteer) (usually updated within a few days).
@@ -28,7 +28,7 @@ If you wish to install an older version of Chromium, take a look at [Versioning]
 This package works with all the currently supported AWS Lambda Node.js runtimes out of the box.
 
 ```javascript
-const chromium = require('chrome-aws-lambda');
+const chromium = require('@sparticuz/chrome-aws-lambda');
 
 exports.handler = async (event, context, callback) => {
   let result = null;
@@ -63,7 +63,7 @@ exports.handler = async (event, context, callback) => {
 ### Usage with Playwright
 
 ```javascript
-const chromium = require('chrome-aws-lambda');
+const chromium = require('@sparticuz/chrome-aws-lambda');
 const playwright = require('playwright-core');
 
 (async () => {

@@ -1,12 +1,12 @@
 {
-  "name": "chrome-aws-lambda",
+  "name": "@sparticuz/chrome-aws-lambda",
   "private": false,
   "version": "14.0.0",
   "author": {
-    "name": "Alix Axel"
+    "name": "Kyle McNally"
   },
   "license": "MIT",
-  "description": "Chromium Binary for AWS Lambda and Google Cloud Functions",
+  "description": "Chromium Binary for AWS Lambda and Google Cloud Functions, forked from @alixaxel/chrome-aws-lambda",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
@@ -36,12 +36,12 @@
     "puppeteer-core": "14.0.0"
   },
   "bugs": {
-    "url": "https://github.com/alixaxel/chrome-aws-lambda/issues"
+    "url": "https://github.com/Sparticuz/chrome-aws-lambda/issues"
   },
-  "homepage": "https://github.com/alixaxel/chrome-aws-lambda",
+  "homepage": "https://github.com/Sparticuz/chrome-aws-lambda",
   "repository": {
     "type": "git",
-    "url": "git://github.com/alixaxel/chrome-aws-lambda.git"
+    "url": "git://github.com/Sparticuz/chrome-aws-lambda.git"
   },
   "keywords": [
     "aws",

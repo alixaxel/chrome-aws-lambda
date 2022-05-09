@@ -40,9 +40,9 @@ jobs:
         event:
           - example.com
         version:
-          - 10
-          - 12
           - 14
+          - 16
+          - 18
     steps:
     - name: Checkout
       uses: actions/checkout@v2
