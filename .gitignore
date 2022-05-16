@@ -9,3 +9,5 @@ build
 node_modules
 nodejs
 package-lock.json
+_/amazon/samconfig.toml
+_/amazon/.aws-sam
