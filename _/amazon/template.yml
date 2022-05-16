@@ -2,19 +2,29 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
-    MemorySize: 512
+    MemorySize: 2048
     Timeout: 30
 
 Resources:
   layer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-        LayerName: chrome-aws-lambda
+        LayerName: sparticuz-chrome-aws-lambda
         ContentUri: code/
         CompatibleRuntimes:
           - nodejs14.x
+          - nodejs16.x
 
   node14:
+    Type: AWS::Serverless::Function
+    Properties:
+      Layers:
+        - !Ref layer
+      Handler: handlers/index.handler
+      Runtime: nodejs14.x
+      Policies:
+        - AWSLambdaBasicExecutionRole
+  node16:
     Type: AWS::Serverless::Function
     Properties:
       Layers:

@@ -1,6 +1,6 @@
 const { ok } = require('assert');
 const { createHash } = require('crypto');
-const chromium = require('chrome-aws-lambda');
+const chromium = require('@sparticuz/chrome-aws-lambda');
 
 exports.handler = async (event, context) => {
   let browser = null;

@@ -11,9 +11,9 @@ clean:
 	mkdir -p nodejs/
 	npm install --prefix nodejs/ lambdafs@~2.0.3 puppeteer-core@14.0.0 --no-bin-links --no-fund --no-optional --no-package-lock --no-save --no-shrinkwrap
 	npm pack
-	mkdir -p nodejs/node_modules/chrome-aws-lambda/
-	tar --directory nodejs/node_modules/chrome-aws-lambda/ --extract --file chrome-aws-lambda-*.tgz --strip-components=1
-	rm chrome-aws-lambda-*.tgz
+	mkdir -p nodejs/node_modules/@sparticuz/chrome-aws-lambda/
+	tar --directory nodejs/node_modules/@sparticuz/chrome-aws-lambda/ --extract --file sparticuz-chrome-aws-lambda-*.tgz --strip-components=1
+	rm sparticuz-chrome-aws-lambda-*.tgz
 	mkdir -p $(dir $@)
 	zip -9 --filesync --move --recurse-paths $@ nodejs/
 
