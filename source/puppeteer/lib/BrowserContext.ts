@@ -4,9 +4,9 @@ import { Hook, Prototype } from '../../../typings/chrome-aws-lambda';
 let Super: Prototype<BrowserContext> = null;
 
 try {
-  Super = require('puppeteer/lib/cjs/puppeteer/common/Browser').BrowserContext;
+  Super = require('puppeteer/lib/cjs/puppeteer/common/Browser.js').BrowserContext;
 } catch (error) {
-  Super = require('puppeteer-core/lib/cjs/puppeteer/common/Browser').BrowserContext;
+  Super = require('puppeteer-core/lib/cjs/puppeteer/common/Browser.js').BrowserContext;
 }
 
 Super.prototype.defaultPage = async function (...hooks: Hook[]) {
