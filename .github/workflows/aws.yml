@@ -9,15 +9,15 @@ on:
 jobs:
   build:
     name: Build Lambda Layer
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: 14.x
+        node-version: 16.x
 
     - name: Install Packages
       run: npm install
@@ -26,7 +26,7 @@ jobs:
       run: make chrome_aws_lambda.zip
 
     - name: Upload Layer Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: chrome_aws_lambda
         path: chrome_aws_lambda.zip
@@ -34,7 +34,7 @@ jobs:
   execute:
     name: Lambda (Node ${{ matrix.version }}.x)
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         event:
@@ -42,16 +42,20 @@ jobs:
         version:
           - 14
           - 16
-          - 18
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
 
     - name: Setup AWS SAM CLI
-      uses: aws-actions/setup-sam@v0
+      uses: aws-actions/setup-sam@v2
 
     - name: Download Layer Artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: chrome_aws_lambda
 
