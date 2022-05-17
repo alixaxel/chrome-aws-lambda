@@ -23,7 +23,7 @@
     "preversion": "npm run build"
   },
   "dependencies": {
-    "lambdafs": "^2.0.3"
+    "lambdafs": "^2.1.1"
   },
   "devDependencies": {
     "@types/node": "^16.11.35",
