@@ -23,3 +23,13 @@ Resources:
       Runtime: nodejs14.x
       Policies:
         - AWSLambdaBasicExecutionRole
+
+  node16:
+    Type: AWS::Serverless::Function
+    Properties:
+      Layers:
+        - !Ref layer
+      Handler: handlers/index.handler
+      Runtime: nodejs16.x
+      Policies:
+        - AWSLambdaBasicExecutionRole
