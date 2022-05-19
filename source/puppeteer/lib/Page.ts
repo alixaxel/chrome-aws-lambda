@@ -4,9 +4,9 @@ import { KeysOfType, Prototype } from '../../../typings/chrome-aws-lambda';
 let Super: Prototype<Page> = null;
 
 try {
-  Super = require('puppeteer/lib/cjs/puppeteer/common/Page').Page;
+  Super = require('puppeteer/lib/cjs/puppeteer/common/Page.js').Page;
 } catch (error) {
-  Super = require('puppeteer-core/lib/cjs/puppeteer/common/Page').Page;
+  Super = require('puppeteer-core/lib/cjs/puppeteer/common/Page.js').Page;
 }
 
 Super.prototype.block = function (predicates: string[]) {
