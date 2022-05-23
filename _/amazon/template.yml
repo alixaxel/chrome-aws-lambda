@@ -30,6 +30,6 @@ Resources:
       Layers:
         - !Ref layer
       Handler: handlers/index.handler
-      Runtime: nodejs14.x
+      Runtime: nodejs16.x
       Policies:
         - AWSLambdaBasicExecutionRole
