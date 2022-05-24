@@ -22,11 +22,9 @@
     "prepack": "npm run build",
     "preversion": "npm run build"
   },
-  "dependencies": {
-    "lambdafs": "^2.1.1"
-  },
   "devDependencies": {
     "@types/node": "^16.11.35",
+    "@types/tar-fs": "^2.0.1",
     "puppeteer-core": "14.1.0",
     "typescript": "^4.6.4"
   },
@@ -60,5 +58,8 @@
     "tabWidth": 2,
     "trailingComma": "es5",
     "useTabs": false
+  },
+  "dependencies": {
+    "tar-fs": "^2.1.1"
   }
 }
