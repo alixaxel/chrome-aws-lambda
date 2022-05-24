@@ -1,7 +1,13 @@
 .PHONY: clean
 
 clean:
-	rm -f $(lastword $(MAKECMDGOALS))
+	rm -rf chrome_aws_lambda.zip _/amazon/code/nodejs
+
+pretest:
+	unzip chrome_aws_lambda.zip -d _/amazon/code
+
+test:
+	sam local invoke --template _/amazon/template.yml --event _/amazon/events/example.com.json node16
 
 .fonts.zip:
 	zip -9 --filesync --move --recurse-paths .fonts.zip .fonts/
