@@ -9,7 +9,7 @@ clean:
 %.zip:
 	npm install --no-fund --no-package-lock --no-shrinkwrap
 	mkdir -p nodejs/
-	npm install --prefix nodejs/ lambdafs@~2.0.3 puppeteer-core@14.1.0 --no-bin-links --no-fund --no-optional --no-package-lock --no-save --no-shrinkwrap
+	npm install --prefix nodejs/ tar-fs@2.1.1 puppeteer-core@14.1.0 --no-bin-links --no-fund --no-optional --no-package-lock --no-save --no-shrinkwrap
 	npm pack
 	mkdir -p nodejs/node_modules/@sparticuz/chrome-aws-lambda/
 	tar --directory nodejs/node_modules/@sparticuz/chrome-aws-lambda/ --extract --file sparticuz-chrome-aws-lambda-*.tgz --strip-components=1

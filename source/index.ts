@@ -2,7 +2,7 @@
 
 import { access, createWriteStream, existsSync, mkdirSync, readdirSync, symlink, unlinkSync } from 'fs';
 import { IncomingMessage } from 'http';
-import LambdaFS from 'lambdafs';
+import LambdaFS from './lambdafs';
 import { join } from 'path';
 import { PuppeteerNode, Viewport } from 'puppeteer-core';
 import { URL } from 'url';
