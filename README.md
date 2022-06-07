@@ -260,50 +260,51 @@ let page = await browser.defaultPage(replaceUserAgent);
 
 This package is versioned based on the underlying `puppeteer` minor version:
 
-| `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                    |
-| ------------------- | --------------------------------------------- | ---------------------------------------------------- |
-| `14.2.*`            | `npm i @sparticuz/chrome-aws-lambda@~14.2.0`  | `103.0.5058.0`                                       |
-| `14.1.*`            | `npm i @sparticuz/chrome-aws-lambda@~14.1.1`  | `102`                                                |
-| `10.1.*`            | `npm i chrome-aws-lambda@~10.1.0`             | [`884014`](https://crrev.com/884014) (`92.0.4512.0`) |
-| `10.0.*`            | `npm i chrome-aws-lambda@~10.0.0`             | [`884014`](https://crrev.com/884014) (`92.0.4512.0`) |
-| `9.1.*`             | `npm i chrome-aws-lambda@~9.1.0`              | [`869685`](https://crrev.com/869685) (`91.0.4469.0`) |
-| `9.0.*`             | `npm i chrome-aws-lambda@~9.0.0`              | [`869685`](https://crrev.com/869685) (`91.0.4469.0`) |
-| `8.0.*`             | `npm i chrome-aws-lambda@~8.0.2`              | [`856583`](https://crrev.com/856583) (`90.0.4427.0`) |
-| `7.0.*`             | `npm i chrome-aws-lambda@~7.0.0`              | [`848005`](https://crrev.com/848005) (`90.0.4403.0`) |
-| `6.0.*`             | `npm i chrome-aws-lambda@~6.0.0`              | [`843427`](https://crrev.com/843427) (`89.0.4389.0`) |
-| `5.5.*`             | `npm i chrome-aws-lambda@~5.5.0`              | [`818858`](https://crrev.com/818858) (`88.0.4298.0`) |
-| `5.4.*`             | `npm i chrome-aws-lambda@~5.4.0`              | [`809590`](https://crrev.com/809590) (`87.0.4272.0`) |
-| `5.3.*`             | `npm i chrome-aws-lambda@~5.3.1`              | [`800071`](https://crrev.com/800071) (`86.0.4240.0`) |
-| `5.2.*`             | `npm i chrome-aws-lambda@~5.2.1`              | [`782078`](https://crrev.com/782078) (`85.0.4182.0`) |
-| `5.1.*`             | `npm i chrome-aws-lambda@~5.1.0`              | [`768783`](https://crrev.com/768783) (`84.0.4147.0`) |
-| `5.0.*`             | `npm i chrome-aws-lambda@~5.0.0`              | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
-| `3.1.*`             | `npm i chrome-aws-lambda@~3.1.1`              | [`756035`](https://crrev.com/756035) (`83.0.4103.0`) |
-| `3.0.*`             | `npm i chrome-aws-lambda@~3.0.4`              | [`737027`](https://crrev.com/737027) (`81.0.4044.0`) |
-| `2.1.*`             | `npm i chrome-aws-lambda@~2.1.1`              | [`722234`](https://crrev.com/722234) (`80.0.3987.0`) |
-| `2.0.*`             | `npm i chrome-aws-lambda@~2.0.2`              | [`705776`](https://crrev.com/705776) (`79.0.3945.0`) |
-| `1.20.*`            | `npm i chrome-aws-lambda@~1.20.4`             | [`686378`](https://crrev.com/686378) (`78.0.3882.0`) |
-| `1.19.*`            | `npm i chrome-aws-lambda@~1.19.0`             | [`674921`](https://crrev.com/674921) (`77.0.3844.0`) |
-| `1.18.*`            | `npm i chrome-aws-lambda@~1.18.1`             | [`672088`](https://crrev.com/672088) (`77.0.3835.0`) |
-| `1.18.*`            | `npm i chrome-aws-lambda@~1.18.0`             | [`669486`](https://crrev.com/669486) (`77.0.3827.0`) |
-| `1.17.*`            | `npm i chrome-aws-lambda@~1.17.1`             | [`662092`](https://crrev.com/662092) (`76.0.3803.0`) |
-| `1.16.*`            | `npm i chrome-aws-lambda@~1.16.1`             | [`656675`](https://crrev.com/656675) (`76.0.3786.0`) |
-| `1.15.*`            | `npm i chrome-aws-lambda@~1.15.1`             | [`650583`](https://crrev.com/650583) (`75.0.3765.0`) |
-| `1.14.*`            | `npm i chrome-aws-lambda@~1.14.0`             | [`641577`](https://crrev.com/641577) (`75.0.3738.0`) |
-| `1.13.*`            | `npm i chrome-aws-lambda@~1.13.0`             | [`637110`](https://crrev.com/637110) (`74.0.3723.0`) |
-| `1.12.*`            | `npm i chrome-aws-lambda@~1.12.2`             | [`624492`](https://crrev.com/624492) (`73.0.3679.0`) |
-| `1.11.*`            | `npm i chrome-aws-lambda@~1.11.2`             | [`609904`](https://crrev.com/609904) (`72.0.3618.0`) |
-| `1.10.*`            | `npm i chrome-aws-lambda@~1.10.1`             | [`604907`](https://crrev.com/604907) (`72.0.3582.0`) |
-| `1.9.*`             | `npm i chrome-aws-lambda@~1.9.1`              | [`594312`](https://crrev.com/594312) (`71.0.3563.0`) |
-| `1.8.*`             | `npm i chrome-aws-lambda@~1.8.0`              | [`588429`](https://crrev.com/588429) (`71.0.3542.0`) |
-| `1.7.*`             | `npm i chrome-aws-lambda@~1.7.0`              | [`579032`](https://crrev.com/579032) (`70.0.3508.0`) |
-| `1.6.*`             | `npm i chrome-aws-lambda@~1.6.3`              | [`575458`](https://crrev.com/575458) (`69.0.3494.0`) |
-| `1.5.*`             | `npm i chrome-aws-lambda@~1.5.0`              | [`564778`](https://crrev.com/564778) (`69.0.3452.0`) |
-| `1.4.*`             | `npm i chrome-aws-lambda@~1.4.0`              | [`555668`](https://crrev.com/555668) (`68.0.3419.0`) |
-| `1.3.*`             | `npm i chrome-aws-lambda@~1.3.0`              | [`549031`](https://crrev.com/549031) (`67.0.3391.0`) |
-| `1.2.*`             | `npm i chrome-aws-lambda@~1.2.0`              | [`543305`](https://crrev.com/543305) (`67.0.3372.0`) |
-| `1.1.*`             | `npm i chrome-aws-lambda@~1.1.0`              | [`536395`](https://crrev.com/536395) (`66.0.3347.0`) |
-| `1.0.*`             | `npm i chrome-aws-lambda@~1.0.0`              | [`526987`](https://crrev.com/526987) (`65.0.3312.0`) |
-| `0.13.*`            | `npm i chrome-aws-lambda@~0.13.0`             | [`515411`](https://crrev.com/515411) (`64.0.3264.0`) |
+| `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                       |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------- |
+| `14.3.*`            | `npm i @sparticuz/chrome-aws-lambda@~14.3.0`  | [`1002410`](https://crrev.com/1002410) (`103.0.5058.0`) |
+| `14.2.*`            | `npm i @sparticuz/chrome-aws-lambda@~14.2.0`  | [`1002410`](https://crrev.com/1002410) (`103.0.5058.0`) |
+| `14.1.*`            | `npm i @sparticuz/chrome-aws-lambda@~14.1.1`  | [`991974`](https://crrev.com/991974) (`102.0.5002.0`)   |
+| `10.1.*`            | `npm i chrome-aws-lambda@~10.1.0`             | [`884014`](https://crrev.com/884014) (`92.0.4512.0`)    |
+| `10.0.*`            | `npm i chrome-aws-lambda@~10.0.0`             | [`884014`](https://crrev.com/884014) (`92.0.4512.0`)    |
+| `9.1.*`             | `npm i chrome-aws-lambda@~9.1.0`              | [`869685`](https://crrev.com/869685) (`91.0.4469.0`)    |
+| `9.0.*`             | `npm i chrome-aws-lambda@~9.0.0`              | [`869685`](https://crrev.com/869685) (`91.0.4469.0`)    |
+| `8.0.*`             | `npm i chrome-aws-lambda@~8.0.2`              | [`856583`](https://crrev.com/856583) (`90.0.4427.0`)    |
+| `7.0.*`             | `npm i chrome-aws-lambda@~7.0.0`              | [`848005`](https://crrev.com/848005) (`90.0.4403.0`)    |
+| `6.0.*`             | `npm i chrome-aws-lambda@~6.0.0`              | [`843427`](https://crrev.com/843427) (`89.0.4389.0`)    |
+| `5.5.*`             | `npm i chrome-aws-lambda@~5.5.0`              | [`818858`](https://crrev.com/818858) (`88.0.4298.0`)    |
+| `5.4.*`             | `npm i chrome-aws-lambda@~5.4.0`              | [`809590`](https://crrev.com/809590) (`87.0.4272.0`)    |
+| `5.3.*`             | `npm i chrome-aws-lambda@~5.3.1`              | [`800071`](https://crrev.com/800071) (`86.0.4240.0`)    |
+| `5.2.*`             | `npm i chrome-aws-lambda@~5.2.1`              | [`782078`](https://crrev.com/782078) (`85.0.4182.0`)    |
+| `5.1.*`             | `npm i chrome-aws-lambda@~5.1.0`              | [`768783`](https://crrev.com/768783) (`84.0.4147.0`)    |
+| `5.0.*`             | `npm i chrome-aws-lambda@~5.0.0`              | [`756035`](https://crrev.com/756035) (`83.0.4103.0`)    |
+| `3.1.*`             | `npm i chrome-aws-lambda@~3.1.1`              | [`756035`](https://crrev.com/756035) (`83.0.4103.0`)    |
+| `3.0.*`             | `npm i chrome-aws-lambda@~3.0.4`              | [`737027`](https://crrev.com/737027) (`81.0.4044.0`)    |
+| `2.1.*`             | `npm i chrome-aws-lambda@~2.1.1`              | [`722234`](https://crrev.com/722234) (`80.0.3987.0`)    |
+| `2.0.*`             | `npm i chrome-aws-lambda@~2.0.2`              | [`705776`](https://crrev.com/705776) (`79.0.3945.0`)    |
+| `1.20.*`            | `npm i chrome-aws-lambda@~1.20.4`             | [`686378`](https://crrev.com/686378) (`78.0.3882.0`)    |
+| `1.19.*`            | `npm i chrome-aws-lambda@~1.19.0`             | [`674921`](https://crrev.com/674921) (`77.0.3844.0`)    |
+| `1.18.*`            | `npm i chrome-aws-lambda@~1.18.1`             | [`672088`](https://crrev.com/672088) (`77.0.3835.0`)    |
+| `1.18.*`            | `npm i chrome-aws-lambda@~1.18.0`             | [`669486`](https://crrev.com/669486) (`77.0.3827.0`)    |
+| `1.17.*`            | `npm i chrome-aws-lambda@~1.17.1`             | [`662092`](https://crrev.com/662092) (`76.0.3803.0`)    |
+| `1.16.*`            | `npm i chrome-aws-lambda@~1.16.1`             | [`656675`](https://crrev.com/656675) (`76.0.3786.0`)    |
+| `1.15.*`            | `npm i chrome-aws-lambda@~1.15.1`             | [`650583`](https://crrev.com/650583) (`75.0.3765.0`)    |
+| `1.14.*`            | `npm i chrome-aws-lambda@~1.14.0`             | [`641577`](https://crrev.com/641577) (`75.0.3738.0`)    |
+| `1.13.*`            | `npm i chrome-aws-lambda@~1.13.0`             | [`637110`](https://crrev.com/637110) (`74.0.3723.0`)    |
+| `1.12.*`            | `npm i chrome-aws-lambda@~1.12.2`             | [`624492`](https://crrev.com/624492) (`73.0.3679.0`)    |
+| `1.11.*`            | `npm i chrome-aws-lambda@~1.11.2`             | [`609904`](https://crrev.com/609904) (`72.0.3618.0`)    |
+| `1.10.*`            | `npm i chrome-aws-lambda@~1.10.1`             | [`604907`](https://crrev.com/604907) (`72.0.3582.0`)    |
+| `1.9.*`             | `npm i chrome-aws-lambda@~1.9.1`              | [`594312`](https://crrev.com/594312) (`71.0.3563.0`)    |
+| `1.8.*`             | `npm i chrome-aws-lambda@~1.8.0`              | [`588429`](https://crrev.com/588429) (`71.0.3542.0`)    |
+| `1.7.*`             | `npm i chrome-aws-lambda@~1.7.0`              | [`579032`](https://crrev.com/579032) (`70.0.3508.0`)    |
+| `1.6.*`             | `npm i chrome-aws-lambda@~1.6.3`              | [`575458`](https://crrev.com/575458) (`69.0.3494.0`)    |
+| `1.5.*`             | `npm i chrome-aws-lambda@~1.5.0`              | [`564778`](https://crrev.com/564778) (`69.0.3452.0`)    |
+| `1.4.*`             | `npm i chrome-aws-lambda@~1.4.0`              | [`555668`](https://crrev.com/555668) (`68.0.3419.0`)    |
+| `1.3.*`             | `npm i chrome-aws-lambda@~1.3.0`              | [`549031`](https://crrev.com/549031) (`67.0.3391.0`)    |
+| `1.2.*`             | `npm i chrome-aws-lambda@~1.2.0`              | [`543305`](https://crrev.com/543305) (`67.0.3372.0`)    |
+| `1.1.*`             | `npm i chrome-aws-lambda@~1.1.0`              | [`536395`](https://crrev.com/536395) (`66.0.3347.0`)    |
+| `1.0.*`             | `npm i chrome-aws-lambda@~1.0.0`              | [`526987`](https://crrev.com/526987) (`65.0.3312.0`)    |
+| `0.13.*`            | `npm i chrome-aws-lambda@~0.13.0`             | [`515411`](https://crrev.com/515411) (`64.0.3264.0`)    |
 
 Patch versions are reserved for bug fixes in `chrome-aws-lambda` and general maintenance.
 
