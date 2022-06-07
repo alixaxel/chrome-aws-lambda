@@ -17,6 +17,7 @@
     "node": ">= 14"
   },
   "scripts": {
+    "test": "make clean && make && make pretest && make test",
     "build": "rm -rf build && tsc -p tsconfig.json",
     "postversion": "git push && git push --tags && npm publish",
     "prepack": "npm run build",
