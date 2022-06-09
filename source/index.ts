@@ -73,9 +73,22 @@ class Chromium {
     } else {
       const input = join(__dirname, '..', 'bin');
       const promises = [
-        inflate(folder, `${input}/chromium.br`),
-        inflate(folder, `${input}/swiftshader.tar.br`),
-        inflate(folder, `${input}/aws.tar.br`),
+        inflate({
+          folder,
+          file: `${input}/chromium.br`
+        }),
+        // Swiftshader needs to be extracted at the same level as chromium and not inside a swiftshader director
+        // https://github.com/alixaxel/chrome-aws-lambda/pull/264#issuecomment-1136311984
+        inflate({
+          folder,
+          file: `${input}/swiftshader.tar.br`,
+          targetFolder: folder,
+          checkFileToExists: `${folder}/libGLESv2.so`
+        }),
+        inflate({
+          folder,
+          file: `${input}/aws.tar.br`
+        }),
       ];
 
       const awsFolder = join(folder, 'aws')
