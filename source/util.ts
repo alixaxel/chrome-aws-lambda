@@ -3,13 +3,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as zlib from 'zlib';
 
-interface IInflateProps {
-  folder: string,
-  file: string,
-  targetFolder?: string,
-  checkFileToExists?:string
-}
-
 
 export async function fileExists(filepath: string) {
     try {
@@ -19,26 +12,26 @@ export async function fileExists(filepath: string) {
       return false
     }
   }
-
-/**
- * Decompresses a (tarballed) Brotli or Gzip compressed file and returns the path to the decompressed file/folder.
- */
-export async function inflate({ folder, file, targetFolder, checkFileToExists }: IInflateProps) {
-    const output = targetFolder ?? path.join(folder, path.basename(file).replace(/[.](?:t(?:ar(?:[.](?:br|gz))?|br|gz)|br|gz)$/i, ''));
-
-    if (await fileExists(checkFileToExists ?? output)) {
-      return output;
+    /**
+     * Decompresses a (tarballed) Brotli or Gzip compressed file and returns the path to the decompressed file/folder.
+     *
+     * @param file Path of the file to decompress.
+     */
+ export async function inflate(folder: string, file: string) {
+    const output = path.join(folder, path.basename(file).replace(/[.](?:t(?:ar(?:[.](?:br|gz))?|br|gz)|br|gz)$/i, ''));
+    if (await fileExists(output)) {
+        return output;
     }
-
     return new Promise((resolve, reject) => {
         const source = fs.createReadStream(file, { highWaterMark: 2 ** 23 });
         let target = null;
-        if (/[.](?:t(?:ar(?:[.](?:br|gz))?|br|gz))$/i.test(file)) {
+        if (/[.](?:t(?:ar(?:[.](?:br|gz))?|br|gz))$/i.test(file) === true) {
             target = tar_fs.extract(output);
             target.once('finish', () => {
                 return resolve(output);
             });
-        } else {
+        }
+        else {
             target = fs.createWriteStream(output, { mode: 0o700 });
         }
         source.once('error', (error) => {
@@ -50,9 +43,10 @@ export async function inflate({ folder, file, targetFolder, checkFileToExists }:
         target.once('close', () => {
             return resolve(output);
         });
-        if (/(?:br|gz)$/i.test(file)) {
+        if (/(?:br|gz)$/i.test(file) === true) {
             source.pipe(/br$/i.test(file) ? zlib.createBrotliDecompress({ chunkSize: 2 ** 21 }) : zlib.createUnzip({ chunkSize: 2 ** 21 })).pipe(target);
-        } else {
+        }
+        else {
             source.pipe(target);
         }
     });
@@ -65,7 +59,7 @@ export function fontConfig(awsFolder: string) {
       <dir>${awsFolder}/.fonts</dir>
       <dir>/tmp/.fonts</dir>
       <dir>/opt/.fonts</dir>
-
+    
       <match target="pattern">
         <test qual="any" name="family">
           <string>mono</string>
@@ -74,7 +68,7 @@ export function fontConfig(awsFolder: string) {
           <string>monospace</string>
         </edit>
       </match>
-
+    
       <match target="pattern">
         <test qual="any" name="family">
           <string>sans serif</string>
@@ -83,7 +77,7 @@ export function fontConfig(awsFolder: string) {
           <string>sans-serif</string>
         </edit>
       </match>
-
+    
       <match target="pattern">
         <test qual="any" name="family">
           <string>sans</string>
@@ -92,7 +86,7 @@ export function fontConfig(awsFolder: string) {
           <string>sans-serif</string>
         </edit>
       </match>
-
+    
       <config></config>
     </fontconfig>`
 }
