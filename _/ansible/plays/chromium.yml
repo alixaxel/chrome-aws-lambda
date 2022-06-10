@@ -54,7 +54,7 @@
           - device_name: /dev/xvda
             delete_on_termination: true
             volume_size: 128
-            volume_type: gp2
+            volume_type: gp3
         instance_tags:
           Name: Chromium
       register: ec2
@@ -188,6 +188,14 @@
         dest: /srv/source/depot_tools
         force: yes
         update: yes
+
+    - name: Upload .gclient
+      copy:
+        src: .gclient
+        dest: /srv/source/chromium/.gclient
+        owner: ec2-user
+        group: ec2-user
+        mode: '0664'
 
     - name: Checking for Chromium
       stat:
