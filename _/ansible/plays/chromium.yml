@@ -202,13 +202,6 @@
         path: /srv/source/chromium/.gclient
       register: gclient
 
-    - name: Fetching Chromium
-      shell: |
-        fetch --nohooks chromium
-      args:
-        chdir: /srv/source/chromium
-      when: gclient.stat.exists != true
-
     - name: Resolving Puppeteer Version
       uri:
         url: "https://raw.githubusercontent.com/puppeteer/puppeteer/{{ puppeteer_version | default('main') }}/src/revisions.ts"
