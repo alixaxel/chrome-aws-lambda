@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
@@ -24,6 +24,8 @@ Resources:
       Runtime: nodejs14.x
       Policies:
         - AWSLambdaBasicExecutionRole
+        - AWSXRayDaemonWriteAccess
+      Tracing: Active
   node16:
     Type: AWS::Serverless::Function
     Properties:
@@ -33,3 +35,5 @@ Resources:
       Runtime: nodejs16.x
       Policies:
         - AWSLambdaBasicExecutionRole
+        - AWSXRayDaemonWriteAccess
+      Tracing: Active

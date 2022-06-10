@@ -54,7 +54,7 @@
           - device_name: /dev/xvda
             delete_on_termination: true
             volume_size: 128
-            volume_type: gp2
+            volume_type: gp3
         instance_tags:
           Name: Chromium
       register: ec2
@@ -189,17 +189,18 @@
         force: yes
         update: yes
 
+    - name: Upload .gclient
+      copy:
+        src: .gclient
+        dest: /srv/source/chromium/.gclient
+        owner: ec2-user
+        group: ec2-user
+        mode: '0664'
+
     - name: Checking for Chromium
       stat:
         path: /srv/source/chromium/.gclient
       register: gclient
-
-    - name: Fetching Chromium
-      shell: |
-        fetch --nohooks chromium
-      args:
-        chdir: /srv/source/chromium
-      when: gclient.stat.exists != true
 
     - name: Resolving Puppeteer Version
       uri:
@@ -289,11 +290,13 @@
           ffmpeg_branding = "Chrome"
           is_component_build = false
           is_debug = false
+          is_official_build = true
           proprietary_codecs = true
           symbol_level = 0
           target_cpu = "x64"
           target_os = "linux"
           use_sysroot = true
+          v8_symbol_level = 0
           v8_target_cpu = "x64"
         dest: /srv/source/chromium/src/out/Headless/args.gn
 
