@@ -13,7 +13,7 @@
         creates: ansible.pem
 
     - name: Creating EC2 Key Pair
-      ec2_key:
+      amazon.aws.ec2_key:
         name: ansible
         state: present
         region: "{{ region }}"
@@ -21,7 +21,7 @@
       with_file: ../ansible.pem.pub
 
     - name: Creating Security Group
-      ec2_group:
+      amazon.aws.ec2_group:
         name: Chromium
         description: SSH Access
         state: present
@@ -36,7 +36,7 @@
             cidr_ip: 0.0.0.0/0
 
     - name: Launching EC2 Instance
-      ec2:
+      amazon.aws.ec2:
         group: Chromium
         image: "{{ image }}"
         instance_type: c6a.12xlarge
@@ -143,7 +143,7 @@
     - name: Creating NVMe SSD Filesystem
       become: true
       become_user: root
-      filesystem:
+      community.general.system.filesystem:
         dev: /dev/nvme1n1
         fstype: xfs
       when: nvme.stat.exists
@@ -371,20 +371,20 @@
 
   tasks:
     - name: Terminating EC2 Instance
-      ec2:
+      amazon.aws.ec2:
         wait: yes
         state: absent
         instance_ids: '{{ ec2.instance_ids }}'
         region: "{{ region }}"
 
     - name: Deleting Security Group
-      ec2_group:
+      amazon.aws.ec2_group:
         name: Chromium
         state: absent
         region: "{{ region }}"
 
     - name: Deleting EC2 Key Pair
-      ec2_key:
+      amazon.aws.ec2_key:
         name: ansible
         state: absent
         region: "{{ region }}"
