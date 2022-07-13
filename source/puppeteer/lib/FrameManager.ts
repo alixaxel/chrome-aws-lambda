@@ -44,7 +44,7 @@ Super.prototype.clickAndWaitForRequest = function (selector: string, predicate: 
   };
 
   let promises: [Promise<HTTPRequest>, Promise<void>] = [
-    ((this._frameManager as any)._page as Page).waitForRequest((typeof predicate === 'function') ? predicate : callback, options),
+    this.page().waitForRequest((typeof predicate === 'function') ? predicate : callback, options),
     this.click(selector),
   ];
 
@@ -67,7 +67,7 @@ Super.prototype.clickAndWaitForResponse = function (selector: string, predicate:
   };
 
   let promises: [Promise<HTTPResponse>, Promise<void>] = [
-    ((this._frameManager as any)._page as Page).waitForResponse((typeof predicate === 'function') ? predicate : callback, options),
+    this.page().waitForResponse((typeof predicate === 'function') ? predicate : callback, options),
     this.click(selector),
   ];
 
