@@ -26,11 +26,11 @@
   "devDependencies": {
     "@types/node": "^16.11.40",
     "@types/tar-fs": "^2.0.1",
-    "puppeteer-core": "14.4.1",
+    "puppeteer-core": "15.4.0",
     "typescript": "^4.6.4"
   },
   "peerDependencies": {
-    "puppeteer-core": "14.4.1"
+    "puppeteer-core": "15.4.0"
   },
   "bugs": {
     "url": "https://github.com/Sparticuz/chrome-aws-lambda/issues"
