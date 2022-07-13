@@ -211,7 +211,7 @@
     - name: Resolving Chromium Revision from Puppeteer Version
       set_fact:
         chromium_revision: >
-          {{ puppeteer_revisions.content | regex_search("chromium: [']([0-9]+)[']", '\1') | first }}
+          {{ puppeteer_revisions.content | regex_search("chromium: [']([0-9]*)[']", '\1') | first }}
 
     - name: Resolving Git Commit from Chromium Revision
       uri:
@@ -219,9 +219,14 @@
         return_content: yes
       register: revision
 
+    - name: Parse Result
+      set_fact:
+       gitsha: >
+        {{ revision.content | regex_search('"git_sha":"([a-zA-Z0-9_]*)"', '\1') | trim }}
+
     - name: Checking Out Chromium revision
       shell: |
-        gclient sync --delete_unversioned_trees --revision {{ revision.json.git_sha }} --with_branch_heads
+        gclient sync --delete_unversioned_trees --revision {{ gitsha | first }} --with_branch_heads
       args:
         chdir: /srv/source/chromium
 
