@@ -262,7 +262,7 @@ This package is versioned based on the underlying `puppeteer` minor version:
 
 | `puppeteer` Version | `chrome-aws-lambda` Version                   | Chromium Revision                                       |
 | ------------------- | --------------------------------------------- | ------------------------------------------------------- |
-| `15.4.*`            | `npm i @sparticuz/chrome-aws-lambda@~15.4.0`  | [`1011831`](https://crrev.com/1011831) (`104.0.5109.0`) |
+| `15.4.*`            | `npm i @sparticuz/chrome-aws-lambda@~15.5.0`  | [`1022525`](https://crrev.com/1011831) (`105.0.5173.0`) |
 | `14.4.*`            | `npm i @sparticuz/chrome-aws-lambda@~14.4.1`  | [`1002410`](https://crrev.com/1002410) (`103.0.5058.0`) |
 | `14.3.*`            | `npm i @sparticuz/chrome-aws-lambda@~14.3.0`  | [`1002410`](https://crrev.com/1002410) (`103.0.5058.0`) |
 | `14.2.*`            | `npm i @sparticuz/chrome-aws-lambda@~14.2.0`  | [`1002410`](https://crrev.com/1002410) (`103.0.5058.0`) |
