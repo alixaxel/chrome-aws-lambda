@@ -54,7 +54,7 @@ Super.prototype.fillFormBySelector = function <T extends Record<string, boolean 
 Super.prototype.fillFormByXPath = function <T extends Record<string, boolean | string | string[]>>(selector: string, data: T) {
   return this.mainFrame().fillFormByXPath(selector, data);
 };
-/*
+
 Super.prototype.number = function <T = HTMLElement>(selector: string, decimal: string = '.', property: KeysOfType<T, string> = 'textContent' as any) {
   return this.mainFrame().number(selector, decimal, property);
 };
@@ -66,7 +66,7 @@ Super.prototype.selectByLabel = function (selector: string, ...values: string[])
 Super.prototype.string = function <T = HTMLElement>(selector: string, property: KeysOfType<T, string> = 'textContent' as any) {
   return this.mainFrame().string(selector, property);
 };
-*/
+
 Super.prototype.waitForInflightRequests = function (requests: number = 0, alpha: number = 500, omega: number = 500, options?: WaitTimeoutOptions) {
   let result: Record<string, Function> = {
     reject: null,

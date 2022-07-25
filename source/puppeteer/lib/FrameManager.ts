@@ -106,7 +106,6 @@ Super.prototype.fillFormByXPath = function <T extends Record<string, boolean | s
   return this.$(selector).then((element) => element?.fillFormByXPath(data) ?? null);
 };
 
-/*
 Super.prototype.number = function <T = HTMLElement>(selector: string, decimal: string = '.', property: KeysOfType<T, string> = 'textContent' as any) {
   return this.$(selector).then((element) => element?.number(decimal, property) ?? null);
 };
@@ -118,7 +117,6 @@ Super.prototype.selectByLabel = function (selector: string, ...values: string[])
 Super.prototype.string = function <T = HTMLElement>(selector: string, property: KeysOfType<T, string> = 'textContent' as any) {
   return this.$(selector).then((element) => element?.string(property) ?? null);
 };
-*/
 
 Super.prototype.waitForText = function (predicate: string, options?: WaitTimeoutOptions) {
   if (predicate.includes(`"`) !== true) {

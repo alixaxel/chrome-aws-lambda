@@ -126,23 +126,22 @@ declare module 'puppeteer-core' {
      *
      * @param decimal - Decimal separator to use, defaults to `.`.
      * @param property - Element property to extract content from, defaults to `textContent`.
-
-    number<T = HTMLElement>(decimal?: string, property?: KeysOfType<T, string>): Promise<number[]>;
      */
+    number<T = HTMLElement>(decimal?: string, property?: KeysOfType<T, string>): Promise<number[]>;
+
     /**
      * Selects multiple `select` options by label and returns the values of the actual selection.
      *
      * @param values - Option labels to select.
-
-    selectByLabel(...values: string[]): Promise<string[]>;
      */
+    selectByLabel(...values: string[]): Promise<string[]>;
+
     /**
      * Returns normalized text found in the given element.
      *
      * @param property - Element property to extract content from, defaults to `textContent`.
-
-    string<T = HTMLElement>(property?: KeysOfType<T, string>): Promise<string>;
      */
+    string<T = HTMLElement>(property?: KeysOfType<T, string>): Promise<string>;
   }
 
   interface Frame {
@@ -249,25 +248,25 @@ declare module 'puppeteer-core' {
      * @param selector - Selector to query for.
      * @param decimal - Decimal separator to use, defaults to `.`.
      * @param property - Element property to extract content from, defaults to `textContent`.
-
-    number<T = HTMLElement>(selector: string, decimal?: string, property?: KeysOfType<T, string>): Promise<number[]>;
      */
+    number<T = HTMLElement>(selector: string, decimal?: string, property?: KeysOfType<T, string>): Promise<number[]>;
+
     /**
      * Selects multiple `select` options by label and returns the values of the actual selection.
      *
      * @param selector - Selector to query the `select` element for.
      * @param values - Option labels to select.
-
-    selectByLabel(selector: string, ...values: string[]): Promise<string[]>;
      */
+    selectByLabel(selector: string, ...values: string[]): Promise<string[]>;
+
     /**
      * Returns normalized text found in the given selector.
      *
      * @param selector - Selector to query for.
      * @param property - Element property to extract content from, defaults to `textContent`.
-
-    string<T = HTMLElement>(selector: string, property?: KeysOfType<T, string>): Promise<string>;
      */
+    string<T = HTMLElement>(selector: string, property?: KeysOfType<T, string>): Promise<string>;
+
     /**
      * Wait for a string to be present and visible.
      *
