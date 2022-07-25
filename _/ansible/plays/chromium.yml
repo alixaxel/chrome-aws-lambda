@@ -83,6 +83,12 @@
     PATH: "{{ ansible_env.PATH }}:/srv/source/depot_tools"
 
   tasks:
+    - name: Update system
+      become: true
+      become_user: root
+      shell: |
+        dnf update --releasever=2022.0.20220719 -y
+
     - name: Installing Packages
       become: true
       become_user: root
@@ -93,7 +99,7 @@
           - atk-devel
           - bc
           - bluez-libs-devel
-          - brlapi-devel
+#          - brlapi-devel
           - bzip2-devel
           - cairo-devel
           - cmake
@@ -102,16 +108,16 @@
           - dbus-glib-devel
           - dbus-x11
           - expat-devel
-          - glibc.i686
+          - glibc
           - glibc-langpack-en
           - gperf
           - gtk3-devel
           - httpd
-          - java-11-openjdk-devel
+          - java-latest-openjdk-devel
           - libatomic
           - libcap-devel
           - libjpeg-devel
-          - libstdc++.i686
+          - libstdc++
           - libXScrnSaver-devel
           - libxkbcommon-x11-devel
           - mod_ssl
@@ -129,7 +135,7 @@
           - python-setuptools
           - ruby
           - xorg-x11-server-Xvfb
-          - zlib.i686
+          - zlib
         state: latest
         update_cache: true
 
@@ -300,6 +306,7 @@
           symbol_level = 0
           target_cpu = "x64"
           target_os = "linux"
+          use_brlapi = 0
           use_sysroot = true
           v8_symbol_level = 0
           v8_target_cpu = "x64"
