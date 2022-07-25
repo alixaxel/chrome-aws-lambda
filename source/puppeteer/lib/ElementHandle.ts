@@ -1,4 +1,4 @@
-import { ElementHandle, EvaluateFn, HTTPRequest, HTTPResponse, Page, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
+import { ElementHandle, EvaluateFunc, HTTPRequest, HTTPResponse, Page, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
 import { KeysOfType, Prototype } from '../../../typings/chrome-aws-lambda';
 
 let Super: Prototype<ElementHandle> = null;
@@ -171,7 +171,7 @@ Super.prototype.fillFormByLabel = function <T extends Record<string, boolean | s
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, data) as any;
+  return this.evaluate(callback as unknown as EvaluateFunc<[ElementHandle<Element>, T]>, data) as any;
 };
 
 Super.prototype.fillFormByName = function <T extends Record<string, boolean | string | string[]>>(data: T) {
@@ -262,7 +262,7 @@ Super.prototype.fillFormByName = function <T extends Record<string, boolean | st
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, data) as any;
+  return this.evaluate(callback as unknown as EvaluateFunc<[ElementHandle<Element>, T]>, data) as any;
 };
 
 Super.prototype.fillFormBySelector = function <T extends Record<string, boolean | string | string[]>>(data: T) {
@@ -353,7 +353,7 @@ Super.prototype.fillFormBySelector = function <T extends Record<string, boolean 
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, data) as any;
+  return this.evaluate(callback as unknown as EvaluateFunc<[ElementHandle<Element>, T]>, data) as any;
 };
 
 Super.prototype.fillFormByXPath = function <T extends Record<string, boolean | string | string[]>>(data: T) {
@@ -450,7 +450,7 @@ Super.prototype.fillFormByXPath = function <T extends Record<string, boolean | s
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, data) as any;
+  return this.evaluate(callback as unknown as EvaluateFunc<[ElementHandle<Element>, T]>, data) as any;
 };
 
 Super.prototype.getInnerHTML = function () {
@@ -486,7 +486,7 @@ Super.prototype.number = function <T = HTMLElement>(decimal: string = '.', prope
     return null;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, decimal, property as any);
+  return this.evaluate(callback as unknown as EvaluateFunc<Element>, decimal, property as any);
 };
 
 Super.prototype.selectByLabel = function (...values: string[]) {
@@ -523,7 +523,7 @@ Super.prototype.selectByLabel = function (...values: string[]) {
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, values);
+  return this.evaluate(callback as unknown as EvaluateFunc<Element>, values);
 };
 
 Super.prototype.string = function <T = HTMLElement>(property: KeysOfType<T, string> = 'textContent' as any) {
@@ -553,5 +553,5 @@ Super.prototype.string = function <T = HTMLElement>(property: KeysOfType<T, stri
     return null;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, property as any);
+  return this.evaluate(callback as unknown as EvaluateFunc<Element>, property as any);
 };
