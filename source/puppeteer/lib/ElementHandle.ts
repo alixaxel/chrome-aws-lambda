@@ -1,5 +1,5 @@
 import { ElementHandle, EvaluateFunc, HTTPRequest, HTTPResponse, Page, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
-import { KeysOfType, Prototype } from '../../../typings/chrome-aws-lambda';
+import { Prototype } from '../../../typings/chrome-aws-lambda';
 
 let Super: Prototype<ElementHandle> = null;
 
@@ -465,8 +465,8 @@ Super.prototype.getInnerText = function () {
   });
 };
 
-Super.prototype.number = function <T = HTMLElement>(decimal: string = '.', property: KeysOfType<T, string> = 'textContent' as any) {
-  let callback = (node: T, decimal: string, property: KeysOfType<T, string>) => {
+Super.prototype.number = function (decimal: string = '.', property: any) {
+  let callback = (node: any, decimal: string, property: any) => {
     let data = (node[property] as unknown) as string;
 
     if (typeof data === 'string') {
@@ -486,7 +486,7 @@ Super.prototype.number = function <T = HTMLElement>(decimal: string = '.', prope
     return null;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFunc<Element>, decimal, property as any);
+  return this.evaluate(callback, decimal, property as any);
 };
 
 Super.prototype.selectByLabel = function (...values: string[]) {
@@ -523,11 +523,11 @@ Super.prototype.selectByLabel = function (...values: string[]) {
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFunc<Element>, values);
+  return this.evaluate(callback as any, values);
 };
 
-Super.prototype.string = function <T = HTMLElement>(property: KeysOfType<T, string> = 'textContent' as any) {
-  let callback = (node: T, property: KeysOfType<T, string>) => {
+Super.prototype.string = function (property: any) {
+  let callback = (node: any, property: any) => {
     let data = (node[property] as unknown) as string;
 
     if (typeof data === 'string') {
@@ -553,5 +553,5 @@ Super.prototype.string = function <T = HTMLElement>(property: KeysOfType<T, stri
     return null;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFunc<Element>, property as any);
+  return this.evaluate(callback, property as any);
 };

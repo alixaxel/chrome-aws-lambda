@@ -1,4 +1,4 @@
-import { Frame, HTTPRequest, HTTPResponse, Page, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
+import { Frame, HTTPRequest, HTTPResponse, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
 import { KeysOfType, Prototype } from '../../../typings/chrome-aws-lambda';
 
 let Super: Prototype<Frame> = null;

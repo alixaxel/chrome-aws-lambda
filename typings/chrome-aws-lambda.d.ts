@@ -127,7 +127,7 @@ declare module 'puppeteer-core' {
      * @param decimal - Decimal separator to use, defaults to `.`.
      * @param property - Element property to extract content from, defaults to `textContent`.
      */
-    number<T = HTMLElement>(decimal?: string, property?: KeysOfType<T, string>): Promise<number[]>;
+    number(decimal?: string, property?: any): Promise<number[]>;
 
     /**
      * Selects multiple `select` options by label and returns the values of the actual selection.
@@ -141,7 +141,7 @@ declare module 'puppeteer-core' {
      *
      * @param property - Element property to extract content from, defaults to `textContent`.
      */
-    string<T = HTMLElement>(property?: KeysOfType<T, string>): Promise<string>;
+    string(property?: any): Promise<string>;
   }
 
   interface Frame {
