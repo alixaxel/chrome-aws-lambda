@@ -4,9 +4,9 @@ import { Prototype } from '../../../typings/chrome-aws-lambda';
 let Super: Prototype<ElementHandle> = null;
 
 try {
-  Super = require('puppeteer/lib/cjs/puppeteer/common/JSHandle.js').ElementHandle;
+  Super = require('puppeteer/lib/cjs/puppeteer/common/ElementHandle.js').ElementHandle;
 } catch (error) {
-  Super = require('puppeteer-core/lib/cjs/puppeteer/common/JSHandle.js').ElementHandle;
+  Super = require('puppeteer-core/lib/cjs/puppeteer/common/ElementHandle.js').ElementHandle;
 }
 
 Super.prototype.clear = function () {
