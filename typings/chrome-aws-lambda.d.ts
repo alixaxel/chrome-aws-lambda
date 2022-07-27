@@ -127,7 +127,7 @@ declare module 'puppeteer-core' {
      * @param decimal - Decimal separator to use, defaults to `.`.
      * @param property - Element property to extract content from, defaults to `textContent`.
      */
-    number<T = HTMLElement>(decimal?: string, property?: KeysOfType<T, string>): Promise<number[]>;
+    number(decimal?: string, property?: any): Promise<number[]>;
 
     /**
      * Selects multiple `select` options by label and returns the values of the actual selection.
@@ -141,7 +141,7 @@ declare module 'puppeteer-core' {
      *
      * @param property - Element property to extract content from, defaults to `textContent`.
      */
-    string<T = HTMLElement>(property?: KeysOfType<T, string>): Promise<string>;
+    string(property?: any): Promise<string>;
   }
 
   interface Frame {
@@ -273,7 +273,7 @@ declare module 'puppeteer-core' {
      * @param predicate - String to wait for.
      * @param options - Optional waiting parameters.
      */
-    waitForText(predicate: string, options?: WaitTimeoutOptions): Promise<ElementHandle>;
+    waitForText(predicate: string, options?: WaitTimeoutOptions): Promise<ElementHandle<Node>>;
 
     /**
      * Waits for element to be present in DOM and to be visible.
@@ -281,7 +281,7 @@ declare module 'puppeteer-core' {
      * @param selector - Selector to query for.
      * @param options - Optional waiting parameters.
      */
-    waitUntilVisible(selector: string, options?: WaitTimeoutOptions): Promise<ElementHandle>;
+    waitUntilVisible(selector: string, options?: WaitTimeoutOptions): Promise<ElementHandle<Node>>;
 
     /**
      * Waits for element to not be found in the DOM or to be hidden.
@@ -289,7 +289,7 @@ declare module 'puppeteer-core' {
      * @param selector - Selector to query for.
      * @param options - Optional waiting parameters.
      */
-    waitWhileVisible(selector: string, options?: WaitTimeoutOptions): Promise<ElementHandle>;
+    waitWhileVisible(selector: string, options?: WaitTimeoutOptions): Promise<ElementHandle<Node>>;
   }
 
   interface Page {
@@ -442,7 +442,7 @@ declare module 'puppeteer-core' {
      * @param predicate - String to wait for.
      * @param options - Optional waiting parameters.
      */
-    waitForText(predicate: string, options?: WaitTimeoutOptions): Promise<ElementHandle>;
+    waitForText(predicate: string, options?: WaitTimeoutOptions): Promise<ElementHandle<Node>>;
 
     /**
      * Waits for element to be present in DOM and to be visible.
@@ -450,7 +450,7 @@ declare module 'puppeteer-core' {
      * @param selector - Selector to query for.
      * @param options - Optional waiting parameters.
      */
-    waitUntilVisible(selector: string, options?: WaitTimeoutOptions): Promise<ElementHandle>;
+    waitUntilVisible(selector: string, options?: WaitTimeoutOptions): Promise<ElementHandle<Node>>;
 
     /**
      * Waits for element to not be found in the DOM or to be hidden.
@@ -458,7 +458,7 @@ declare module 'puppeteer-core' {
      * @param selector - Selector to query for.
      * @param options - Optional waiting parameters.
      */
-    waitWhileVisible(selector: string, options?: WaitTimeoutOptions): Promise<ElementHandle>;
+    waitWhileVisible(selector: string, options?: WaitTimeoutOptions): Promise<ElementHandle<Node>>;
 
     /**
      * Encapsulates the callback execution in a tracing session.
