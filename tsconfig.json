@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "importHelpers": false,
     "inlineSourceMap": false,
-    "lib": ["dom", "es2018"],
+    "lib": ["dom", "es2020"],
     "listEmittedFiles": false,
     "listFiles": false,
     "module": "commonjs",
@@ -29,7 +29,7 @@
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": false,
-    "target": "es2018",
+    "target": "es2020",
     "traceResolution": false,
     "typeRoots": ["node_modules/@types", "typings"],
     "types": ["node"]
