@@ -1,12 +1,12 @@
-import { ElementHandle, EvaluateFn, HTTPRequest, HTTPResponse, Page, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
-import { KeysOfType, Prototype } from '../../../typings/chrome-aws-lambda';
+import { ElementHandle, EvaluateFunc, HTTPRequest, HTTPResponse, Page, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
+import { Prototype } from '../../../typings/chrome-aws-lambda';
 
 let Super: Prototype<ElementHandle> = null;
 
 try {
-  Super = require('puppeteer/lib/cjs/puppeteer/common/JSHandle').ElementHandle;
+  Super = require('puppeteer/lib/cjs/puppeteer/common/ElementHandle.js').ElementHandle;
 } catch (error) {
-  Super = require('puppeteer-core/lib/cjs/puppeteer/common/JSHandle').ElementHandle;
+  Super = require('puppeteer-core/lib/cjs/puppeteer/common/ElementHandle.js').ElementHandle;
 }
 
 Super.prototype.clear = function () {
@@ -171,7 +171,7 @@ Super.prototype.fillFormByLabel = function <T extends Record<string, boolean | s
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, data) as any;
+  return this.evaluate(callback as unknown as EvaluateFunc<[ElementHandle<Element>, T]>, data) as any;
 };
 
 Super.prototype.fillFormByName = function <T extends Record<string, boolean | string | string[]>>(data: T) {
@@ -262,7 +262,7 @@ Super.prototype.fillFormByName = function <T extends Record<string, boolean | st
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, data) as any;
+  return this.evaluate(callback as unknown as EvaluateFunc<[ElementHandle<Element>, T]>, data) as any;
 };
 
 Super.prototype.fillFormBySelector = function <T extends Record<string, boolean | string | string[]>>(data: T) {
@@ -353,7 +353,7 @@ Super.prototype.fillFormBySelector = function <T extends Record<string, boolean 
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, data) as any;
+  return this.evaluate(callback as unknown as EvaluateFunc<[ElementHandle<Element>, T]>, data) as any;
 };
 
 Super.prototype.fillFormByXPath = function <T extends Record<string, boolean | string | string[]>>(data: T) {
@@ -450,7 +450,7 @@ Super.prototype.fillFormByXPath = function <T extends Record<string, boolean | s
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, data) as any;
+  return this.evaluate(callback as unknown as EvaluateFunc<[ElementHandle<Element>, T]>, data) as any;
 };
 
 Super.prototype.getInnerHTML = function () {
@@ -465,8 +465,8 @@ Super.prototype.getInnerText = function () {
   });
 };
 
-Super.prototype.number = function <T = HTMLElement>(decimal: string = '.', property: KeysOfType<T, string> = 'textContent' as any) {
-  let callback = (node: T, decimal: string, property: KeysOfType<T, string>) => {
+Super.prototype.number = function (decimal: string = '.', property: any) {
+  let callback = (node: any, decimal: string, property: any) => {
     let data = (node[property] as unknown) as string;
 
     if (typeof data === 'string') {
@@ -486,7 +486,7 @@ Super.prototype.number = function <T = HTMLElement>(decimal: string = '.', prope
     return null;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, decimal, property as any);
+  return this.evaluate(callback, decimal, property as any);
 };
 
 Super.prototype.selectByLabel = function (...values: string[]) {
@@ -523,11 +523,11 @@ Super.prototype.selectByLabel = function (...values: string[]) {
     return result;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, values);
+  return this.evaluate(callback as any, values);
 };
 
-Super.prototype.string = function <T = HTMLElement>(property: KeysOfType<T, string> = 'textContent' as any) {
-  let callback = (node: T, property: KeysOfType<T, string>) => {
+Super.prototype.string = function (property: any) {
+  let callback = (node: any, property: any) => {
     let data = (node[property] as unknown) as string;
 
     if (typeof data === 'string') {
@@ -553,5 +553,5 @@ Super.prototype.string = function <T = HTMLElement>(property: KeysOfType<T, stri
     return null;
   };
 
-  return this.evaluate(callback as unknown as EvaluateFn<Element>, property as any);
+  return this.evaluate(callback, property as any);
 };

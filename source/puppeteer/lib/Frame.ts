@@ -1,12 +1,12 @@
-import { Frame, HTTPRequest, HTTPResponse, Page, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
+import { Frame, HTTPRequest, HTTPResponse, WaitForOptions, WaitTimeoutOptions } from 'puppeteer-core';
 import { KeysOfType, Prototype } from '../../../typings/chrome-aws-lambda';
 
 let Super: Prototype<Frame> = null;
 
 try {
-  Super = require('puppeteer/lib/cjs/puppeteer/common/FrameManager').Frame;
+  Super = require('puppeteer/lib/cjs/puppeteer/common/Frame.js').Frame;
 } catch (error) {
-  Super = require('puppeteer-core/lib/cjs/puppeteer/common/FrameManager').Frame;
+  Super = require('puppeteer-core/lib/cjs/puppeteer/common/Frame.js').Frame;
 }
 
 Super.prototype.clear = function (selector: string) {
@@ -44,7 +44,7 @@ Super.prototype.clickAndWaitForRequest = function (selector: string, predicate: 
   };
 
   let promises: [Promise<HTTPRequest>, Promise<void>] = [
-    ((this._frameManager as any)._page as Page).waitForRequest((typeof predicate === 'function') ? predicate : callback, options),
+    this.page().waitForRequest((typeof predicate === 'function') ? predicate : callback, options),
     this.click(selector),
   ];
 
@@ -67,7 +67,7 @@ Super.prototype.clickAndWaitForResponse = function (selector: string, predicate:
   };
 
   let promises: [Promise<HTTPResponse>, Promise<void>] = [
-    ((this._frameManager as any)._page as Page).waitForResponse((typeof predicate === 'function') ? predicate : callback, options),
+    this.page().waitForResponse((typeof predicate === 'function') ? predicate : callback, options),
     this.click(selector),
   ];
 
