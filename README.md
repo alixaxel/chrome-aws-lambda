@@ -18,7 +18,7 @@ This will ship with appropriate binary for the latest stable release of [`puppet
 You also need to install the corresponding version of `puppeteer-core` (or `puppeteer`):
 
 ```shell
-npm install puppeteer-core --save-prod
+npm install puppeteer-core --save-prod 
 ```
 
 If you wish to install an older version of Chromium, take a look at [Versioning](https://github.com/alixaxel/chrome-aws-lambda#versioning).
