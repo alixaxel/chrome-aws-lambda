@@ -40,8 +40,6 @@ jobs:
         event:
           - example.com
         version:
-          - 10
-          - 12
           - 14
     steps:
     - name: Checkout
