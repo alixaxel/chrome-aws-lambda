@@ -51,7 +51,7 @@ jobs:
       uses: aws-actions/setup-sam@v0
 
     - name: Download Layer Artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4.1.7
       with:
         name: chrome_aws_lambda
 
